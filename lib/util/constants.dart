@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static final items_per_row = 5;
-  static final item_size = 5.0;
-  static final main_color = Color (0xFF9BBC0F);
-  static final side_color = Color (0xFF8BAC0F);
-  static final third_color = Color (0xFF306230);
-  static final spacing = 3.0;
+  static const items_per_row = 5;
+  static const item_size = 5.0;
+  static const main_color = Color (0xFF9BBC0F);
+  static const side_color = Color (0xFF8BAC0F);
+  static const third_color = Color (0xFF306230);
+  static const spacing = 3.0;
 
-  static final homescreen_appbar_title = Text ('Main Menu');
-  static final appbar_elevation = 2.0;
+  static const homescreen_appbar_title = Text ('Main Menu');
+  static const appbar_elevation = 2.0;
 }
