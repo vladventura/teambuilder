@@ -13,13 +13,14 @@ class _JoinableTeamState extends State <JoinableTeam>{
         minimum: EdgeInsets.all(3),
         child: Container (
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
             border: Border.all(
-              color: Constants.third_color,
-              width: 1,
+              color: Constants.side_color,
+              width: 2,
               style: BorderStyle.solid
             )
           ),
-            child: MaterialButton(
+            child: FlatButton(
               onPressed: (){
               print('pressed');
             },
