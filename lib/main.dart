@@ -54,6 +54,7 @@ class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.third_color,
         body: NestedScrollView(
             physics: BouncingScrollPhysics(),

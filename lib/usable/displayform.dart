@@ -1,5 +1,6 @@
 import  'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:teambuilder/models/project.dart';
 import 'package:teambuilder/util/constants.dart';
 
 class DisplayForm extends StatefulWidget{
@@ -8,17 +9,22 @@ class DisplayForm extends StatefulWidget{
 }
 
 class _DisplayFormState extends State<DisplayForm>{
-  String _value;
-  List <String> values = new List <String>();
-
+  // This is to display and get the value from the
+  // Dropdown list
+  String _complexity;
+  List <String> complexities = new List <String>();
+  // This is to handle the data from the form
+  String name, description, contactPlatforms;
+  // This is a needed key. The main scaffold also needs one
+  final _formKey = new GlobalKey<FormState>();
   @override
   void initState(){
-    values.addAll(['Beginner', 'Intermediate', 'Expert']);
+    complexities.addAll(['Beginner', 'Intermediate', 'Expert']);
   }
 
   void _onChanged(String value){
     setState(() {
-      _value = value;
+      _complexity = value;
     });
   }
 
@@ -26,6 +32,8 @@ class _DisplayFormState extends State<DisplayForm>{
   Widget build (BuildContext context){
     return SafeArea(
       top: false,
+      child: Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -38,6 +46,12 @@ class _DisplayFormState extends State<DisplayForm>{
               textInputAction: TextInputAction.go,
               autocorrect: true,
               autovalidate: true,
+              onSaved: (name){
+                this.name = name;
+              },
+              validator: (name) {
+                if (name.isEmpty) return 'Please fill in a Project name';
+              },
               decoration: InputDecoration(
                 // TODO: Move this code to another place to only write once
                 enabledBorder: OutlineInputBorder(
@@ -55,7 +69,7 @@ class _DisplayFormState extends State<DisplayForm>{
                 ),
                 labelText: 'Project Name',
               ),
-            )
+            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -65,6 +79,12 @@ class _DisplayFormState extends State<DisplayForm>{
               maxLengthEnforced: true,
               autocorrect: true,
               autovalidate: true,
+              validator: (description){
+                if (description.isEmpty){
+                  return 'Please fill in a description!';
+                }
+              },
+              onSaved: (name) => this.description = description,
               // TODO: Make the lines take a certain amount of characters
               decoration: InputDecoration(
                 labelText: 'Project Description',
@@ -94,11 +114,11 @@ class _DisplayFormState extends State<DisplayForm>{
             child: DropdownButtonHideUnderline(
               child:DropdownButton(
                 hint: Text('Complexity'),
-                value: _value,
+                value: _complexity,
                 onChanged: (String value){
                 _onChanged(value);
               },
-              items: values.map((String value){
+              items: complexities.map((String value){
                 return new DropdownMenuItem(value: value, child: Text(value));
               }).toList()
             )
@@ -111,12 +131,26 @@ class _DisplayFormState extends State<DisplayForm>{
                color: Colors.transparent,
                child: Icon(Icons.add),
                onPressed: ((){
+                 submitProject();
                }),
              ) 
             )
           )
         ],
       )
+      )
     );
+  }
+
+  void submitProject(){
+    if (this._formKey.currentState.validate()){
+      _formKey.currentState.save();
+    }
+    else return null;
+    Project project = new Project();
+    project.name = name;
+    project.description = description;
+    project.complexity = _complexity;
+
   }
 }
