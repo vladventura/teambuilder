@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/usable/displayform.dart';
 import 'package:teambuilder/usable/displayteams.dart';
 import 'package:teambuilder/util/constants.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
-  Widget build (BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pepega',
       home: MyHomepage(),
@@ -15,14 +16,13 @@ class MyApp extends StatelessWidget{
   }
 }
 
-
-class MyHomepage extends StatefulWidget{
+class MyHomepage extends StatefulWidget {
   @override
   _MyHomepageState createState() => _MyHomepageState();
 }
 
-class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateMixin {
-  bool show = false;
+class _MyHomepageState extends State<MyHomepage>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
 
@@ -31,19 +31,8 @@ class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateM
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
-    _tabController.addListener(listener);
   }
-
-  void listener(){
-    if (_tabController.index == 0){
-      show = false;
-    }
-    else {
-      show = true;
-    }
-    setState(() {});
-  }
-
+  
   @override
   void dispose() {
     _tabController.dispose();
@@ -54,6 +43,9 @@ class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: fabulous(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Constants.third_color,
       resizeToAvoidBottomPadding: false,
       backgroundColor: Constants.third_color,
         body: NestedScrollView(
@@ -62,8 +54,8 @@ class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateM
             headerSliverBuilder: (BuildContext context, bool isScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  backgroundColor: Constants.main_color,
-                  brightness: Brightness.dark,
+                    backgroundColor: Constants.main_color,
+                    brightness: Brightness.dark,
                     title: Text('Main Screen'),
                     forceElevated: isScrolled,
                     pinned: true,
@@ -71,27 +63,28 @@ class _MyHomepageState extends State<MyHomepage> with SingleTickerProviderStateM
                     bottom: TabBar(
                       controller: _tabController,
                       tabs: <Widget>[
-                        Tab(
-                            text: 'Join Project',
-                            icon: Icon(Icons.search)
-                        ),
-                        Tab(
-                            text: 'Create Project',
-                            icon: Icon(Icons.laptop)
-                        )
+                        Tab(text: 'Join Project', icon: Icon(Icons.search)),
+                        Tab(text: 'Create Project', icon: Icon(Icons.laptop))
                       ],
-                    )
-                )
+                    ))
               ];
             },
             body: TabBarView(
               controller: _tabController,
-              children: <Widget>[
-                DisplayTeams(),
-                DisplayForm()
-              ],
-            )
-        )
+              children: <Widget>[DisplayTeams(), DisplayForm()],
+            )));
+  }
+  fabulous(){
+    return FloatingActionButton(
+      child: Icon(Icons.delete),
+      onPressed: (){
+        var dbLink = DBManager();
+        dbLink.deleteProjects();
+        setState(() {
+         DisplayTeams(); 
+        });
+      },
     );
   }
 }
+
