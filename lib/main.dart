@@ -32,7 +32,7 @@ class _MyHomepageState extends State<MyHomepage>
     _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
   }
-
+  
   @override
   void dispose() {
     _tabController.dispose();
@@ -44,8 +44,10 @@ class _MyHomepageState extends State<MyHomepage>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: fabulous(),
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Constants.third_color,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Constants.third_color,
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: Constants.third_color,
         body: NestedScrollView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
