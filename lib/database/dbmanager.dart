@@ -7,12 +7,12 @@ import 'dart:async';
 import 'package:teambuilder/models/project.dart';
 
 class DBManager{
-  static Database db_instance;
+  static Database dbInstance;
   
   //Property
   Future <Database> get db async{
-    if (db_instance == null) db_instance = await initDB();
-    return db_instance;
+    if (dbInstance == null) dbInstance = await initDB();
+    return dbInstance;
   }
 
   //Initializes the database link from dart to the database file
@@ -68,7 +68,11 @@ class DBManager{
     var dbLink = await db;
     dbLink.delete('projects', where:"""id=${pj.id}""");
   }
-
+  
+  deleteProjects() async{
+    var dbLink = await db;
+    dbLink.delete('projects');
+  }
   /*A glimpse to the future can be
   Future <List<Project>> userProjects(User user) async{
     And inside there can be something similar to
