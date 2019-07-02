@@ -43,16 +43,6 @@ class _MyHomepageState extends State<MyHomepage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('This is america'),
-            ),
-            Container(),
-          ],
-        ),
-      ),
       floatingActionButton: fabulous(),
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.third_color,
