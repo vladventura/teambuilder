@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  // App information related stuff
-  static const app_title = 'Teambuilder';
-  static const release = '-ALPHA-';
-  static const appbar_title = Text('Teambuilder');
+
 
   // Tabs information
   static const app_tabs = 2;
@@ -20,10 +17,15 @@ class Constants {
   // Form information
   static const form_column_margins = EdgeInsets.all(5);
   static const project_name_screen_percent = .60;
+  static const description_max_lines = 5;
+  static const description_max_length = 500;
+  static const has_autocorrect = true;
+  static const max_length_enforced = true;
 
-  static projectFormDecoration(String formName){
+  static formDecoration(String formName){
     const borderDecoWidth = 2.0;
     return InputDecoration(
+      labelText: formName,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25),
         borderSide: const BorderSide(
@@ -31,7 +33,12 @@ class Constants {
           width: borderDecoWidth,
         ),
       ),
-      focusedBorder: OutlineInputBorder()
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: side_color,
+          width: borderDecoWidth,
+        ),
+      ),
     );
   }
 
