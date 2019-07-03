@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/models/project.dart';
 
@@ -76,14 +75,11 @@ class _DisplayFormState extends State<DisplayForm> {
                 ),
                 Container(
                     margin: Constants.form_column_margins,
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7),
-                        border:
-                            Border.all(color: Constants.side_color, width: 2)),
+                    padding: Constants.complexity_padding,
+                    decoration: Constants.complexitiesDecoration(),
                     child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                            hint: Text('Complexity'),
+                            hint: Texts.project_complexity_text,
                             value: _complexity,
                             onChanged: (String value) {
                               _onChanged(value);
@@ -93,7 +89,7 @@ class _DisplayFormState extends State<DisplayForm> {
                                   value: value, child: Text(value));
                             }).toList()))),
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    margin: Constants.complexity_padding,
                     child: Center(
                         child: FlatButton(
                       color: Colors.transparent,
