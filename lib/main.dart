@@ -3,6 +3,7 @@ import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/usable/displayform.dart';
 import 'package:teambuilder/usable/displayteams.dart';
 import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/texts.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "${Constants.app_title} ${Constants.release}",
+      title: "${Texts.app_title} ${Texts.release}",
       home: MyHomepage(),
     );
   }
@@ -54,7 +55,7 @@ class _MyHomepageState extends State<MyHomepage>
               return <Widget>[
                 SliverAppBar(
                     backgroundColor: Constants.main_color,
-                    title: Constants.appbar_title,
+                    title: Texts.appbar_title,
                     forceElevated: isScrolled,
                     pinned: true,
                     floating: true,
