@@ -40,9 +40,8 @@ class _DisplayFormState extends State<DisplayForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  width: 300,
-                  padding: EdgeInsets.only(bottom: 5),
+                  margin: Constants.form_column_margins,
+                  width: MediaQuery.of(context).size.width * Constants.project_name_screen_percent,
                   child: TextFormField(
                     textCapitalization: TextCapitalization.sentences,
                     textInputAction: TextInputAction.go,
