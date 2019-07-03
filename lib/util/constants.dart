@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'texts.dart';
 
 class Constants {
-
-
   // Tabs information
   static const app_tabs = 2;
   static const join_project = {
@@ -26,7 +24,7 @@ class Constants {
   static const has_autocorrect = true;
   static const max_length_enforced = true;
   static const complexity_padding = EdgeInsets.symmetric(horizontal: 5);
-
+    // Decorations
   static formDecoration(String formName){
     return InputDecoration(
       labelText: formName,
@@ -55,6 +53,29 @@ class Constants {
     );
   }
 
+  // Team button information
+  static buttonDecoration() {
+    return BoxDecoration(
+      border: Border.all(
+        color: side_color,
+        width: decoration_width,
+        style: BorderStyle.solid,
+      )
+    );
+  }
+ 
+  // Database information
+  static const database_filename = 'projects.db';
+  static const database_query_name = 'projects';
+  static const database_version = 1;
+  static const on_create_SQL = 
+    """
+    CREATE TABLE $database_query_name(id INTEGER PRIMARY KEY AUTOINCREASE,
+    name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT);
+    """;
+  static const select_all_from_db = """SELECT * FROM projects""";
+
+  // General information
   static const items_per_row = 5;
   static const item_size = 5.0;
   static const main_color = Color (0xFF9BBC0F);

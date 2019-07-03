@@ -2,78 +2,78 @@ import 'package:flutter/material.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/util/constants.dart';
 
-class DisplayTeams extends StatefulWidget{
+class DisplayTeams extends StatefulWidget {
   _DisplayTeams createState() => _DisplayTeams();
 }
 
-class _DisplayTeams extends State<DisplayTeams>{
-  final controller_name = new TextEditingController();
-  final controller_owner = new TextEditingController();
-
+class _DisplayTeams extends State<DisplayTeams> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
   @override
-  Widget build (BuildContext context){
+  Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getProjectsFromDB(),
-      builder:(context, snapshot) {
-        if(snapshot.data != null){
-          if (snapshot.hasData){
-            return ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index){
-                return SafeArea(
-                  minimum: EdgeInsets.all(3),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Constants.side_color,
-                        width: 2,
-                        style: BorderStyle.solid
-                      )
+        future: getProjectsFromDB(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return SafeArea(
+                    minimum: EdgeInsets.all(3),
+                    child: Container(
+                      decoration: Constants.buttonDecoration(),
+                      child: FlatButton(
+                        child: buttonInfoDisplay(
+                            snapshot.data[index].name, 'originator'),
+                        onPressed: () {
+                          return showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content:
+                                      Text(snapshot.data[index].description),
+                                  title: Text(snapshot.data[index].name),
+                                );
+                              });
+                        },
+                      ),
                     ),
-                    child: FlatButton(
-                      onPressed: (){
-                        return showDialog(
-                          context: context,
-                          builder:(BuildContext context) {
-                            return AlertDialog(
-                            content: Text(snapshot.data[index].description),
-                            title: Text(snapshot.data[index].name),
-                          );
-                          }
-                        );
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(snapshot.data[index].name, textAlign: TextAlign.right,),
-                            Text('Originator', textAlign: TextAlign.right,)
-                          ],
-                        ),
-                      )
-                    ),
-                  ),
-                );
-              },
-            );
+                  );
+                },
+              );
+            }
           }
-        }
-        return new Container(
+          return Container(
             child: CircularProgressIndicator(),
           );
-      }
-    );
+        });
   }
 
-  getProjectsFromDB() async{
+  getProjectsFromDB() async {
     var dbLink = new DBManager();
     return dbLink.getAllProjects();
+  }
+
+  buttonInfoDisplay(String name, String originator) {
+    return SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              name,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              originator,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ));
   }
 }

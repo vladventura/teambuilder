@@ -33,7 +33,7 @@ class _MyHomepageState extends State<MyHomepage>
     _tabController = TabController(length: Constants.app_tabs, vsync: this);
     _scrollController = ScrollController();
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -44,10 +44,10 @@ class _MyHomepageState extends State<MyHomepage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: restartDatabase(),
-      resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Constants.third_color,
+        floatingActionButton: restartDatabase(),
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Constants.third_color,
         body: NestedScrollView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
@@ -62,8 +62,12 @@ class _MyHomepageState extends State<MyHomepage>
                     bottom: TabBar(
                       controller: _tabController,
                       tabs: <Widget>[
-                        Tab(text: Constants.join_project['text'], icon: Constants.join_project['icon']),
-                        Tab(text: Constants.create_project['text'], icon: Constants.create_project['icon'])
+                        Tab(
+                            text: Constants.join_project['text'],
+                            icon: Constants.join_project['icon']),
+                        Tab(
+                            text: Constants.create_project['text'],
+                            icon: Constants.create_project['icon'])
                       ],
                     ))
               ];
@@ -73,17 +77,17 @@ class _MyHomepageState extends State<MyHomepage>
               children: <Widget>[DisplayTeams(), DisplayForm()],
             )));
   }
-  restartDatabase(){
+
+  restartDatabase() {
     return FloatingActionButton(
       child: Icon(Icons.delete),
-      onPressed: (){
+      onPressed: () {
         var dbLink = DBManager();
         dbLink.deleteProjects();
         setState(() {
-         DisplayTeams(); 
+          DisplayTeams();
         });
       },
     );
   }
 }
-
