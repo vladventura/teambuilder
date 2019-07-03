@@ -43,35 +43,36 @@ class _DisplayFormState extends State<DisplayForm> {
               children: <Widget>[
                 Container(
                   margin: Constants.form_column_margins,
-                  width: MediaQuery.of(context).size.width * Constants.project_name_screen_percent, // Reactive screen size
+                  width: MediaQuery.of(context).size.width *
+                      Constants
+                          .project_name_screen_percent, // Reactive screen size
                   child: TextFormField(
-                    textCapitalization: TextCapitalization.sentences,
-                    textInputAction: TextInputAction.go,
-                    autocorrect: Constants.has_autocorrect,
-                    onSaved: (name) {
-                      this.name = name;
-                    },
-                    validator: (name) {
-                      if (name.isEmpty) return Texts.name_error_msg;
-                    },
-                    decoration: Constants.formDecoration(Texts.project_name)
-                  ),
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.go,
+                      autocorrect: Constants.has_autocorrect,
+                      onSaved: (name) {
+                        this.name = name;
+                      },
+                      validator: (name) {
+                        if (name.isEmpty) return Texts.name_error_msg;
+                      },
+                      decoration: Constants.formDecoration(Texts.project_name)),
                 ),
                 Container(
                   margin: Constants.form_column_margins,
                   width: MediaQuery.of(context).size.width,
                   child: TextFormField(
-                    maxLines: Constants.description_max_lines,
-                    maxLength: Constants.description_max_length,
-                    maxLengthEnforced: Constants.max_length_enforced,
-                    autocorrect: Constants.has_autocorrect,
-                    validator: (description) {
-                      if (description.isEmpty) return Texts.description_error;
-                    },
-                    onSaved: (description) => this.description = description,
-                    // TODO: Make the lines take a certain amount of characters
-                    decoration: Constants.formDecoration(Texts.project_description)
-                  ),
+                      maxLines: Constants.description_max_lines,
+                      maxLength: Constants.description_max_length,
+                      maxLengthEnforced: Constants.max_length_enforced,
+                      autocorrect: Constants.has_autocorrect,
+                      validator: (description) {
+                        if (description.isEmpty) return Texts.description_error;
+                      },
+                      onSaved: (description) => this.description = description,
+                      // TODO: Make the lines take a certain amount of characters
+                      decoration:
+                          Constants.formDecoration(Texts.project_description)),
                 ),
                 Container(
                     margin: Constants.form_column_margins,
