@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pepega',
+      title: "${Constants.app_title} ${Constants.release}",
       home: MyHomepage(),
     );
   }
@@ -29,7 +29,7 @@ class _MyHomepageState extends State<MyHomepage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: Constants.app_tabs, vsync: this);
     _scrollController = ScrollController();
   }
   
@@ -43,9 +43,12 @@ class _MyHomepageState extends State<MyHomepage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: restartDatabase(),
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Constants.third_color,
       drawer: Drawer(
         child: Text('data'),
-
       ),
       floatingActionButton: fabulous(),
       resizeToAvoidBottomInset: false,
@@ -58,16 +61,15 @@ class _MyHomepageState extends State<MyHomepage>
               return <Widget>[
                 SliverAppBar(
                     backgroundColor: Constants.main_color,
-                    brightness: Brightness.dark,
-                    title: Text('Main Screen'),
+                    title: Constants.appbar_title,
                     forceElevated: isScrolled,
                     pinned: true,
                     floating: true,
                     bottom: TabBar(
                       controller: _tabController,
                       tabs: <Widget>[
-                        Tab(text: 'Join Project', icon: Icon(Icons.search)),
-                        Tab(text: 'Create Project', icon: Icon(Icons.laptop))
+                        Tab(text: Constants.join_project['text'], icon: Constants.join_project['icon']),
+                        Tab(text: Constants.create_project['text'], icon: Constants.create_project['icon'])
                       ],
                     ))
               ];
@@ -77,7 +79,7 @@ class _MyHomepageState extends State<MyHomepage>
               children: <Widget>[DisplayTeams(), DisplayForm()],
             )));
   }
-  fabulous(){
+  restartDatabase(){
     return FloatingActionButton(
       child: Icon(Icons.delete),
       onPressed: (){
