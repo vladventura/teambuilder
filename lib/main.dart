@@ -47,6 +47,13 @@ class _MyHomepageState extends State<MyHomepage>
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.third_color,
+      drawer: Drawer(
+        child: Text('data'),
+      ),
+      floatingActionButton: fabulous(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Constants.third_color,
+      resizeToAvoidBottomPadding: false,
         body: NestedScrollView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
