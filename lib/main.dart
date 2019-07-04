@@ -43,6 +43,10 @@ class _MyHomepageState extends State<MyHomepage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: Text('data'),
+
+      ),
       floatingActionButton: fabulous(),
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.third_color,
