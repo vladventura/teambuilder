@@ -54,7 +54,7 @@ class _MyHomepageState extends State<MyHomepage>
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.third_color,
       resizeToAvoidBottomPadding: false,
-        body: NestedScrollView(
+      body: NestedScrollView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
             headerSliverBuilder: (BuildContext context, bool isScrolled) {
