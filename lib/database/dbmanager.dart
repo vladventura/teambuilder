@@ -5,6 +5,7 @@ import 'dart:async';
 
 // Models in the database
 import 'package:teambuilder/models/project.dart';
+import 'package:teambuilder/models/user.dart';
 
 class DBManager{
   static Database dbInstance;
@@ -18,7 +19,7 @@ class DBManager{
   //Initializes the database link from dart to the database file
   initDB() async{
     String databasesDirectory = await getDatabasesPath();
-    String path = join(databasesDirectory, 'projects.db');
+    String path = join(databasesDirectory, 'teambuilder.db');
     var db = await openDatabase(path, onCreate: onCreateFunction, version: 1);
     return db;
   }
@@ -29,6 +30,9 @@ class DBManager{
       """
       CREATE TABLE projects(id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT);
+      
+      CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username UNIQUE TEXT,
+      password TEXT, email TEXT);
       """
     );
   }
