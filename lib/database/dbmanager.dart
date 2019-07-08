@@ -37,6 +37,22 @@ class DBManager{
     );
   }
 
+  Future <List<User>> getAllUsers() async{
+    var dbLink = await db;
+    List <Map> allUsers = await dbLink.rawQuery("""SELECT * FROM users""");
+    List <User> users = new List();
+
+    for (int index = 0; index < allUsers.length; index++){
+      User user = new User();
+      user.id = allUsers[index]['id'];
+      user.email = allUsers[index]['email'];
+      user.username = allUsers[index]['username'];
+      user.password = allUsers[index]['password'];
+      users.add(user);
+    }
+    return users;
+  }
+
   //Now to tell the queries of the database, and the mutations we can perform
   Future <List<Project>> getAllProjects() async{
     var dbLink = await db;
