@@ -49,6 +49,12 @@ class DBManager {
     return projects;
   }
 
+  //Inserts a user to the database
+  insertUser(User user)async{
+    var dbLink = await db;
+    dbLink.insert('users', user.toMap(), conflictAlgorithm: ConflictAlgorithm.rollback);
+  }
+
   //Inserts a project into the database
   insertProject(Project pj) async {
     var dbLink = await db;
