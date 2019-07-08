@@ -50,7 +50,15 @@ class _MyHomepageState extends State<MyHomepage>
       drawer: Drawer(
         child: Text('data'),
       ),
+<<<<<<< HEAD
         body: NestedScrollView(
+=======
+      floatingActionButton: fabulous(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Constants.third_color,
+      resizeToAvoidBottomPadding: false,
+      body: NestedScrollView(
+>>>>>>> 023a717360ef8a17f6e7d5c54d80931831db2b78
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
             headerSliverBuilder: (BuildContext context, bool isScrolled) {
