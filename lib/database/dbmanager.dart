@@ -2,11 +2,11 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:async';
+import 'package:teambuilder/util/constants.dart';
 
 // Models in the database
 import 'package:teambuilder/models/project.dart';
-// Getting database information from here
-import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/models/user.dart';
 
 class DBManager {
   static Database dbInstance;
@@ -29,6 +29,22 @@ class DBManager {
   //What to do when the link is created and the database is completely new
   void onCreateFunction(Database db, int version) async {
     await db.execute(Constants.on_create_SQL);
+  }
+
+  Future <List<User>> getAllUsers() async{
+    var dbLink = await db;
+    List <Map> allUsers = await dbLink.rawQuery("""SELECT * FROM users""");
+    List <User> users = new List();
+
+    for (int index = 0; index < allUsers.length; index++){
+      User user = new User();
+      user.id = allUsers[index]['id'];
+      user.email = allUsers[index]['email'];
+      user.username = allUsers[index]['username'];
+      user.password = allUsers[index]['password'];
+      users.add(user);
+    }
+    return users;
   }
 
   //Now to tell the queries of the database, and the mutations we can perform
