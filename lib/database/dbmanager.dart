@@ -5,41 +5,39 @@ import 'dart:async';
 
 // Models in the database
 import 'package:teambuilder/models/project.dart';
+// Getting database information from here
+import 'package:teambuilder/util/constants.dart';
 
-class DBManager{
+class DBManager {
   static Database dbInstance;
-  
+
   //Property
-  Future <Database> get db async{
+  Future<Database> get db async {
     if (dbInstance == null) dbInstance = await initDB();
     return dbInstance;
   }
 
   //Initializes the database link from dart to the database file
-  initDB() async{
+  initDB() async {
     String databasesDirectory = await getDatabasesPath();
-    String path = join(databasesDirectory, 'projects.db');
-    var db = await openDatabase(path, onCreate: onCreateFunction, version: 1);
+    String path = join(databasesDirectory, Constants.database_filename);
+    var db = await openDatabase(path,
+        onCreate: onCreateFunction, version: Constants.database_version);
     return db;
   }
 
   //What to do when the link is created and the database is completely new
-  void onCreateFunction(Database db, int version) async{
-    await db.execute(
-      """
-      CREATE TABLE projects(id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT);
-      """
-    );
+  void onCreateFunction(Database db, int version) async {
+    await db.execute(Constants.on_create_SQL);
   }
 
   //Now to tell the queries of the database, and the mutations we can perform
-  Future <List<Project>> getAllProjects() async{
+  Future<List<Project>> getAllProjects() async {
     var dbLink = await db;
-    List <Map> allItems = await dbLink.rawQuery("""SELECT * FROM projects""");
-    List <Project> projects = new List();
+    List<Map> allItems = await dbLink.rawQuery(Constants.select_all_from_db);
+    List<Project> projects = new List();
 
-    for (int index = 0; index < allItems.length; index++){
+    for (int index = 0; index < allItems.length; index++) {
       Project pj = new Project();
       pj.contactPlatforms = allItems[index]['contactPlatforms'];
       pj.complexity = allItems[index]['complexity'];
@@ -52,26 +50,27 @@ class DBManager{
   }
 
   //Inserts a project into the database
-  insertProject(Project pj) async{
+  insertProject(Project pj) async {
     var dbLink = await db;
-    dbLink.insert('projects', pj.toMap());
+    dbLink.insert(Constants.database_query_name, pj.toMap());
   }
 
   //Updates to a given value an existing project. When the app scales, this should only be available to the project owner
-  updateProject(Project pj) async{
+  updateProject(Project pj) async {
     var dbLink = await db;
-    dbLink.update('projects', pj.toMap(), conflictAlgorithm: ConflictAlgorithm.replace, where: """id=${pj.id}""");
+    dbLink.update(Constants.database_query_name, pj.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace, where: """id=${pj.id}""");
   }
 
   //Deletes a given project from the database. Again, only available to the project's owner
-  deleteProject(Project pj) async{
+  deleteProject(Project pj) async {
     var dbLink = await db;
-    dbLink.delete('projects', where:"""id=${pj.id}""");
+    dbLink.delete(Constants.database_query_name, where: """id=${pj.id}""");
   }
-  
-  deleteProjects() async{
+
+  deleteProjects() async {
     var dbLink = await db;
-    dbLink.delete('projects');
+    dbLink.delete(Constants.database_query_name);
   }
   /*A glimpse to the future can be
   Future <List<Project>> userProjects(User user) async{
@@ -82,4 +81,3 @@ class DBManager{
   }
   */
 }
-

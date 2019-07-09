@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/models/project.dart';
+
+// Constant values and texts
 import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/texts.dart';
 
 class DisplayForm extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class _DisplayFormState extends State<DisplayForm> {
   @override
   void initState() {
     super.initState();
-    complexities.addAll(['Beginner', 'Intermediate', 'Expert']);
+    complexities.addAll(Texts.complexities);
   }
 
   void _onChanged(String value) {
@@ -41,68 +43,44 @@ class _DisplayFormState extends State<DisplayForm> {
               children: <Widget>[
                 Container(
                   margin: Constants.form_column_margins,
-                  width: MediaQuery.of(context).size.width * Constants.project_name_screen_percent,
+                  width: MediaQuery.of(context).size.width *
+                      Constants
+                          .project_name_screen_percent, // Reactive screen size
                   child: TextFormField(
-                    textCapitalization: TextCapitalization.sentences,
-                    textInputAction: TextInputAction.go,
-                    autocorrect: true,
-                    autovalidate: true,
-                    onSaved: (name) {
-                      this.name = name;
-                    },
-                    validator: (name) {
-                      if (name.isEmpty) return 'Please fill in a Project name';
-                    },
-                    decoration: InputDecoration(
-                      // TODO: Move this code to another place to only write once
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: const BorderSide(
-                              color: Constants.main_color, width: 2.0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Constants.side_color, width: 2.0)),
-                      labelText: 'Project Name',
-                    ),
-                  ),
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.go,
+                      autocorrect: Constants.has_autocorrect,
+                      onSaved: (name) {
+                        this.name = name;
+                      },
+                      validator: (name) {
+                        if (name.isEmpty) return Texts.name_error_msg;
+                      },
+                      decoration: Constants.formDecoration(Texts.project_name)),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  margin: Constants.form_column_margins,
+                  width: MediaQuery.of(context).size.width,
                   child: TextFormField(
-                    maxLines: 5,
-                    maxLength: 500,
-                    maxLengthEnforced: true,
-                    autocorrect: true,
-                    autovalidate: true,
-                    validator: (description) {
-                      if (description.isEmpty) {
-                        return 'Please fill in a description!';
-                      }
-                    },
-                    onSaved: (description) => this.description = description,
-                    // TODO: Make the lines take a certain amount of characters
-                    decoration: InputDecoration(
-                      labelText: 'Project Description',
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: const BorderSide(
-                              color: Constants.main_color, width: 2.0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Constants.side_color, width: 2.0)),
-                    ),
-                  ),
+                      maxLines: Constants.description_max_lines,
+                      maxLength: Constants.description_max_length,
+                      maxLengthEnforced: Constants.max_length_enforced,
+                      autocorrect: Constants.has_autocorrect,
+                      validator: (description) {
+                        if (description.isEmpty) return Texts.description_error;
+                      },
+                      onSaved: (description) => this.description = description,
+                      // TODO: Make the lines take a certain amount of characters
+                      decoration:
+                          Constants.formDecoration(Texts.project_description)),
                 ),
                 Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7),
-                        border:
-                            Border.all(color: Constants.side_color, width: 2)),
+                    margin: Constants.form_column_margins,
+                    padding: Constants.complexity_padding,
+                    decoration: Constants.complexitiesDecoration(),
                     child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                            hint: Text('Complexity'),
+                            hint: Texts.project_complexity_text,
                             value: _complexity,
                             onChanged: (String value) {
                               _onChanged(value);
@@ -112,7 +90,7 @@ class _DisplayFormState extends State<DisplayForm> {
                                   value: value, child: Text(value));
                             }).toList()))),
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    margin: Constants.complexity_padding,
                     child: Center(
                         child: FlatButton(
                       color: Colors.transparent,
