@@ -67,7 +67,7 @@ class DBManager {
 
   getUser(User user) async{
     var dbLink = await db;
-    List<Map> usr = await dbLink.rawQuery("""SELECT * FROM ${Constants.users_query_name} WHERE username=${user.username}""");
+    List<Map> usr = await dbLink.rawQuery("""SELECT * FROM ${Constants.users_query_name} WHERE username=${user.username};""");
     User use = new User();
     use.email = usr[0]['email'];
     use.id = usr[0]['id'];
