@@ -77,7 +77,7 @@ class Constants {
     CREATE TABLE $users_query_name(id INTEGER PRIMARY KEY AUTOINCREASE,
     username TEXT UNIQUE, email TEXT UNIQUE, password TEXT);
     """;
-  static const select_all_from_db = """SELECT * FROM projects""";
+  static const select_all_from_db = """SELECT * FROM projects;""";
 
   // General information
   static const items_per_row = 5;
