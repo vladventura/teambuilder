@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(home: LoginScreen(),));
-
-
 class LoginScreen extends StatefulWidget{
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -59,7 +56,10 @@ class _LoginScreenState extends State<LoginScreen>{
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: RaisedButton(
-                onPressed: (){},
+                onPressed: (){
+                //Validate first, then push this
+                 Navigator.of(context).pushNamedAndRemoveUntil('/Start', (Route <dynamic> route) => false);
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -70,12 +70,12 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
             FlatButton(
               child: Text('Create Account', style: TextStyle(color: Colors.black54),),
-              onPressed: (){},
+              onPressed: (){
+              },
             ),
           ],
         ),
       ),
     );
   }
-
 }
