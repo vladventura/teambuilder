@@ -6,7 +6,7 @@ import 'package:teambuilder/screens/home.dart';
 void main(){
   runApp(MaterialApp(
     routes: <String, WidgetBuilder>{
-      '/Start': (context) => MyHomepage(),
+      '/Home': (context) => MyHomepage(),
     },
     home: LoginScreen(),
   ));
