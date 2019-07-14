@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:teambuilder/database/dbmanager.dart';
+import 'package:teambuilder/models/user.dart';
 
 class LoginScreen extends StatefulWidget{
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen>{
-  String email, password;
+  final _formKey = new GlobalKey<FormState>();
+  String username, email, password;
   @override
   void initState(){
     super.initState();
@@ -14,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen>{
   Widget build (BuildContext context){
     return Scaffold(
       body: Center(
-        child: ListView(
+        child: Form(
+          key: _formKey,
+          child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 24),
           shrinkWrap: true,
           children: <Widget>[
@@ -29,6 +34,15 @@ class _LoginScreenState extends State<LoginScreen>{
             SizedBox(height: 48.0,),
             // Email
             TextFormField(
+              onSaved: (email){
+                this.email = email;
+              },
+              validator: (email){
+                if (email.contains(' ')) return "Emails must not contain spaces";
+                if (!email.contains('@')) return "This is not a valid email.";
+                if (email.isEmpty) return "Required Field.";
+              },
+              textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
               autofocus: false,
               decoration: InputDecoration(
@@ -42,6 +56,14 @@ class _LoginScreenState extends State<LoginScreen>{
             SizedBox(height: 8,),
             // Password
             TextFormField(
+              onSaved: (password){
+                this.password = password;
+              },
+              validator: (password){
+                if (password.contains(' ')) return "Passwords must not contain spaces.";
+                if (password.isEmpty) return "Required field\n";
+                if (password.length < 6) return "Passwords should be larger than 6 characters";
+              },
               autofocus: false,
               obscureText: true,
               decoration: InputDecoration(
@@ -57,8 +79,7 @@ class _LoginScreenState extends State<LoginScreen>{
               padding: EdgeInsets.symmetric(vertical: 16),
               child: RaisedButton(
                 onPressed: (){
-                //Validate first, then push this
-                 Navigator.of(context).pushNamedAndRemoveUntil('/Start', (Route <dynamic> route) => false);
+                submitUser();
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -76,6 +97,20 @@ class _LoginScreenState extends State<LoginScreen>{
           ],
         ),
       ),
+      ),
     );
+  }
+  void submitUser(){
+    var dbLink = DBManager();
+    if(this._formKey.currentState.validate()){
+      _formKey.currentState.save();
+    }
+    else 
+    return null;
+    User user = new User();
+    user.email = email;
+    user.password = password;
+    dbLink.insertUser(user);
+    Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route <dynamic> route) => false);
   }
 }
