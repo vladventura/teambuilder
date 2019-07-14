@@ -32,6 +32,26 @@ class _LoginScreenState extends State<LoginScreen>{
               ),
             ),
             SizedBox(height: 48.0,),
+            // Username
+              TextFormField(
+              onSaved: (username){
+                this.username = username;
+              },
+              validator: (username){
+                if (username.contains(' ')) return "Usernames must not contain spaces";
+                if (username.isEmpty) return "Required Field.";
+              },
+              textInputAction: TextInputAction.next,
+              autofocus: false,
+              decoration: InputDecoration(
+                hintText: 'Username',
+                contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+            SizedBox(height: 8,),
             // Email
             TextFormField(
               onSaved: (email){
@@ -108,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen>{
     else 
     return null;
     User user = new User();
+    user.username = username;
     user.email = email;
     user.password = password;
     dbLink.insertUser(user);
