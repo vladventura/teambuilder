@@ -1,6 +1,8 @@
 // Dependencies for the database, async and await properties and also the path parsing
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/src/exception.dart';
 import 'package:path/path.dart';
+import 'package:teambuilder/exceptions/userex.dart';
 import 'dart:async';
 import 'package:teambuilder/util/constants.dart';
 
@@ -64,9 +66,9 @@ class DBManager {
     }
     return projects;
   }
-  authenticate(String username, String field) async{
+  authenticate(String username, String field) async {
     var dbLink = await db;
-    await dbLink.rawQuery("""SELECT $field from ${Constants.users_query_name} where username=$username""");
+    await dbLink.query('users',where:"""$field=$username;""" );
   }
   getUser(User user) async{
     var dbLink = await db;
