@@ -64,7 +64,10 @@ class DBManager {
     }
     return projects;
   }
-
+  authenticate(String username, String field) async{
+    var dbLink = await db;
+    await dbLink.rawQuery("""SELECT $field from ${Constants.users_query_name} where username=$username""");
+  }
   getUser(User user) async{
     var dbLink = await db;
     List<Map> usr = await dbLink.rawQuery("""SELECT * FROM ${Constants.users_query_name} WHERE username=${user.username};""");
