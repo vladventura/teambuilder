@@ -11,7 +11,12 @@ class _DisplayTeams extends State<DisplayTeams> {
   void initState() {
     super.initState();
   }
-
+  /* 
+  TODO: Have a set of icons that instanciate depending on the difficuty of the project
+  TODO: Sort the projects by several topics, like difficulty 
+    (if difficulty is like beginner then just make this project's value 1 or something. 
+    Again, these sort of functionalities are abstracted from the dev in cloud databases).
+  */
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

@@ -55,6 +55,7 @@ class _DisplayFormState extends State<DisplayForm> {
                       },
                       validator: (name) {
                         if (name.isEmpty) return Texts.name_error_msg;
+                        return null;
                       },
                       decoration: Constants.formDecoration(Texts.project_name)),
                 ),
@@ -68,9 +69,9 @@ class _DisplayFormState extends State<DisplayForm> {
                       autocorrect: Constants.has_autocorrect,
                       validator: (description) {
                         if (description.isEmpty) return Texts.description_error;
+                        return null;
                       },
                       onSaved: (description) => this.description = description,
-                      // TODO: Make the lines take a certain amount of characters
                       decoration:
                           Constants.formDecoration(Texts.project_description)),
                 ),
