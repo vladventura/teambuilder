@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/src/exception.dart';
+import 'package:sqflite/src/exception.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/exceptions/userex.dart';
 class LoginScreen extends StatefulWidget{
@@ -18,8 +19,6 @@ class _LoginScreenState extends State<LoginScreen>{
   TODO: Find a way to return a user object to assign to this instance of the app so we can use the user's info
   TODO: Change that logo, it looks horrible btw
 
-  First delete unnecessary form fields.
-    Easy. Take away the email one.
   Then, check if the database has a user with the specified username
   Then, check if the entry with this name matches the password entered
     Medium. This should be done server side; the user sends the credentials.
@@ -48,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen>{
             // Username
               TextFormField(
               validator: (username){
-                try{
+                try {
                   checkUser(username);
-                } on UserExeption {
-                  return "This username is not registered";
+                } on SqfliteDatabaseException {
+                  return "Username not registered";
                 }
                 if (username.contains(' ')) return "Usernames must not contain spaces";
                 if (username.isEmpty) return "Required Field.";
@@ -121,12 +120,8 @@ class _LoginScreenState extends State<LoginScreen>{
     if(_formKey.currentState.validate()) Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route <dynamic> route) => false);
   }
 
-  checkUser(String username){
+  checkUser(String username) async {
     var dbLink = new DBManager();
-    try{
-      dbLink.authenticate(username, "username");
-    } on DatabaseException{
-      throw new UserExeption('user');
-    }
+    await dbLink.authenticate(username, "username");
   }
 }
