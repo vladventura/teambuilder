@@ -1,8 +1,8 @@
 // Dependencies for the database, async and await properties and also the path parsing
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/src/exception.dart';
+
 import 'package:path/path.dart';
-import 'package:teambuilder/exceptions/userex.dart';
+
 import 'dart:async';
 import 'package:teambuilder/util/constants.dart';
 
