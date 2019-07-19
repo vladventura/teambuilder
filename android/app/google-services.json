@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1041108415254",
+    "firebase_url": "https://teambuilder-25bfa.firebaseio.com",
+    "project_id": "teambuilder-25bfa",
+    "storage_bucket": "teambuilder-25bfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041108415254:android:2c33bbc851f43c37",
+        "android_client_info": {
+          "package_name": "com.sleepydev.teambuilder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041108415254-afjk0421gscq96069mljj2pal842kule.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC72Op2dk14cS9qCS6LgbsHUnDu1O8Hmls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041108415254-afjk0421gscq96069mljj2pal842kule.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

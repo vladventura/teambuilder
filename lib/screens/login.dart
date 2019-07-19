@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/src/exception.dart';
-import 'package:sqflite/src/exception.dart';
+
 import 'package:teambuilder/database/dbmanager.dart';
-import 'package:teambuilder/exceptions/userex.dart';
+
 class LoginScreen extends StatefulWidget{
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -47,11 +46,6 @@ class _LoginScreenState extends State<LoginScreen>{
             // Username
               TextFormField(
               validator: (username){
-                try {
-                  checkUser(username);
-                } on SqfliteDatabaseException {
-                  return "Username not registered";
-                }
                 if (username.contains(' ')) return "Usernames must not contain spaces";
                 if (username.isEmpty) return "Required Field.";
                 return null;
