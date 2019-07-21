@@ -5,12 +5,12 @@ import 'package:teambuilder/usable/displayteams.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 
-class MyHomepage extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   @override
-  _MyHomepageState createState() => _MyHomepageState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _MyHomepageState extends State<MyHomepage>
+class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
