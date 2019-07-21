@@ -17,10 +17,10 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  firebase_auth: 0.7.0
+  firebase_core: 0.2.5+1 # Add dependency for Firebase Core
   sqflite:
-  
   path_provider: 
-
   flutter:
     sdk: flutter
 
