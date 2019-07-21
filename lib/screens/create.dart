@@ -1,8 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqlite_api.dart';
-import 'package:teambuilder/database/dbmanager.dart';
-import 'package:teambuilder/exceptions/userex.dart';
-import 'package:teambuilder/models/user.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class CreateScreen extends StatefulWidget{
   _CreateScreenState createState() => _CreateScreenState();
@@ -10,22 +9,13 @@ class CreateScreen extends StatefulWidget{
 
 class _CreateScreenState extends State<CreateScreen>{
   final _formKey = new GlobalKey<FormState>();
-  String username, email, password;
+  TextEditingController _username, _email, _password;
+  
   @override
   void initState(){
     super.initState();
   }
   /*
-  TODO: Make a new page to call from the create account button
-  
-  Then, check if the username and/or the email are already define in the database,
-  because these two are Unique
-    Medium. I'll probably have to split the transaction into several pieces and
-    check for the username and the email
-  
-  This will prepare me to use Firebase, even though these features are abstracted
-  on a cloud database (including authentication). If not, then I'll most likely 
-  look for an oAuth package or something. This is too far ahead yet.
   */
   Widget build (BuildContext context){
     return Scaffold(
@@ -47,15 +37,8 @@ class _CreateScreenState extends State<CreateScreen>{
             SizedBox(height: 48.0,),
             // Username
               TextFormField(
-              onSaved: (username){
-                this.username = username;
-              },
+              controller: _username,
               validator: (username){
-                try {
-                  checkUser(username);
-                } on UserExeption {
-                  return "This username is already taken";
-                }
                 if (username.contains(' ')) return "Usernames must not contain spaces";
                 if (username.isEmpty) return "Required Field.";
                 return null;
@@ -73,9 +56,7 @@ class _CreateScreenState extends State<CreateScreen>{
             SizedBox(height: 8,),
             // Email
             TextFormField(
-              onSaved: (email){
-                this.email = email;
-              },
+              controller: _email,
               validator: (email){
                 if (email.contains(' ')) return "Emails must not contain spaces";
                 if (!email.contains('@')) return "This is not a valid email.";
@@ -96,9 +77,7 @@ class _CreateScreenState extends State<CreateScreen>{
             SizedBox(height: 8,),
             // Password
             TextFormField(
-              onSaved: (password){
-                this.password = password;
-              },
+              controller: _password,
               validator: (password){
                 if (password.contains(' ')) return "Passwords must not contain spaces.";
                 if (password.isEmpty) return "Required field\n";
@@ -119,7 +98,7 @@ class _CreateScreenState extends State<CreateScreen>{
             // Confirm Password
             TextFormField(
               validator: (confirm){
-                if (confirm != this.password) return "Passwords don't match.";
+                if (confirm != _password.text) return "Passwords don't match.";
                 return null;
               },
               autofocus: false,
@@ -136,8 +115,10 @@ class _CreateScreenState extends State<CreateScreen>{
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: RaisedButton(
-                onPressed: (){
-                submitUser();
+                onPressed: () async {
+                  if (_formKey.currentState.validate()){
+                    _registerUser();
+                  }
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -153,37 +134,11 @@ class _CreateScreenState extends State<CreateScreen>{
       ),
     );
   }
-
-  checkUser(String username){
-    var dbLink = new DBManager();
-    try{
-      dbLink.authenticate(username, "username");
-    } on DatabaseException{
-      throw new UserExeption('user');
-    }
-  }
-
-  checkEmail(String email){
-    var dbLink = new DBManager();
-    try{
-      dbLink.authenticate(email, "email");
-    } on DatabaseException {
-      throw new UserExeption('email');
-    }
-  }
-
-  void submitUser(){
-    var dbLink = DBManager();
-    if(this._formKey.currentState.validate()){
-      _formKey.currentState.save();
-    }
-    else 
-    return null;
-    User user = new User();
-    user.username = username;
-    user.email = email;
-    user.password = password;
-    dbLink.insertUser(user);
-    Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route <dynamic> route) => false);
+  void _registerUser() async{
+    final FirebaseUser user = await _auth.createUserWithEmailAndPassword(
+      email: _email.text,
+      password: _password.text,
+    );
+    
   }
 }
