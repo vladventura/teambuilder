@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:teambuilder/database/auth.dart';
 import 'package:teambuilder/screens/create.dart';
 
 import 'package:teambuilder/screens/login.dart';
 import 'package:teambuilder/screens/home.dart';
+
+import 'database/authprovider.dart';
 
 /* 
 TODO: Set PRs for all the TODOs (:
@@ -11,11 +14,13 @@ TODO: Firebase integration
 */
 
 void main(){
-  runApp(MaterialApp(
+  runApp(
+    Provider(
+    auth: Auth(),
+    child: MaterialApp(
     routes: <String, WidgetBuilder>{
-      '/Home': (context) => MyHomepage(),
-      '/Create': (context) => CreateScreen(),
+      '/Home': (context) => MainScreen(),
     },
-    home: LoginScreen(),
-  ));
+    home: Login(),
+  )));
 }
