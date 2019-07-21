@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget{
     return Provider(
         auth: Auth(),
         child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark(),
-        home: YourHomepage(),
+          title: 'Flutter Demo',
+          theme: ThemeData.dark(),
+          home: YourHomepage(),
       ),
     );
   }
