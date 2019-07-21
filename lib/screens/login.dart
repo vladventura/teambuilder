@@ -4,27 +4,6 @@ import 'package:teambuilder/database/authprovider.dart';
 import 'package:teambuilder/database/validators.dart';
 import 'package:teambuilder/screens/home.dart';
 
-class Streamer extends StatelessWidget {
-  /*
-  TODO: True login on the main page
-  TODO: Find a way to return a user object to assign to this instance of the app so we can use the user's info
-  TODO: Change that logo, it looks horrible btw
-  */
-  @override
-  Widget build(BuildContext context) {
-    final Auth auth = Provider.of(context).auth;
-
-    return StreamBuilder<String>(
-        stream: auth.onAuthStateChanged,
-        builder: (context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            final bool loggedIn = snapshot.hasData;
-            return loggedIn ? MainScreen() : Login();
-          }
-          return CircularProgressIndicator();
-        });
-  }
-}
 
 class Login extends StatefulWidget {
   @override
@@ -50,6 +29,47 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  bool validate(){
+    final form = _formKey.currentState;
+    if (form.validate()){
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void submit() async {
+    if (validate()) {
+      try {
+        final auth = Provider.of(context).auth;
+        if (_formType == FormType.login) {
+          String userId =
+              await auth.signWithEmailAndPassword(_email, _password);
+          print("Signed in $userId");
+        } else {
+          String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+          print("Created $userId");
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  void switchFormState(String state) {
+    _formKey.currentState.reset();
+    if (state == 'register') {
+      setState(() {
+        _formType = FormType.register;
+      });
+    } else {
+      setState(() {
+        _formType = FormType.login;
+      });
+    }
   }
 
   List<Widget> buildScreen() {
@@ -104,7 +124,7 @@ class _LoginState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(12),
           child: RaisedButton(
-              onPressed: () {},
+              onPressed: submit,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.all(12),
@@ -117,7 +137,9 @@ class _LoginState extends State<Login> {
         FlatButton(
           child:
               Text('Create Account', style: TextStyle(color: Colors.black54)),
-          onPressed: () {},
+          onPressed: () {
+            switchFormState('register');
+          },
         ),
       ];
     } else {
@@ -172,7 +194,7 @@ class _LoginState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(12),
           child: RaisedButton(
-              onPressed: () {},
+              onPressed: submit,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.all(12),
@@ -183,9 +205,10 @@ class _LoginState extends State<Login> {
               )),
         ),
         FlatButton(
-          child:
-              Text('Log In', style: TextStyle(color: Colors.black54)),
-          onPressed: () {},
+          child: Text('Log In', style: TextStyle(color: Colors.black54)),
+          onPressed: () {
+            switchFormState('login');
+          },
         ),
       ];
     }
