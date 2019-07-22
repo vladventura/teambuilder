@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teambuilder/database/auth.dart';
+import 'package:teambuilder/database/authprovider.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/usable/displayform.dart';
 import 'package:teambuilder/usable/displayteams.dart';
@@ -37,7 +39,23 @@ class _MainScreenState extends State<MainScreen>
         resizeToAvoidBottomInset: false,
         backgroundColor: Constants.third_color,
         drawer: Drawer(
-          child: Text('data'),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                FlatButton(
+                  child: Text("Sign Out"),
+                  onPressed: () async {
+                    try{
+                      Auth auth = Provider.of(context).auth;
+                      await auth.signOut();
+                    } catch (e){
+                      print(e);
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
         ),
         body: NestedScrollView(
             physics: BouncingScrollPhysics(),
