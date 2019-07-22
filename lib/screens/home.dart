@@ -47,6 +47,7 @@ class _MainScreenState extends State<MainScreen>
                   onPressed: () async {
                     try{
                       Auth auth = Provider.of(context).auth;
+                      print("Signed out ${auth.currentUser()}");
                       await auth.signOut();
                     } catch (e){
                       print(e);
