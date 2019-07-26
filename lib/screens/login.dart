@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teambuilder/database/auth.dart';
-import 'package:teambuilder/database/authprovider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teambuilder/database/validators.dart';
-import 'package:teambuilder/screens/home.dart';
-
+import 'package:flushbar/flushbar.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -31,9 +29,9 @@ class _LoginState extends State<Login> {
     );
   }
 
-  bool validate(){
+  bool validate() {
     final form = _formKey.currentState;
-    if (form.validate()){
+    if (form.validate()) {
       form.save();
       return true;
     } else {
@@ -41,20 +39,27 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void submit() async {
+  Future<void> submit() async {
     if (validate()) {
-      try {
-        final auth = Provider.of(context).auth;
-        if (_formType == FormType.login) {
-          String userId =
-              await auth.signWithEmailAndPassword(_email, _password);
-          print("Signed in $userId");
-        } else {
-          String userId = await auth.createUserWithEmailAndPassword(_email, _password);
-          print("Created $userId");
+      if (_formType == FormType.login) {
+        try {
+          FirebaseUser user = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: _email, password: _password);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/Home', (Route<dynamic> route) => false);
+        } catch (e) {
+          print(e.message);
         }
-      } catch (e) {
-        print(e);
+      } else {
+        try {
+          FirebaseUser user = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: _email, password: _password);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/Home', (Route<dynamic> route) => false);
+        } catch (e) {
+          print(e.message);
+        }
       }
     }
   }
@@ -88,7 +93,7 @@ class _LoginState extends State<Login> {
         ),
         // Email
         TextFormField(
-            validator: UsernameValidator.validate,
+            validator: EmailValidator.validate,
             textInputAction: TextInputAction.next,
             autofocus: false,
             decoration: InputDecoration(
@@ -98,17 +103,18 @@ class _LoginState extends State<Login> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onSaved: (value) {
-              _email = value;
+            onSaved: (email) {
+              _email = email;
             }),
         SizedBox(
           height: 8,
         ),
         // Password
         TextFormField(
-          onSaved: (value) {
-            _password = value;
+          onSaved: (password) {
+            _password = password;
           },
+          validator: PasswordValidator.validate,
           obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
@@ -124,7 +130,10 @@ class _LoginState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(12),
           child: RaisedButton(
-              onPressed: submit,
+              onPressed: (){
+                showFlushbar(context);
+                submit();
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.all(12),
@@ -157,7 +166,7 @@ class _LoginState extends State<Login> {
         ),
         // Email
         TextFormField(
-            validator: UsernameValidator.validate,
+            validator: EmailValidator.validate,
             textInputAction: TextInputAction.next,
             autofocus: false,
             decoration: InputDecoration(
@@ -167,16 +176,16 @@ class _LoginState extends State<Login> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onSaved: (value) {
-              _email = value;
+            onSaved: (email) {
+              _email = email;
             }),
         SizedBox(
           height: 8,
         ),
         // Password
         TextFormField(
-          onSaved: (value) {
-            _password = value;
+          onSaved: (password) {
+            _password = password;
           },
           validator: PasswordValidator.validate,
           obscureText: true,
@@ -213,4 +222,10 @@ class _LoginState extends State<Login> {
       ];
     }
   }
+}
+
+void showFlushbar(BuildContext context){
+  Flushbar(
+    message: 'Logging In',
+  ).show(context);
 }
