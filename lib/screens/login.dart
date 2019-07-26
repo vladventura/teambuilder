@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teambuilder/database/validators.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:teambuilder/util/snackbars.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -52,6 +51,7 @@ class _LoginState extends State<Login> {
               .then((user) {
             username = user.displayName;
             print(username);
+            Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route <dynamic> route) => false);
             return null;
           });
           print(username);

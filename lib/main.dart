@@ -4,9 +4,8 @@ import 'package:teambuilder/screens/login.dart';
 import 'package:teambuilder/screens/home.dart';
 
 /* 
-TODO: Set PRs for all the TODOs (:
+TODO: Set issues for all the TODOs (:
 TODO: Set a proper color scheme for the app, like a palette of something
-TODO: Firebase integration
 */
 
 void main() {
