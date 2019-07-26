@@ -43,6 +43,10 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
+    /* TODO: Make a StreamBuilder or something based on a boolean 
+    that gets changed inside a .then() after the username has been fetched.
+    Meanwhile display a circular progress bar.
+    */
     return Scaffold(
         floatingActionButton: restartDatabase(),
         resizeToAvoidBottomPadding: false,
