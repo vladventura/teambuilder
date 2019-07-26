@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teambuilder/database/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teambuilder/database/authprovider.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/usable/displayform.dart';
@@ -46,8 +46,9 @@ class _MainScreenState extends State<MainScreen>
                   child: Text("Sign Out"),
                   onPressed: () async {
                     try{
-                      Auth auth = Provider.of(context).auth;
+                      FirebaseAuth auth = FirebaseAuth.instance;
                       await auth.signOut();
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (Route <dynamic> route) => false);
                     } catch (e){
                       print(e);
                     }
