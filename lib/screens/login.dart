@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teambuilder/database/validators.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:teambuilder/util/snackbars.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,7 +11,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  String _email, _password;
+  String _email, _password, _username;
+  TextEditingController _passwordController = new TextEditingController();
   FormType _formType = FormType.login;
 
   @override
@@ -39,29 +41,38 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future<void> submit() async {
+  Future<String> submit() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
     if (validate()) {
       if (_formType == FormType.login) {
         try {
-          FirebaseUser user = await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: _email, password: _password);
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/Home', (Route<dynamic> route) => false);
+          var username;
+          await auth
+              .signInWithEmailAndPassword(email: _email, password: _password)
+              .then((user) {
+            username = user.displayName;
+            print(username);
+            return null;
+          });
+          print(username);
+          return username;
         } catch (e) {
           print(e.message);
         }
       } else {
         try {
-          FirebaseUser user = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: _email, password: _password);
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/Home', (Route<dynamic> route) => false);
+          UserUpdateInfo updater = UserUpdateInfo();
+          FirebaseUser user = await auth.createUserWithEmailAndPassword(
+              email: _email, password: _password);
+          updater.displayName = _username;
+          print(updater.displayName);
+          user.updateProfile(updater);
         } catch (e) {
           print(e.message);
         }
       }
     }
+    return null;
   }
 
   void switchFormState(String state) {
@@ -130,9 +141,11 @@ class _LoginState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(12),
           child: RaisedButton(
-              onPressed: (){
-                showFlushbar(context);
+              onPressed: () {
                 submit();
+                showFlushbar(context, _username);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                '/Home', (Route<dynamic> route) => false);
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
@@ -151,6 +164,8 @@ class _LoginState extends State<Login> {
           },
         ),
       ];
+
+      // Create account page
     } else {
       return [
         CircleAvatar(
@@ -182,8 +197,27 @@ class _LoginState extends State<Login> {
         SizedBox(
           height: 8,
         ),
+        // Username
+        TextFormField(
+            validator: UsernameValidator.validate,
+            textInputAction: TextInputAction.next,
+            autofocus: false,
+            decoration: InputDecoration(
+              hintText: 'User Name',
+              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            onSaved: (username) {
+              _username = username;
+            }),
+        SizedBox(
+          height: 8,
+        ),
         // Password
         TextFormField(
+          controller: _passwordController,
           onSaved: (password) {
             _password = password;
           },
@@ -191,6 +225,29 @@ class _LoginState extends State<Login> {
           obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
+            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+        // Confirm password with the value of the controller
+        SizedBox(
+          height: 8,
+        ),
+        // Password
+        TextFormField(
+          onSaved: (password) {
+            _password = password;
+          },
+          validator: (confirm) {
+            if (confirm != _passwordController.text)
+              return "Passwords do not match";
+            return null;
+          },
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'Confirm Password',
             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
@@ -222,10 +279,10 @@ class _LoginState extends State<Login> {
       ];
     }
   }
-}
 
-void showFlushbar(BuildContext context){
-  Flushbar(
-    message: 'Logging In',
-  ).show(context);
+  showFlushbar(BuildContext context, argument) {
+    Flushbar(
+      message: 'Logging $argument in',
+    ).show(context);
+  }
 }
