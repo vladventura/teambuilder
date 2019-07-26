@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teambuilder/database/authprovider.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/usable/displayform.dart';
 import 'package:teambuilder/usable/displayteams.dart';
@@ -16,12 +15,15 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
+  static var username;
 
   @override
   void initState() {
     super.initState();
+    username = setUsername();
     _tabController = TabController(length: Constants.app_tabs, vsync: this);
     _scrollController = ScrollController();
+
   }
 
   @override
@@ -29,6 +31,14 @@ class _MainScreenState extends State<MainScreen>
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future <String> setUsername() async{
+    await FirebaseAuth.instance.currentUser()
+    .then((user){
+      return user.displayName;
+    });
+    return 'error';
   }
 
   @override
@@ -43,7 +53,7 @@ class _MainScreenState extends State<MainScreen>
             child: Column(
               children: <Widget>[
                 FlatButton(
-                  child: Text("Sign Out"),
+                  child: Text("Sign $username out"),
                   onPressed: () async {
                     try{
                       FirebaseAuth auth = FirebaseAuth.instance;
