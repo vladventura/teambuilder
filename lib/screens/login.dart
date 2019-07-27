@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:teambuilder/database/validators.dart';
@@ -13,6 +15,13 @@ class _LoginState extends State<Login> {
   String _email, _password, _username;
   TextEditingController _passwordController = new TextEditingController();
   FormType _formType = FormType.login;
+  var displayMe;
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,24 +49,25 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future<String> submit() async {
+  Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (validate()) {
       if (_formType == FormType.login) {
         try {
-          var username;
+          bool show = false;
           await auth
               .signInWithEmailAndPassword(email: _email, password: _password)
               .then((user) {
-            username = user.displayName;
-            print(username);
-            Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route <dynamic> route) => false);
-            return null;
+            displayMe = user.displayName;
+            print(displayMe);
+            show = true;
           });
-          print(username);
-          return username;
+          while (show == false){
+          show? showFlushbar(context, displayMe) :
+          Navigator.pushNamedAndRemoveUntil(context,'/Home', (Route <dynamic> route) => false);}
+          print(displayMe);
         } catch (e) {
-          print(e.message);
+          print(e);
         }
       } else {
         try {
@@ -143,9 +153,6 @@ class _LoginState extends State<Login> {
           child: RaisedButton(
               onPressed: () {
                 submit();
-                showFlushbar(context, _username);
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                '/Home', (Route<dynamic> route) => false);
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
