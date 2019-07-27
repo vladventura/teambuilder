@@ -26,7 +26,7 @@ class DBManager {
     var db = await openDatabase(
         path,
         onCreate: onCreateFunction, 
-        onUpgrade: onUpgradeFunction, 
+        //onUpgrade: onUpgradeFunction, 
         version: Constants.database_version,
         );
     return db;
