@@ -68,7 +68,7 @@ class Constants {
   static const database_filename = 'projects.db';
   static const projects_query_name = 'projects';
   static const users_query_name = 'users';
-  static const database_version = 3;
+  static const database_version = 4;
   static const on_create_SQL = 
     """
     CREATE TABLE $projects_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
