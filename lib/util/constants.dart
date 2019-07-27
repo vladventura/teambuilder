@@ -73,10 +73,14 @@ class Constants {
     """
     CREATE TABLE $projects_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT);
-
-    CREATE TABLE $users_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE, email TEXT UNIQUE, password TEXT);
     """;
+
+  static const on_update_SQL =
+  """ 
+  CREATE TABLE $projects_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT,
+  originator TEXT);
+  """;
   static const select_all_from_db = """SELECT * FROM projects;""";
 
   // General information

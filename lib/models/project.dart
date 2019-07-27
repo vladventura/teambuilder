@@ -5,6 +5,7 @@ class Project{
   String description;
   String complexity;
   String contactPlatforms;
+  String originator;
 
   Map <String, dynamic> toMap(){
     return{
@@ -13,6 +14,7 @@ class Project{
       'description': description,
       'complexity': complexity,
       'contactPlatforms': contactPlatforms,
+      'originator': originator,
     };
   }
 }

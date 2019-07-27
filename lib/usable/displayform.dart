@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:teambuilder/database/dbmanager.dart';
 import 'package:teambuilder/models/project.dart';
@@ -20,10 +21,18 @@ class _DisplayFormState extends State<DisplayForm> {
   String name, description, contactPlatforms;
   // This is a needed key. The main scaffold also needs one
   final _formKey = new GlobalKey<FormState>();
+
+  FirebaseUser _user;
+
   @override
   void initState() {
     super.initState();
+    asyncSetup();
     complexities.addAll(Texts.complexities);
+  }
+
+  Future<dynamic> asyncSetup() async{
+    _user = await FirebaseAuth.instance.currentUser();
   }
 
   void _onChanged(String value) {
@@ -111,6 +120,7 @@ class _DisplayFormState extends State<DisplayForm> {
     } else
       return null;
     Project project = new Project();
+    project.originator = _user.displayName;
     project.name = name;
     project.description = description;
     project.complexity = _complexity;

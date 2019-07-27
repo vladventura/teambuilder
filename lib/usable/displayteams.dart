@@ -34,7 +34,7 @@ class _DisplayTeams extends State<DisplayTeams> {
                       decoration: Constants.buttonDecoration(),
                       child: FlatButton(
                         child: buttonInfoDisplay(
-                            snapshot.data[index].name, 'originator'),
+                            snapshot.data[index].name, snapshot.data[index].originator),
                         onPressed: () {
                           return showDialog(
                               context: context,
