@@ -15,38 +15,28 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
-  static var username;
+  FirebaseUser _user;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    username = setUsername();
+    _user = await FirebaseAuth.instance.currentUser();
     _tabController = TabController(length: Constants.app_tabs, vsync: this);
     _scrollController = ScrollController();
 
   }
 
+  //TODO: Keep an eye on this behavior and the StreamBuilder in main
   @override
-  void dispose() {
+  void dispose() async{
+    await FirebaseAuth.instance.signOut();
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  Future <String> setUsername() async{
-    await FirebaseAuth.instance.currentUser()
-    .then((user){
-      return user.displayName;
-    });
-    return 'error';
-  }
-
   @override
   Widget build(BuildContext context) {
-    /* TODO: Make a StreamBuilder or something based on a boolean 
-    that gets changed inside a .then() after the username has been fetched.
-    Meanwhile display a circular progress bar.
-    */
     return Scaffold(
         floatingActionButton: restartDatabase(),
         resizeToAvoidBottomPadding: false,
@@ -57,7 +47,7 @@ class _MainScreenState extends State<MainScreen>
             child: Column(
               children: <Widget>[
                 FlatButton(
-                  child: Text("Sign $username out"),
+                  child: Text("Sign ${_user.displayName} out"),
                   onPressed: () async {
                     try{
                       FirebaseAuth auth = FirebaseAuth.instance;
