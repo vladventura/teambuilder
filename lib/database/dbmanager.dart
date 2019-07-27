@@ -23,14 +23,22 @@ class DBManager {
   initDB() async {
     String databasesDirectory = await getDatabasesPath();
     String path = join(databasesDirectory, Constants.database_filename);
-    var db = await openDatabase(path,
-        onCreate: onCreateFunction, version: Constants.database_version);
+    var db = await openDatabase(
+        path,
+        onCreate: onCreateFunction, 
+        onUpgrade:onUpdateFunction, 
+        version: Constants.database_version,
+        );
     return db;
   }
 
   //What to do when the link is created and the database is completely new
   void onCreateFunction(Database db, int version) async {
     await db.execute(Constants.on_create_SQL);
+  }
+
+  void onUpdateFunction(Database db, int version) async{
+    await db.execute(Constants.on_update_SQL);
   }
 
   Future <List<User>> getAllUsers() async{
