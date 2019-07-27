@@ -54,18 +54,15 @@ class _LoginState extends State<Login> {
     if (validate()) {
       if (_formType == FormType.login) {
         try {
-          bool show = false;
           await auth
               .signInWithEmailAndPassword(email: _email, password: _password)
               .then((user) {
             displayMe = user.displayName;
+            showFlushbar(context, displayMe);
             print(displayMe);
-            show = true;
           });
-          while (show == false){
-          show? showFlushbar(context, displayMe) :
-          Navigator.pushNamedAndRemoveUntil(context,'/Home', (Route <dynamic> route) => false);}
-          print(displayMe);
+          Navigator.pushNamedAndRemoveUntil(context,'/Home', (Route <dynamic> route) => false);
+          return true;
         } catch (e) {
           print(e);
         }
@@ -151,8 +148,8 @@ class _LoginState extends State<Login> {
         Padding(
           padding: EdgeInsets.all(12),
           child: RaisedButton(
-              onPressed: () {
-                submit();
+              onPressed: () async {
+                await submit();
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
