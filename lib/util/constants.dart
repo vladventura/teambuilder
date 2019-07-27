@@ -66,14 +66,18 @@ class Constants {
  
   // Database information
   static const database_filename = 'projects.db';
-  static const database_query_name = 'projects';
+  static const projects_query_name = 'projects';
+  static const users_query_name = 'users';
   static const database_version = 1;
   static const on_create_SQL = 
     """
-    CREATE TABLE $database_query_name(id INTEGER PRIMARY KEY AUTOINCREASE,
+    CREATE TABLE $projects_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT, description TEXT, complexity TEXT, contactPlatforms TEXT);
+
+    CREATE TABLE $users_query_name(id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE, email TEXT UNIQUE, password TEXT);
     """;
-  static const select_all_from_db = """SELECT * FROM projects""";
+  static const select_all_from_db = """SELECT * FROM projects;""";
 
   // General information
   static const items_per_row = 5;
