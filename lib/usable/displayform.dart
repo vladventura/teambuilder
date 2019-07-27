@@ -113,14 +113,16 @@ class _DisplayFormState extends State<DisplayForm> {
             )));
   }
 
-  void submitProject() {
+  void submitProject(){
     var dbLink = DBManager();
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
     } else
       return null;
     Project project = new Project();
-    project.originator = _user.displayName;
+    print(_user.displayName);
+    (_user.displayName != null)? project.originator = _user.displayName :project.originator = "No one";
+    print(project.originator);
     project.name = name;
     project.description = description;
     project.complexity = _complexity;

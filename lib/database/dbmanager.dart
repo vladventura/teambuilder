@@ -26,7 +26,7 @@ class DBManager {
     var db = await openDatabase(
         path,
         onCreate: onCreateFunction, 
-        onUpgrade:onUpdateFunction, 
+        onUpgrade: onUpgradeFunction, 
         version: Constants.database_version,
         );
     return db;
@@ -37,7 +37,7 @@ class DBManager {
     await db.execute(Constants.on_create_SQL);
   }
 
-  void onUpdateFunction(Database db, int version) async{
+  void onUpgradeFunction(Database db, int oldVersion, int newVersion) async{
     await db.execute(Constants.on_update_SQL);
   }
 
