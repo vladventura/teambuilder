@@ -26,7 +26,6 @@ class DBManager {
     var db = await openDatabase(
         path,
         onCreate: onCreateFunction, 
-        //onUpgrade: onUpgradeFunction, 
         version: Constants.database_version,
         );
     return db;
@@ -35,10 +34,6 @@ class DBManager {
   //What to do when the link is created and the database is completely new
   void onCreateFunction(Database db, int version) async {
     await db.execute(Constants.on_create_SQL);
-  }
-
-  void onUpgradeFunction(Database db, int oldVersion, int newVersion) async{
-    await db.execute(Constants.on_update_SQL);
   }
 
   Future <List<User>> getAllUsers() async{
@@ -65,6 +60,7 @@ class DBManager {
 
     for (int index = 0; index < allItems.length; index++) {
       Project pj = new Project();
+      pj.originator = allItems[index]['originator'];
       pj.contactPlatforms = allItems[index]['contactPlatforms'];
       pj.complexity = allItems[index]['complexity'];
       pj.description = allItems[index]['description'];

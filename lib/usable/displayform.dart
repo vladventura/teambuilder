@@ -120,9 +120,7 @@ class _DisplayFormState extends State<DisplayForm> {
     } else
       return null;
     Project project = new Project();
-    print(_user.displayName);
-    (_user.displayName != null)? project.originator = _user.displayName :project.originator = "No one";
-    print(project.originator);
+    (_user.displayName != null)? project.originator = _user.displayName :project.originator = "Guest";
     project.name = name;
     project.description = description;
     project.complexity = _complexity;
