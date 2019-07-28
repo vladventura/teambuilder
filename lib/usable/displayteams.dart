@@ -24,7 +24,6 @@ class _DisplayTeams extends State<DisplayTeams> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
-              print(snapshot.data[2].originator);
               return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
@@ -35,7 +34,7 @@ class _DisplayTeams extends State<DisplayTeams> {
                       decoration: Constants.buttonDecoration(),
                       child: FlatButton(
                         child: buttonInfoDisplay(
-                            snapshot.data[index].name, snapshot.data[index].description),
+                            snapshot.data[index].name, snapshot.data[index].originator),
                         onPressed: () {
                           return showDialog(
                               context: context,
