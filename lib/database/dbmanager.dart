@@ -23,8 +23,11 @@ class DBManager {
   initDB() async {
     String databasesDirectory = await getDatabasesPath();
     String path = join(databasesDirectory, Constants.database_filename);
-    var db = await openDatabase(path,
-        onCreate: onCreateFunction, version: Constants.database_version);
+    var db = await openDatabase(
+        path,
+        onCreate: onCreateFunction, 
+        version: Constants.database_version,
+        );
     return db;
   }
 
@@ -57,6 +60,7 @@ class DBManager {
 
     for (int index = 0; index < allItems.length; index++) {
       Project pj = new Project();
+      pj.originator = allItems[index]['originator'];
       pj.contactPlatforms = allItems[index]['contactPlatforms'];
       pj.complexity = allItems[index]['complexity'];
       pj.description = allItems[index]['description'];

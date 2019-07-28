@@ -26,8 +26,11 @@ class _FutureMainScreenState extends State<FutureMainScreen>
     _scrollController = ScrollController();
   }
 
+
+  // TODO: Keep an eye out with this behavior and the main file's StreamBuilder
   @override
-  void dispose() {
+  void dispose() async{
+    await FirebaseAuth.instance.signOut();
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
