@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:teambuilder/database/dbmanager.dart';
-import 'package:teambuilder/models/project.dart';
 
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
@@ -106,24 +104,10 @@ class _DisplayFormState extends State<DisplayForm> {
                       color: Colors.transparent,
                       child: Icon(Icons.add),
                       onPressed: (() {
-                        submitProject();
+                        //submitProject();
                       }),
                     )))
               ],
             )));
-  }
-
-  void submitProject(){
-    var dbLink = DBManager();
-    if (this._formKey.currentState.validate()) {
-      _formKey.currentState.save();
-    } else
-      return null;
-    Project project = new Project();
-    (_user.displayName != null)? project.originator = _user.displayName :project.originator = "Guest";
-    project.name = name;
-    project.description = description;
-    project.complexity = _complexity;
-    dbLink.insertProject(project);
   }
 }
