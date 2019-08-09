@@ -45,6 +45,7 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -56,11 +57,11 @@ android {
 //            storePassword keystoreProperties['storePassword']
 //        }
 //    }
-//    buildTypes {
-//        release {
-//            signingConfig signingConfigs.release
-//        }
-//    }
+   buildTypes {
+       release {
+           multiDexKeepFile file('multidex-config.txt')
+       }
+   }
 }
 
 flutter {
