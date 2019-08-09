@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teambuilder/database/validators.dart';
+import 'package:teambuilder/util/validators.dart';
 import 'package:flushbar/flushbar.dart';
 
 class Login extends StatefulWidget {

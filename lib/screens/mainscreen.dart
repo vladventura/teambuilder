@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:teambuilder/screens/displayprojects.dart';
-import 'package:teambuilder/usable/displayform.dart';
+import './displayprojects.dart';
+import './displayform.dart';
 
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 
-class FutureMainScreen extends StatefulWidget {
-  _FutureMainScreenState createState() => _FutureMainScreenState();
+class MainScreen extends StatefulWidget {
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _FutureMainScreenState extends State<FutureMainScreen>
+class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
