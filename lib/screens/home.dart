@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teambuilder/database/dbmanager.dart';
+
+import 'package:teambuilder/screens/displayprojects.dart';
 import 'package:teambuilder/usable/displayform.dart';
-import 'package:teambuilder/usable/displayteams.dart';
+
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 
@@ -38,7 +39,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: restartDatabase(),
+        //floatingActionButton: restartDatabase(),
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
         backgroundColor: Constants.third_color,
@@ -88,20 +89,20 @@ class _MainScreenState extends State<MainScreen>
             },
             body: TabBarView(
               controller: _tabController,
-              children: <Widget>[DisplayTeams(), DisplayForm()],
+              children: <Widget>[DisplayProjects(), DisplayForm()],
             )));
   }
 
-  restartDatabase() {
-    return FloatingActionButton(
-      child: Icon(Icons.delete),
-      onPressed: () {
-        var dbLink = DBManager();
-        dbLink.deleteProjects();
-        setState(() {
-          DisplayTeams();
-        });
-      },
-    );
-  }
+  // restartDatabase() {
+  //   return FloatingActionButton(
+  //     child: Icon(Icons.delete),
+  //     onPressed: () {
+  //       var dbLink = DBManager();
+  //       dbLink.deleteProjects();
+  //       setState(() {
+  //         DisplayProjects();
+  //       });
+  //     },
+  //   );
+  // }
 }
