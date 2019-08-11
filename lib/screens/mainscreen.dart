@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teambuilder/database/dbmanager.dart';
-import 'package:teambuilder/usable/displayform.dart';
-import 'package:teambuilder/usable/displayteams.dart';
+
+import './displayprojects.dart';
+import './displayform.dart';
+
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 
-class FutureMainScreen extends StatefulWidget {
-  _FutureMainScreenState createState() => _FutureMainScreenState();
+class MainScreen extends StatefulWidget {
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _FutureMainScreenState extends State<FutureMainScreen>
+class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
@@ -47,19 +48,6 @@ class _FutureMainScreenState extends State<FutureMainScreen>
     return true;
   }
 
-  restartDatabase() {
-    var dbLink = DBManager();
-    return FloatingActionButton(
-      child: Icon(Icons.delete),
-      onPressed: () {
-        dbLink.deleteProjects();
-        setState(() {
-          DisplayTeams();
-        });
-      },
-    );
-  }
-
   buttonInfoDisplay(String name, String originator) {
     return SizedBox(
         width: double.infinity,
@@ -86,7 +74,6 @@ class _FutureMainScreenState extends State<FutureMainScreen>
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               return Scaffold(
-                floatingActionButton: restartDatabase(),
                 resizeToAvoidBottomInset: false,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Colors.blueAccent,
@@ -142,7 +129,7 @@ class _FutureMainScreenState extends State<FutureMainScreen>
                   body: TabBarView(
                     controller: _tabController,
                     children: <Widget>[
-                      DisplayTeams(),
+                      DisplayProjects(),
                       DisplayForm(),
                     ],
                   ),
