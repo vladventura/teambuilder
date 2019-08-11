@@ -1,5 +1,5 @@
 class Project{
-  int originatorId;
+  String originatorId;
   String name;
   String description;
   String complexity;
