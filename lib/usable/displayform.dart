@@ -37,7 +37,12 @@ class _DisplayFormState extends State<DisplayForm> {
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[],
+        children: <Widget>[
+          buildNameBox(),
+          buildDescriptionBox(),
+          buildComplexityDropdow(),
+          buildSubmitButton(),
+        ],
       ),
     );
   }
@@ -98,7 +103,7 @@ class _DisplayFormState extends State<DisplayForm> {
           color: Colors.transparent,
           child: Icon(Icons.add),
           onPressed: (() async {
-            //submitProject();
+            submitProject();
           }),
         )));
   }
