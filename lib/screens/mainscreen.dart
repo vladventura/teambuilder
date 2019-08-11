@@ -48,19 +48,6 @@ class _MainScreenState extends State<MainScreen>
     return true;
   }
 
-  // restartDatabase() {
-  //   var dbLink = DBManager();
-  //   return FloatingActionButton(
-  //     child: Icon(Icons.delete),
-  //     onPressed: () {
-  //       dbLink.deleteProjects();
-  //       setState(() {
-  //         DisplayTeams();
-  //       });
-  //     },
-  //   );
-  // }
-
   buttonInfoDisplay(String name, String originator) {
     return SizedBox(
         width: double.infinity,
@@ -87,7 +74,6 @@ class _MainScreenState extends State<MainScreen>
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               return Scaffold(
-                //floatingActionButton: restartDatabase(),
                 resizeToAvoidBottomInset: false,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Colors.blueAccent,
