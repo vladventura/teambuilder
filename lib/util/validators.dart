@@ -4,6 +4,8 @@
   It also holds the validators for each form field.
 */
 
+import 'package:teambuilder/util/texts.dart';
+
 enum FormType {login, register}
 
 class UsernameValidator{
@@ -26,6 +28,20 @@ class PasswordValidator{
     if (value.isEmpty) return "Password cannot be empty";
     if (value.contains('!')) return "Password must not contain special characters";
     if (value.contains(' ')) return "Password must not contain spaces";
+    return null;
+  }
+}
+
+class ProjectNameValidator{
+  static String validate(String value){
+    if (value.isEmpty) return Texts.project_name_error_msg;
+    return null;
+  }
+}
+
+class ProjectDescriptionValidator{
+  static String validate(String value){
+    if (value.isEmpty) return Texts.project_description_error_msg;
     return null;
   }
 }
