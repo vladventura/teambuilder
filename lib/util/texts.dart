@@ -13,9 +13,9 @@ class Texts{
 
   // Form texts
   static const project_name = 'Project Name';
-  static const name_error_msg = 'Please fill in a Project Name';
+  static const project_name_error_msg = 'Please fill in a Project Name';
   static const project_description = 'Project Description';
-  static const description_error = 'Please fill in a description';
+  static const project_description_error_msg = 'Please fill in a description';
   static const complexities = [
     'Beginner', 
     'Intermediate', 
