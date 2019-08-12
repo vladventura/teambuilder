@@ -1,6 +1,5 @@
 class Project{
-  // It should be user-id and there should also be a creator name too
-  int id;
+  String originatorId;
   String name;
   String description;
   String complexity;
@@ -11,7 +10,7 @@ class Project{
 
   Map <String, dynamic> toMap(){
     return{
-      'id': id,
+      'originator_id': originatorId,
       'name': name,
       'description': description,
       'complexity': complexity,
