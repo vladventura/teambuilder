@@ -27,43 +27,22 @@ class _MainScreenState extends State<MainScreen>
     _scrollController = ScrollController();
   }
 
-
   // TODO: Keep an eye out with this behavior and the main file's StreamBuilder
   @override
-  void dispose() async{
+  void dispose() async {
     await FirebaseAuth.instance.signOut();
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  // Its actually the Firebase documents that I want here
-  // But for now, getting the user's data should suffice
   Future<dynamic> asyncSetup() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    auth.currentUser().then((user){
+    auth.currentUser().then((user) {
       username = user.displayName;
       return username;
     });
     return true;
-  }
-
-  buttonInfoDisplay(String name, String originator) {
-    return SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              name,
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              originator,
-              textAlign: TextAlign.center,
-            )
-          ],
-        ));
   }
 
   @override
@@ -83,14 +62,13 @@ class _MainScreenState extends State<MainScreen>
                       children: <Widget>[
                         FlatButton(
                           child: Text("Sign out, $username"),
-                          onPressed: (){
-                            try{
-                              FirebaseAuth.instance.signOut()
-                              .then((empty){
-                                Navigator.of(context)
-                                .pushNamedAndRemoveUntil('/', (Route <dynamic> route) => false);
+                          onPressed: () {
+                            try {
+                              FirebaseAuth.instance.signOut().then((empty) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/', (Route<dynamic> route) => false);
                               });
-                            } catch (e){
+                            } catch (e) {
                               print(e);
                             }
                           },
@@ -114,9 +92,8 @@ class _MainScreenState extends State<MainScreen>
                           controller: _tabController,
                           tabs: <Widget>[
                             Tab(
-                              text: Constants.join_project['text'],
-                              icon: Constants.join_project['icon']
-                            ),
+                                text: Constants.join_project['text'],
+                                icon: Constants.join_project['icon']),
                             Tab(
                               text: Constants.create_project['text'],
                               icon: Constants.create_project['icon'],
