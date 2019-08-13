@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+// I will keep this example around just for reference
+
 void main(){
   runApp(MaterialApp(
     home:FirestoreCRUDPage()
