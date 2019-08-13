@@ -109,6 +109,7 @@ class _FirestoreCRUDPageState extends State<FirestoreCRUDPage>{
         if (value.isEmpty){
           return 'Please enter some text';
         }
+        return null;
       },
       onSaved: (value) => name = value,
     );
