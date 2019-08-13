@@ -15,7 +15,7 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
-  var username;
+  FirebaseUser _user;
 
   @override
   void initState() {
@@ -27,28 +27,22 @@ class _MainScreenState extends State<MainScreen>
     _scrollController = ScrollController();
   }
 
-  // TODO: Keep an eye out with this behavior and the main file's StreamBuilder
   @override
-  void dispose() async {
-    await FirebaseAuth.instance.signOut();
+  void dispose(){
     _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  Future<dynamic> loadUsername() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    auth.currentUser().then((user) {
-      username = user.displayName;
-      return username;
-    });
-    return true;
+  Future<dynamic> loadUser() async {
+    _user = await FirebaseAuth.instance.currentUser();
+    return _user;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: loadUsername(),
+        future: loadUser(),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
@@ -98,13 +92,15 @@ class _MainScreenState extends State<MainScreen>
         });
   }
 
+
+
   Drawer buildDrawer(){
     return Drawer(
       child: Center(
         child: Column(
           children: <Widget>[
             FlatButton(
-              child: Text("Sign out, $username"),
+              child: Text("Sign out, ${_user.displayName}"),
               onPressed: () {
                 try {
                   FirebaseAuth.instance.signOut().then((empty) {
