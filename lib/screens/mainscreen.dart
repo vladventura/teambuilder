@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen>
     super.dispose();
   }
 
-  Future<dynamic> asyncSetup() async {
+  Future<dynamic> loadUsername() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     auth.currentUser().then((user) {
       username = user.displayName;
@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: asyncSetup(),
+        future: loadUsername(),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
@@ -56,27 +56,7 @@ class _MainScreenState extends State<MainScreen>
                 resizeToAvoidBottomInset: false,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Colors.blueAccent,
-                drawer: Drawer(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text("Sign out, $username"),
-                          onPressed: () {
-                            try {
-                              FirebaseAuth.instance.signOut().then((empty) {
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/', (Route<dynamic> route) => false);
-                              });
-                            } catch (e) {
-                              print(e);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                drawer: buildDrawer(),
                 body: NestedScrollView(
                   physics: BouncingScrollPhysics(),
                   controller: _scrollController,
@@ -116,5 +96,29 @@ class _MainScreenState extends State<MainScreen>
           } // snapshot != null
           return Container(child: CircularProgressIndicator());
         });
+  }
+
+  Drawer buildDrawer(){
+    return Drawer(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            FlatButton(
+              child: Text("Sign out, $username"),
+              onPressed: () {
+                try {
+                  FirebaseAuth.instance.signOut().then((empty) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/', (Route<dynamic> route) => false);
+                  });
+                } catch (e) {
+                  print(e);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
