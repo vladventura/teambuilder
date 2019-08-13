@@ -62,28 +62,11 @@ class _MainScreenState extends State<MainScreen>
                         forceElevated: isScrolled,
                         pinned: true,
                         floating: true,
-                        bottom: TabBar(
-                          controller: _tabController,
-                          tabs: <Widget>[
-                            Tab(
-                                text: Constants.join_project['text'],
-                                icon: Constants.join_project['icon']),
-                            Tab(
-                              text: Constants.create_project['text'],
-                              icon: Constants.create_project['icon'],
-                            ),
-                          ],
-                        ),
+                        bottom: buildTabBar(),
                       ),
                     ];
                   },
-                  body: TabBarView(
-                    controller: _tabController,
-                    children: <Widget>[
-                      DisplayProjects(),
-                      DisplayForm(),
-                    ],
-                  ),
+                  body: buildTabBarView(),
                 ),
               );
             } // snapshot.hasData
@@ -92,7 +75,30 @@ class _MainScreenState extends State<MainScreen>
         });
   }
 
+  TabBarView buildTabBarView(){
+    return TabBarView(
+      controller: _tabController,
+      children: <Widget>[
+        DisplayProjects(),
+        DisplayForm(),
+      ],
+    );
+  }
 
+  TabBar buildTabBar(){
+    return TabBar(
+      controller: _tabController,
+      tabs: <Widget>[
+        Tab(
+            text: Constants.join_project['text'],
+            icon: Constants.join_project['icon']),
+        Tab(
+          text: Constants.create_project['text'],
+          icon: Constants.create_project['icon'],
+        ),
+      ],
+    );
+  }
 
   Drawer buildDrawer(){
     return Drawer(
