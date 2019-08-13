@@ -47,6 +47,7 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
+
   Container buildNameBox() {
     return Container(
       margin: Constants.form_column_margins,
