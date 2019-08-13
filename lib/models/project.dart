@@ -1,21 +1,28 @@
 class Project{
-  String originatorId;
-  String name;
-  String description;
   String complexity;
   String contactPlatforms;
+  String description;
+  String name;
   String originator;
+  String originatorId;
 
-  Project(this.originatorId, this.name, this.description, this.complexity, this.contactPlatforms, this.originator);
+  Project(
+    this.complexity, 
+    this.contactPlatforms, 
+    this.description, 
+    this.name, 
+    this.originator,
+    this.originatorId, 
+  );
 
   Map <String, dynamic> toMap(){
     return{
-      'originator_id': originatorId,
-      'name': name,
-      'description': description,
       'complexity': complexity,
-      'contactPlatforms': contactPlatforms,
+      'contactPlatforms': 'Feature coming soon',
+      'description': description,
+      'name': name,
       'originator': originator,
+      'originator_id': originatorId,
     };
   }
 }
