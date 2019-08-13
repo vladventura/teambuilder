@@ -9,6 +9,7 @@ class DisplayProjects extends StatefulWidget{
 
 class _DisplayProjectsState extends State<DisplayProjects>{
   final _db = Firestore.instance;
+  
   @override
   void initState(){
     super.initState();
