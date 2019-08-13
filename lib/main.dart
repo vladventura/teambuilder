@@ -5,7 +5,6 @@ import 'package:teambuilder/screens/mainscreen.dart';
 
 /* 
 TODO: Set issues for all the TODOs (:
-TODO: Set a proper color scheme for the app, like a palette of something
 */
 
 void main() {
