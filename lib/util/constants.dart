@@ -72,4 +72,14 @@ class Constants {
   static const third_color = Color (0xFF306230);
   static const spacing = 3.0;
   static const appbar_elevation = 2.0;
+
+  // Colors
+  static const mainBackgroundColor = Color (0xFF085F63); // #085F63
+  static const sideBackgroundColor = Color (0xFF00334E); // #00334E
+  static const acceptButtonColor = Color (0xFF32DBC6); // #32DBC6
+  static const cancelButtonColor = Color (0xFFD61D4D); // #D61D4D
+  static const generalTextColor = Color (0xFFEBEFD0); // #EBEFD0
+  static const formInactiveColor = Color (0xFF096386); // #096386
+  static const formActiveColor = Color (0xFF00B7A8); // #00B7A8
+
 }
