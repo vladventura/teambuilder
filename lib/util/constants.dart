@@ -12,7 +12,7 @@ class Constants {
   };
   static const create_project = {
     'text': Texts.create_project,
-    'icon': Icon(Icons.search)
+    'icon': Icon(Icons.add_box)
   };
 
   // Form information
