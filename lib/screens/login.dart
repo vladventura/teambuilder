@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:teambuilder/decorations/loginform.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
@@ -27,14 +28,13 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       backgroundColor: Constants.mainBackgroundColor,
       body: Center(
         child: Form(
           key: _formKey,
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 10),
-            shrinkWrap: true,
             children: buildScreen(),
           ),
         ),
@@ -99,19 +99,21 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Column buildTopText() {
-    return new Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          Texts.app_title,
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.10,
-            color: Constants.generalTextColor,
+  SafeArea buildTopText() {
+    return SafeArea(
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            Texts.app_title,
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.10,
+              color: Constants.generalTextColor,
+            ),
           ),
-        ),
-        Text(Texts.flavor_text),
-      ],
+          Text(Texts.flavor_text),
+        ],
+      ),
     );
   }
 
@@ -126,8 +128,33 @@ class _LoginState extends State<Login> {
         });
   }
 
-  TextFormField buildPasswordBox(){
-    return new TextFormField();
+  TextFormField buildPasswordBox() {
+    return new TextFormField(
+      onSaved: (password) {
+        _password = password;
+      },
+      validator: PasswordValidator.validate,
+      obscureText: true,
+      decoration: Decorations.passwordBoxDecoration(),
+    );
+  }
+
+  Padding buildLoginButton() {
+    return new Padding(
+      padding: EdgeInsets.all(12),
+      child: RaisedButton(
+          onPressed: () async {
+            await submit();
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: EdgeInsets.all(12),
+          color: Colors.amber,
+          child: Text(
+            'Log In',
+            style: TextStyle(color: Colors.white),
+          )),
+    );
   }
 
   List<Widget> buildScreen() {
@@ -135,40 +162,17 @@ class _LoginState extends State<Login> {
       return [
         buildTopText(),
         SizedBox(
-          height: 100,
+          height: MediaQuery.of(context).size.height * 0.30,
         ),
-        // Email
         buildEmailBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
-        // Password
-        TextFormField(
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: PasswordValidator.validate,
-          obscureText: true,
-          decoration: Decorations.passwordBoxDecoration(),
-        ),
+        buildPasswordBox(),
         SizedBox(
-          height: 24,
+          height: MediaQuery.of(context).size.height * 0.1,
         ),
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: RaisedButton(
-              onPressed: () async {
-                await submit();
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.all(12),
-              color: Colors.amber,
-              child: Text(
-                'Log In',
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
+        buildLoginButton(),
         FlatButton(
           child:
               Text('Create Account', style: TextStyle(color: Colors.black54)),
