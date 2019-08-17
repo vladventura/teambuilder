@@ -15,7 +15,9 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
+  PageController _pageController;
   FirebaseUser _user;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -25,12 +27,14 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
     );
     _scrollController = ScrollController();
+    _pageController = new PageController();
   }
 
   @override
   void dispose(){
     _tabController.dispose();
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -51,6 +55,26 @@ class _MainScreenState extends State<MainScreen>
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Colors.blueAccent,
                 drawer: buildDrawer(),
+                bottomNavigationBar: new BottomNavigationBar(
+                  items: [
+                    new BottomNavigationBarItem(
+                      icon: Constants.join_project['icon'],
+                      title: Text(Constants.join_project['text']),
+                    ),
+                    new BottomNavigationBarItem(
+                      icon: Constants.create_project['icon'],
+                      title: Text(Constants.create_project['text']),
+                    )
+                  ],
+                  currentIndex: _currentIndex,
+                  onTap: (index){
+                    _pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                      );
+                  },
+                ),
                 body: NestedScrollView(
                   physics: BouncingScrollPhysics(),
                   controller: _scrollController,
@@ -62,11 +86,21 @@ class _MainScreenState extends State<MainScreen>
                         forceElevated: isScrolled,
                         pinned: true,
                         floating: true,
-                        bottom: buildTabBar(),
                       ),
                     ];
                   },
-                  body: buildTabBarView(),
+                  body: new PageView(
+                    controller: _pageController,
+                    onPageChanged:((index){
+                      setState(() {
+                       this._currentIndex = index;
+                      });
+                    }) ,
+                    children: <Widget>[
+                      DisplayProjects(),
+                      DisplayForm(),
+                    ],
+                  ),
                 ),
               );
             } // snapshot.hasData
