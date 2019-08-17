@@ -88,4 +88,10 @@ class Decorations {
       ),
     );
   }
+
+  static TextStyle inputStyle(){
+    return new TextStyle(
+      color: Constants.flavorTextColor,
+    );
+  }
 }
