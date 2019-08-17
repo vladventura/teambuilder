@@ -33,8 +33,7 @@ class _LoginState extends State<Login> {
       body: Center(
         child: Form(
           key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
             children: buildScreen(),
           ),
         ),
@@ -157,6 +156,16 @@ class _LoginState extends State<Login> {
     );
   }
 
+  FlatButton buildCreateAccountButton(){
+    return FlatButton(
+          child:
+              Text('Create Account', style: TextStyle(color: Colors.black54)),
+          onPressed: () {
+            switchFormState('register');
+          },
+    );
+  }
+
   List<Widget> buildScreen() {
     if (_formType == FormType.login) {
       return [
@@ -173,13 +182,7 @@ class _LoginState extends State<Login> {
           height: MediaQuery.of(context).size.height * 0.1,
         ),
         buildLoginButton(),
-        FlatButton(
-          child:
-              Text('Create Account', style: TextStyle(color: Colors.black54)),
-          onPressed: () {
-            switchFormState('register');
-          },
-        ),
+        buildCreateAccountButton(),
       ];
       // Create account page
     } else {
