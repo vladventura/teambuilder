@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -26,11 +28,12 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.mainBackgroundColor,
       body: Center(
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             shrinkWrap: true,
             children: buildScreen(),
           ),
@@ -98,28 +101,29 @@ class _LoginState extends State<Login> {
   List<Widget> buildScreen() {
     if (_formType == FormType.login) {
       return [
-        CircleAvatar(
-          backgroundColor: Colors.amber,
-          radius: 48,
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-            radius: 38,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(Texts.app_title, style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.10,
+              color: Constants.generalTextColor,
+            ),),
+            Text(Texts.flavor_text),
+          ],
         ),
-        SizedBox(
-          height: 48.0,
-        ),
+        SizedBox(height: 84,),
         // Email
         TextFormField(
             validator: EmailValidator.validate,
             textInputAction: TextInputAction.next,
             autofocus: false,
             decoration: InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
+              labelText: 'Dude',
+              labelStyle: TextStyle(
+                
               ),
+              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+
             ),
             onSaved: (email) {
               _email = email;
