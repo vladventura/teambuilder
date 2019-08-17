@@ -33,8 +33,11 @@ class _LoginState extends State<Login> {
       body: Center(
         child: Form(
           key: _formKey,
-          child: Column(
-            children: buildScreen(),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+              child: Column(
+              children: buildScreen(),
+            ),
           ),
         ),
       ),
@@ -99,7 +102,7 @@ class _LoginState extends State<Login> {
   }
 
   SafeArea buildTopText() {
-    return SafeArea(
+    return new SafeArea(
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -110,14 +113,14 @@ class _LoginState extends State<Login> {
               color: Constants.generalTextColor,
             ),
           ),
-          Text(Texts.flavor_text),
+          Text(Texts.flavor_text, style: TextStyle(color: Constants.flavorTextColor),),
         ],
       ),
     );
   }
 
   Padding buildEmailBox() {
-    return Padding(
+    return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
           validator: EmailValidator.validate,
@@ -145,7 +148,7 @@ class _LoginState extends State<Login> {
   }
 
   Padding buildPasswordBox() {
-    return Padding(
+    return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
         controller: _passwordController,
@@ -178,7 +181,7 @@ class _LoginState extends State<Login> {
   }
 
   SizedBox buildLoginSubmitButton() {
-    return SizedBox(
+    return new SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
@@ -196,7 +199,7 @@ class _LoginState extends State<Login> {
   }
 
     SizedBox buildCreateAccountSubmitButton() {
-    return SizedBox(
+    return new SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
@@ -214,7 +217,7 @@ class _LoginState extends State<Login> {
   }
 
   FlatButton buildCreateAccountButton() {
-    return FlatButton(
+    return new FlatButton(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.30,
         padding: EdgeInsets.symmetric(vertical: 5),
@@ -236,7 +239,7 @@ class _LoginState extends State<Login> {
   }
 
   FlatButton buildLoginButton() {
-    return FlatButton(
+    return new FlatButton(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.30,
         padding: EdgeInsets.symmetric(vertical: 5),
@@ -247,7 +250,7 @@ class _LoginState extends State<Login> {
           ),
         ),
         child: Text(
-          "Create Account",
+          "Log into Account",
           style: TextStyle(color: Constants.flavorTextColor),
         ),
       ),
@@ -284,16 +287,19 @@ class _LoginState extends State<Login> {
         ),
         buildEmailBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildUsernameBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildPasswordBox(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
         buildConfirmPasswordBox(),
         SizedBox(
-          height: 24,
+          height: MediaQuery.of(context).size.height * 0.1,
         ),
         buildCreateAccountSubmitButton(),
         buildLoginButton(),
