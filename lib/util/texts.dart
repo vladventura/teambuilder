@@ -6,6 +6,7 @@ class Texts{
   static const app_title = 'Teambuilder';
   static const release = '-ALPHA-';
   static const appbar_title = Text('Teambuilder');
+  static const flavor_text = "Find your next team project.";
 
   // Tab texts
   static const join_project = 'Join Project';
