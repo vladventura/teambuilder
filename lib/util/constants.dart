@@ -79,6 +79,7 @@ class Constants {
   static const acceptButtonColor = Color (0xFF32DBC6); // #32DBC6
   static const cancelButtonColor = Color (0xFFD61D4D); // #D61D4D
   static const generalTextColor = Color (0xFFEBEFD0); // #EBEFD0
+  static const flavorTextColor = Color (0xFFDCE3AE); // #DCE3AE
   static const formInactiveColor = Color (0xFF096386); // #096386
   static const formActiveColor = Color (0xFF00B7A8); // #00B7A8
 
