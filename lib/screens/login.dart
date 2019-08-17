@@ -116,32 +116,71 @@ class _LoginState extends State<Login> {
     );
   }
 
-  TextFormField buildEmailBox() {
-    return new TextFormField(
-        validator: EmailValidator.validate,
-        textInputAction: TextInputAction.next,
-        autofocus: false,
-        decoration: Decorations.emailBoxDecoration(),
-        onSaved: (email) {
-          _email = email;
-        });
-  }
-
-  TextFormField buildPasswordBox() {
-    return new TextFormField(
-      onSaved: (password) {
-        _password = password;
-      },
-      validator: PasswordValidator.validate,
-      obscureText: true,
-      decoration: Decorations.passwordBoxDecoration(),
+  Padding buildEmailBox() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
+          validator: EmailValidator.validate,
+          textInputAction: TextInputAction.next,
+          autofocus: false,
+          decoration: Decorations.emailBoxDecoration(),
+          onSaved: (email) {
+            _email = email;
+          }),
     );
   }
 
-  Padding buildLoginButton() {
+  Padding buildUsernameBox() {
     return new Padding(
-      padding: EdgeInsets.all(12),
-      child: RaisedButton(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: TextFormField(
+          validator: UsernameValidator.validate,
+          textInputAction: TextInputAction.next,
+          autofocus: false,
+          decoration: Decorations.usernameBoxDecoration(),
+          onSaved: (username) {
+            _username = username;
+          }),
+    );
+  }
+
+  Padding buildPasswordBox() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
+        controller: _passwordController,
+        onSaved: (password) {
+          _password = password;
+        },
+        validator: PasswordValidator.validate,
+        obscureText: true,
+        decoration: Decorations.passwordBoxDecoration(),
+      ),
+    );
+  }
+
+  Padding buildConfirmPasswordBox() {
+    return new Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: TextFormField(
+        onSaved: (password) {
+          _password = password;
+        },
+        validator: (confirm) {
+          if (confirm != _passwordController.text)
+            return "Passwords do not match";
+          return null;
+        },
+        obscureText: true,
+        decoration: Decorations.confirmPasswordBoxDecoration(),
+      ),
+    );
+  }
+
+  SizedBox buildLoginSubmitButton() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.70,
+      child: new RaisedButton(
           onPressed: () async {
             await submit();
           },
@@ -156,13 +195,65 @@ class _LoginState extends State<Login> {
     );
   }
 
-  FlatButton buildCreateAccountButton(){
-    return FlatButton(
-          child:
-              Text('Create Account', style: TextStyle(color: Colors.black54)),
-          onPressed: () {
-            switchFormState('register');
+    SizedBox buildCreateAccountSubmitButton() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.70,
+      child: new RaisedButton(
+          onPressed: () async {
+            await submit();
           },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: EdgeInsets.all(12),
+          color: Colors.amber,
+          child: Text(
+            'Create Account',
+            style: TextStyle(color: Colors.white),
+          )),
+    );
+  }
+
+  FlatButton buildCreateAccountButton() {
+    return FlatButton(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.30,
+        padding: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Constants.flavorTextColor),
+          ),
+        ),
+        child: Text(
+          "Create Account",
+          style: TextStyle(color: Constants.flavorTextColor),
+        ),
+      ),
+      onPressed: () {
+        switchFormState('register');
+      },
+    );
+  }
+
+  FlatButton buildLoginButton() {
+    return FlatButton(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.30,
+        padding: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Constants.flavorTextColor),
+          ),
+        ),
+        child: Text(
+          "Create Account",
+          style: TextStyle(color: Constants.flavorTextColor),
+        ),
+      ),
+      onPressed: () {
+        switchFormState('login');
+      },
     );
   }
 
@@ -181,126 +272,37 @@ class _LoginState extends State<Login> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
         ),
-        buildLoginButton(),
+        buildLoginSubmitButton(),
         buildCreateAccountButton(),
       ];
       // Create account page
     } else {
       return [
-        CircleAvatar(
-          backgroundColor: Colors.amber,
-          radius: 48,
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-            radius: 38,
-          ),
-        ),
+        buildTopText(),
         SizedBox(
-          height: 48.0,
+          height: MediaQuery.of(context).size.height * 0.30,
         ),
-        // Email
-        TextFormField(
-            validator: EmailValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onSaved: (email) {
-              _email = email;
-            }),
+        buildEmailBox(),
         SizedBox(
           height: 8,
         ),
-        // Username
-        TextFormField(
-            validator: UsernameValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'User Name',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onSaved: (username) {
-              _username = username;
-            }),
+        buildUsernameBox(),
         SizedBox(
           height: 8,
         ),
-        // Password
-        TextFormField(
-          controller: _passwordController,
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: PasswordValidator.validate,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
-        // Confirm password with the value of the controller
-        SizedBox(
-          height: 8,
-        ),
-        // Password
-        TextFormField(
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: (confirm) {
-            if (confirm != _passwordController.text)
-              return "Passwords do not match";
-            return null;
-          },
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Confirm Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
+        buildPasswordBox(),
+        buildConfirmPasswordBox(),
         SizedBox(
           height: 24,
         ),
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: RaisedButton(
-              onPressed: submit,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.all(12),
-              color: Colors.amber,
-              child: Text(
-                'Create Account',
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-        FlatButton(
-          child: Text('Log In', style: TextStyle(color: Colors.black54)),
-          onPressed: () {
-            switchFormState('login');
-          },
-        ),
+        buildCreateAccountSubmitButton(),
+        buildLoginButton(),
       ];
     }
   }
 
   showFlushbar(BuildContext context, argument) {
-    Flushbar(
+    return Flushbar(
       message: 'Logging $argument in',
     ).show(context);
   }
