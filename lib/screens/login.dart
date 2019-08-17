@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:teambuilder/decorations/loginform.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
@@ -20,10 +21,9 @@ class _LoginState extends State<Login> {
   var displayMe;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,8 @@ class _LoginState extends State<Login> {
             showFlushbar(context, displayMe);
             print(displayMe);
           });
-          Navigator.pushNamedAndRemoveUntil(context,'/Home', (Route <dynamic> route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/Home', (Route<dynamic> route) => false);
           return true;
         } catch (e) {
           print(e);
@@ -98,36 +99,46 @@ class _LoginState extends State<Login> {
     }
   }
 
+  Column buildTopText() {
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          Texts.app_title,
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width * 0.10,
+            color: Constants.generalTextColor,
+          ),
+        ),
+        Text(Texts.flavor_text),
+      ],
+    );
+  }
+
+  TextFormField buildEmailBox() {
+    return new TextFormField(
+        validator: EmailValidator.validate,
+        textInputAction: TextInputAction.next,
+        autofocus: false,
+        decoration: Decorations.emailBoxDecoration(),
+        onSaved: (email) {
+          _email = email;
+        });
+  }
+
+  TextFormField buildPasswordBox(){
+    return new TextFormField();
+  }
+
   List<Widget> buildScreen() {
     if (_formType == FormType.login) {
       return [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(Texts.app_title, style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.10,
-              color: Constants.generalTextColor,
-            ),),
-            Text(Texts.flavor_text),
-          ],
+        buildTopText(),
+        SizedBox(
+          height: 100,
         ),
-        SizedBox(height: 84,),
         // Email
-        TextFormField(
-            validator: EmailValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              labelText: 'Dude',
-              labelStyle: TextStyle(
-                
-              ),
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-
-            ),
-            onSaved: (email) {
-              _email = email;
-            }),
+        buildEmailBox(),
         SizedBox(
           height: 8,
         ),
@@ -138,13 +149,7 @@ class _LoginState extends State<Login> {
           },
           validator: PasswordValidator.validate,
           obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
+          decoration: Decorations.passwordBoxDecoration(),
         ),
         SizedBox(
           height: 24,
@@ -172,7 +177,6 @@ class _LoginState extends State<Login> {
           },
         ),
       ];
-
       // Create account page
     } else {
       return [
