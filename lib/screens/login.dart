@@ -197,7 +197,7 @@ class _LoginState extends State<Login> {
           color: Colors.amber,
           child: Text(
             'Log In',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           )),
     );
   }
