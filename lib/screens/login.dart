@@ -124,6 +124,7 @@ class _LoginState extends State<Login> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
           validator: EmailValidator.validate,
+          style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
           decoration: Decorations.emailBoxDecoration(),
@@ -138,6 +139,7 @@ class _LoginState extends State<Login> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
           validator: UsernameValidator.validate,
+          style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
           decoration: Decorations.usernameBoxDecoration(),
@@ -151,6 +153,7 @@ class _LoginState extends State<Login> {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
+        style: Decorations.inputStyle(),
         controller: _passwordController,
         onSaved: (password) {
           _password = password;
@@ -166,6 +169,7 @@ class _LoginState extends State<Login> {
     return new Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
+        style: Decorations.inputStyle(),
         onSaved: (password) {
           _password = password;
         },
