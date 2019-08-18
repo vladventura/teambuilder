@@ -57,7 +57,7 @@ class Constants {
   static buttonDecoration() {
     return BoxDecoration(
       border: Border.all(
-        color: side_color,
+        color: acceptButtonColor,
         width: decoration_width,
         style: BorderStyle.solid,
       )
