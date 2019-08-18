@@ -46,6 +46,7 @@ class _DisplayFormState extends State<DisplayForm> {
       ),
     );
   }
+  
 
   Container buildNameBox() {
     return Container(
