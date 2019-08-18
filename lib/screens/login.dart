@@ -7,7 +7,6 @@ import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
 
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -16,9 +15,11 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password, _username;
+  bool _isTaken = false;
   TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _usernameController = new TextEditingController();
   FormType _formType = FormType.login;
-  
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,7 @@ class _LoginState extends State<Login> {
           key: _formKey,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-              child: Column(
+            child: Column(
               children: buildScreen(),
             ),
           ),
@@ -54,28 +55,38 @@ class _LoginState extends State<Login> {
 
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    await isTaken();
     if (validate()) {
       if (_formType == FormType.login) {
         try {
           // TODO: Tell the User their account has been created or that they've been logged in
-          await auth
-              .signInWithEmailAndPassword(email: _email, password: _password);
+          await auth.signInWithEmailAndPassword(
+              email: _email, password: _password);
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
           return true;
-        // TODO: Send myself the errors
+          // TODO: Send myself the errors
         } catch (e) {
           print(e);
         }
       } else {
         try {
-          UserUpdateInfo updater = UserUpdateInfo();
-          CollectionReference reference = Firestore.instance.collection('user');
-          FirebaseUser user = await auth.createUserWithEmailAndPassword(
-              email: _email, password: _password);
-          updater.displayName = _username;
-          print(updater.displayName);
-          user.updateProfile(updater);
+            UserUpdateInfo updater = UserUpdateInfo();
+            await Firestore.instance
+                .collection('users')
+                .document(_username)
+                .setData({
+              'joinedProjects': [],
+              'createdProjects': [],
+            });
+            FirebaseUser user = await auth.createUserWithEmailAndPassword(
+                email: _email, password: _password);
+            updater.displayName = _username;
+            await auth.signInWithEmailAndPassword(
+                email: _email, password: _password);
+            user.updateProfile(updater);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
           print(e.message);
         }
@@ -109,7 +120,10 @@ class _LoginState extends State<Login> {
               color: Constants.generalTextColor,
             ),
           ),
-          Text(Texts.flavor_text, style: TextStyle(color: Constants.flavorTextColor),),
+          Text(
+            Texts.flavor_text,
+            style: TextStyle(color: Constants.flavorTextColor),
+          ),
         ],
       ),
     );
@@ -130,15 +144,27 @@ class _LoginState extends State<Login> {
     );
   }
 
+  isTaken() async{
+    DocumentSnapshot snap = await Firestore.instance.collection('users').document(this._usernameController.text).get();
+    setState(() {
+      _isTaken = (snap.data != null); 
+    });
+  }
+
   Padding buildUsernameBox() {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
-          validator: UsernameValidator.validate,
+          validator: (value){
+            if (this._isTaken) return "Username is taken already";
+            if (value.isEmpty) return "Username cannot be empty";
+            return null;
+          },
           style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
           decoration: Decorations.usernameBoxDecoration(),
+          controller: _usernameController,
           onSaved: (username) {
             _username = username;
           }),
@@ -198,7 +224,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-    SizedBox buildCreateAccountSubmitButton() {
+  SizedBox buildCreateAccountSubmitButton() {
     return new SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
@@ -233,6 +259,11 @@ class _LoginState extends State<Login> {
         ),
       ),
       onPressed: () {
+        setState(() {
+          _email = "";
+          _password = "";
+          _passwordController.text = "";
+        });
         switchFormState('register');
       },
     );
@@ -255,6 +286,11 @@ class _LoginState extends State<Login> {
         ),
       ),
       onPressed: () {
+        setState(() {
+          _email = "";
+          _password = "";
+          _passwordController.text = "";
+        });
         switchFormState('login');
       },
     );
