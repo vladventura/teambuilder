@@ -4,7 +4,7 @@ import 'package:teambuilder/screens/login.dart';
 import 'package:teambuilder/screens/mainscreen.dart';
 
 /* 
-TODO: Set issues for all the TODOs (:
+TODO: Sign user out after certain amount of time.
 */
 
 void main() {
