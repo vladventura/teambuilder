@@ -1,13 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/rendering.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:teambuilder/decorations/loginform.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
-import 'package:flushbar/flushbar.dart';
+
 
 class Login extends StatefulWidget {
   @override
@@ -19,8 +18,7 @@ class _LoginState extends State<Login> {
   String _email, _password, _username;
   TextEditingController _passwordController = new TextEditingController();
   FormType _formType = FormType.login;
-  var displayMe;
-
+  
   @override
   void initState() {
     super.initState();
@@ -59,22 +57,20 @@ class _LoginState extends State<Login> {
     if (validate()) {
       if (_formType == FormType.login) {
         try {
+          // TODO: Tell the User their account has been created or that they've been logged in
           await auth
-              .signInWithEmailAndPassword(email: _email, password: _password)
-              .then((user) {
-            displayMe = user.displayName;
-            showFlushbar(context, displayMe);
-            print(displayMe);
-          });
+              .signInWithEmailAndPassword(email: _email, password: _password);
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
           return true;
+        // TODO: Send myself the errors
         } catch (e) {
           print(e);
         }
       } else {
         try {
           UserUpdateInfo updater = UserUpdateInfo();
+          CollectionReference reference = Firestore.instance.collection('user');
           FirebaseUser user = await auth.createUserWithEmailAndPassword(
               email: _email, password: _password);
           updater.displayName = _username;
@@ -309,11 +305,5 @@ class _LoginState extends State<Login> {
         buildLoginButton(),
       ];
     }
-  }
-
-  showFlushbar(BuildContext context, argument) {
-    return Flushbar(
-      message: 'Logging $argument in',
-    ).show(context);
   }
 }
