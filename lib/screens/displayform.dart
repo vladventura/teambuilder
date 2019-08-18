@@ -46,7 +46,6 @@ class _DisplayFormState extends State<DisplayForm> {
       ),
     );
   }
-  
 
   Container buildNameBox() {
     return Container(
@@ -87,13 +86,15 @@ class _DisplayFormState extends State<DisplayForm> {
         padding: Constants.complexity_padding,
         decoration: Constants.complexitiesDecoration(),
         child: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Constants.sideBackgroundColor
-          ),
+          data: Theme.of(context)
+              .copyWith(canvasColor: Constants.sideBackgroundColor),
           child: DropdownButtonHideUnderline(
               child: DropdownButton(
                   style: TextStyle(color: Constants.flavorTextColor),
-                  hint: Text("Complexity", style: TextStyle(color: Constants.generalTextColor),),
+                  hint: Text(
+                    "Complexity",
+                    style: TextStyle(color: Constants.generalTextColor),
+                  ),
                   value: _complexity,
                   onChanged: (String value) => _onChanged(value),
                   items: complexities.map((String value) {
@@ -107,7 +108,7 @@ class _DisplayFormState extends State<DisplayForm> {
     return Container(
         margin: Constants.complexity_padding,
         child: Center(
-          child: FlatButton(
+            child: FlatButton(
           color: Colors.transparent,
           child: Column(
             children: <Widget>[
