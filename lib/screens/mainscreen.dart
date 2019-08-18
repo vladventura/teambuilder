@@ -18,6 +18,7 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
+  String _currentTitle = "None";
 
   @override
   void initState() {
@@ -53,9 +54,12 @@ class _MainScreenState extends State<MainScreen>
               return Scaffold(
                 resizeToAvoidBottomInset: false,
                 resizeToAvoidBottomPadding: false,
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Constants.mainBackgroundColor,
                 drawer: buildDrawer(),
                 bottomNavigationBar: new BottomNavigationBar(
+                  backgroundColor: Constants.sideBackgroundColor,
+                  selectedItemColor: Constants.formActiveColor,
+                  showSelectedLabels: false,
                   items: [
                     new BottomNavigationBarItem(
                       icon: Constants.join_project['icon'],
@@ -81,10 +85,19 @@ class _MainScreenState extends State<MainScreen>
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
                     return <Widget>[
                       SliverAppBar(
-                        backgroundColor: Colors.deepOrangeAccent,
-                        title: Texts.appbar_title,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        iconTheme: IconThemeData(
+                          color: Constants.flavorTextColor,
+                        ),
+                        textTheme: TextTheme(
+                          title: TextStyle(
+                            color: Constants.generalTextColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                        title: (_currentIndex == 0) ? Texts.appbar_join_title : Texts.appbar_create_title,
                         forceElevated: isScrolled,
-                        pinned: true,
+                        pinned: isScrolled,
                         floating: true,
                       ),
                     ];
