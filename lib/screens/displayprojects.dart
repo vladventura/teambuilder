@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,7 +21,8 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         stream: _db.collection('projects').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
+            return ListView(
+              physics: BouncingScrollPhysics(),
               children: snapshot.data.documents
                   .map((document) => buildProject(document))
                   .toList(),
@@ -62,7 +64,57 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content: Text(document.data['description']),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(document.data['description']),
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+                        Container(
+                          child: Text("Members!"),
+                        ),
+                        getTextWidgets(document.data['joinedUsers']),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: RaisedButton(
+                                child: Text("Join Project"),
+                                color: Constants.acceptButtonColor,
+                                onPressed: () async{
+                                  FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+                                  CollectionReference projects = _db.collection('projects');
+                                  CollectionReference users = _db.collection('users');
+                                  DocumentReference thisProject = projects.document(document.documentID);
+                                  DocumentReference userDocument = users.document(_user.displayName);
+                                  thisProject.updateData({
+                                    'joinedUsers': FieldValue.arrayUnion([
+                                      _user.displayName
+                                    ])
+                                  });
+                                  userDocument.updateData({
+                                    'joinedProjects': FieldValue.arrayUnion([
+                                      document.documentID,
+                                    ])
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.15,
+                            ),
+                            Container(
+                              child: RaisedButton(
+                                child: Text("Cancel"),
+                                color: Constants.cancelButtonColor,
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     title: Text(document.data['name'] +
                         ' by ' +
                         document.data['originator']),
@@ -73,4 +125,13 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       ),
     );
   }
+
+  Widget getTextWidgets(List<dynamic> users){
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: new Column(
+        children: users.map((user) => new Text(user)).toList()),
+    );
+  }
+
 }
