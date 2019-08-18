@@ -3,13 +3,12 @@
   It enumerates the kinds of forms that could happen, which renders my create page useless.
   It also holds the validators for each form field.
 */
-
 import 'package:teambuilder/util/texts.dart';
 
 enum FormType {login, register}
 
 class UsernameValidator{
-  static String validate(String value){
+  static String validate(String value) {
     if (value.isEmpty) return "Username may not be empty";
     return null;
   }
@@ -26,6 +25,7 @@ class EmailValidator{
 class PasswordValidator{
   static String validate(String value){
     if (value.isEmpty) return "Password cannot be empty";
+    if (value.length < 6) return "Password must be 6 or more characters";
     if (value.contains('!')) return "Password must not contain special characters";
     if (value.contains(' ')) return "Password must not contain spaces";
     return null;
