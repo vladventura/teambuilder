@@ -24,7 +24,6 @@ class Decorations {
     );
   }
 
-
   static InputDecoration passwordBoxDecoration() {
     return new InputDecoration(
       labelText: 'Password',
