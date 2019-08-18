@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
+import 'package:teambuilder/decorations/loginform.dart';
+import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -18,21 +22,22 @@ class _LoginState extends State<Login> {
   var displayMe;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
+      backgroundColor: Constants.mainBackgroundColor,
       body: Center(
         child: Form(
           key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            shrinkWrap: true,
-            children: buildScreen(),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+              child: Column(
+              children: buildScreen(),
+            ),
           ),
         ),
       ),
@@ -61,7 +66,8 @@ class _LoginState extends State<Login> {
             showFlushbar(context, displayMe);
             print(displayMe);
           });
-          Navigator.pushNamedAndRemoveUntil(context,'/Home', (Route <dynamic> route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/Home', (Route<dynamic> route) => false);
           return true;
         } catch (e) {
           print(e);
@@ -95,197 +101,218 @@ class _LoginState extends State<Login> {
     }
   }
 
+  SafeArea buildTopText() {
+    return new SafeArea(
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            Texts.app_title,
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.10,
+              color: Constants.generalTextColor,
+            ),
+          ),
+          Text(Texts.flavor_text, style: TextStyle(color: Constants.flavorTextColor),),
+        ],
+      ),
+    );
+  }
+
+  Padding buildEmailBox() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
+          validator: EmailValidator.validate,
+          style: Decorations.inputStyle(),
+          textInputAction: TextInputAction.next,
+          autofocus: false,
+          decoration: Decorations.emailBoxDecoration(),
+          onSaved: (email) {
+            _email = email;
+          }),
+    );
+  }
+
+  Padding buildUsernameBox() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: TextFormField(
+          validator: UsernameValidator.validate,
+          style: Decorations.inputStyle(),
+          textInputAction: TextInputAction.next,
+          autofocus: false,
+          decoration: Decorations.usernameBoxDecoration(),
+          onSaved: (username) {
+            _username = username;
+          }),
+    );
+  }
+
+  Padding buildPasswordBox() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
+        style: Decorations.inputStyle(),
+        controller: _passwordController,
+        onSaved: (password) {
+          _password = password;
+        },
+        validator: PasswordValidator.validate,
+        obscureText: true,
+        decoration: Decorations.passwordBoxDecoration(),
+      ),
+    );
+  }
+
+  Padding buildConfirmPasswordBox() {
+    return new Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: TextFormField(
+        style: Decorations.inputStyle(),
+        onSaved: (password) {
+          _password = password;
+        },
+        validator: (confirm) {
+          if (confirm != _passwordController.text)
+            return "Passwords do not match";
+          return null;
+        },
+        obscureText: true,
+        decoration: Decorations.confirmPasswordBoxDecoration(),
+      ),
+    );
+  }
+
+  SizedBox buildLoginSubmitButton() {
+    return new SizedBox(
+      width: MediaQuery.of(context).size.width * 0.70,
+      child: new RaisedButton(
+          onPressed: () async {
+            await submit();
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: EdgeInsets.all(12),
+          color: Colors.amber,
+          child: Text(
+            'Log In',
+            style: TextStyle(color: Colors.black),
+          )),
+    );
+  }
+
+    SizedBox buildCreateAccountSubmitButton() {
+    return new SizedBox(
+      width: MediaQuery.of(context).size.width * 0.70,
+      child: new RaisedButton(
+          onPressed: () async {
+            await submit();
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: EdgeInsets.all(12),
+          color: Colors.amber,
+          child: Text(
+            'Create Account',
+            style: TextStyle(color: Colors.white),
+          )),
+    );
+  }
+
+  FlatButton buildCreateAccountButton() {
+    return new FlatButton(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.30,
+        padding: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Constants.flavorTextColor),
+          ),
+        ),
+        child: Text(
+          "Create Account",
+          style: TextStyle(color: Constants.flavorTextColor),
+        ),
+      ),
+      onPressed: () {
+        switchFormState('register');
+      },
+    );
+  }
+
+  FlatButton buildLoginButton() {
+    return new FlatButton(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.30,
+        padding: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Constants.flavorTextColor),
+          ),
+        ),
+        child: Text(
+          "Log into Account",
+          style: TextStyle(color: Constants.flavorTextColor),
+        ),
+      ),
+      onPressed: () {
+        switchFormState('login');
+      },
+    );
+  }
+
   List<Widget> buildScreen() {
     if (_formType == FormType.login) {
       return [
-        CircleAvatar(
-          backgroundColor: Colors.amber,
-          radius: 48,
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-            radius: 38,
-          ),
-        ),
+        buildTopText(),
         SizedBox(
-          height: 48.0,
+          height: MediaQuery.of(context).size.height * 0.30,
         ),
-        // Email
-        TextFormField(
-            validator: EmailValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onSaved: (email) {
-              _email = email;
-            }),
+        buildEmailBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
-        // Password
-        TextFormField(
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: PasswordValidator.validate,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
+        buildPasswordBox(),
         SizedBox(
-          height: 24,
+          height: MediaQuery.of(context).size.height * 0.1,
         ),
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: RaisedButton(
-              onPressed: () async {
-                await submit();
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.all(12),
-              color: Colors.amber,
-              child: Text(
-                'Log In',
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-        FlatButton(
-          child:
-              Text('Create Account', style: TextStyle(color: Colors.black54)),
-          onPressed: () {
-            switchFormState('register');
-          },
-        ),
+        buildLoginSubmitButton(),
+        buildCreateAccountButton(),
       ];
-
       // Create account page
     } else {
       return [
-        CircleAvatar(
-          backgroundColor: Colors.amber,
-          radius: 48,
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-            radius: 38,
-          ),
-        ),
+        buildTopText(),
         SizedBox(
-          height: 48.0,
+          height: MediaQuery.of(context).size.height * 0.30,
         ),
-        // Email
-        TextFormField(
-            validator: EmailValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onSaved: (email) {
-              _email = email;
-            }),
+        buildEmailBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
-        // Username
-        TextFormField(
-            validator: UsernameValidator.validate,
-            textInputAction: TextInputAction.next,
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'User Name',
-              contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onSaved: (username) {
-              _username = username;
-            }),
+        buildUsernameBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
-        // Password
-        TextFormField(
-          controller: _passwordController,
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: PasswordValidator.validate,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
-        // Confirm password with the value of the controller
+        buildPasswordBox(),
         SizedBox(
-          height: 8,
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
-        // Password
-        TextFormField(
-          onSaved: (password) {
-            _password = password;
-          },
-          validator: (confirm) {
-            if (confirm != _passwordController.text)
-              return "Passwords do not match";
-            return null;
-          },
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Confirm Password',
-            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ),
+        buildConfirmPasswordBox(),
         SizedBox(
-          height: 24,
+          height: MediaQuery.of(context).size.height * 0.1,
         ),
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: RaisedButton(
-              onPressed: submit,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.all(12),
-              color: Colors.amber,
-              child: Text(
-                'Create Account',
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-        FlatButton(
-          child: Text('Log In', style: TextStyle(color: Colors.black54)),
-          onPressed: () {
-            switchFormState('login');
-          },
-        ),
+        buildCreateAccountSubmitButton(),
+        buildLoginButton(),
       ];
     }
   }
 
   showFlushbar(BuildContext context, argument) {
-    Flushbar(
+    return Flushbar(
       message: 'Logging $argument in',
     ).show(context);
   }
