@@ -55,7 +55,9 @@ class _LoginState extends State<Login> {
 
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    await isTaken();
+    if (_formType == FormType.register){
+      await isTaken();
+    }
     if (validate()) {
       if (_formType == FormType.login) {
         try {
