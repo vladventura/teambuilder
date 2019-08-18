@@ -17,12 +17,12 @@ class Project{
 
   Map <String, dynamic> toMap(){
     return{
-      'complexity': complexity,
+      'complexity': this.complexity,
       'contactPlatforms': 'Feature coming soon',
-      'description': description,
-      'name': name,
-      'originator': originator,
-      'originator_id': originatorId,
+      'description': this.description,
+      'name': this.name,
+      'originator': this.originator,
+      'originator_id': this.originatorId,
     };
   }
 }
