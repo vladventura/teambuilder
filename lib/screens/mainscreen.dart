@@ -18,7 +18,6 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
-  String _currentTitle = "None";
 
   @override
   void initState() {
@@ -29,6 +28,7 @@ class _MainScreenState extends State<MainScreen>
     );
     _scrollController = ScrollController();
     _pageController = new PageController();
+    loadUser();
   }
 
   @override
@@ -154,12 +154,11 @@ class _MainScreenState extends State<MainScreen>
           children: <Widget>[
             FlatButton(
               child: Text("Sign out, ${_user.displayName}"),
-              onPressed: () {
+              onPressed: () async{
                 try {
-                  FirebaseAuth.instance.signOut().then((empty) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
                       '/', (Route<dynamic> route) => false);
-                  });
                 } catch (e) {
                   print(e);
                 }

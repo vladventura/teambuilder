@@ -1,13 +1,11 @@
 import 'dart:async';
-
+import './decorations.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/rendering.dart';
-import 'package:teambuilder/decorations/loginform.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
-import 'package:flushbar/flushbar.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,9 +15,10 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password, _username;
+  bool _isTaken = false;
   TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _usernameController = new TextEditingController();
   FormType _formType = FormType.login;
-  var displayMe;
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _LoginState extends State<Login> {
           key: _formKey,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-              child: Column(
+            child: Column(
               children: buildScreen(),
             ),
           ),
@@ -56,30 +55,38 @@ class _LoginState extends State<Login> {
 
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    await isTaken();
     if (validate()) {
       if (_formType == FormType.login) {
         try {
-          await auth
-              .signInWithEmailAndPassword(email: _email, password: _password)
-              .then((user) {
-            displayMe = user.displayName;
-            showFlushbar(context, displayMe);
-            print(displayMe);
-          });
+          // TODO: Tell the User their account has been created or that they've been logged in
+          await auth.signInWithEmailAndPassword(
+              email: _email, password: _password);
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
           return true;
+          // TODO: Send myself the errors
         } catch (e) {
           print(e);
         }
       } else {
         try {
-          UserUpdateInfo updater = UserUpdateInfo();
-          FirebaseUser user = await auth.createUserWithEmailAndPassword(
-              email: _email, password: _password);
-          updater.displayName = _username;
-          print(updater.displayName);
-          user.updateProfile(updater);
+            UserUpdateInfo updater = UserUpdateInfo();
+            await Firestore.instance
+                .collection('users')
+                .document(_username)
+                .setData({
+              'joinedProjects': [],
+              'createdProjects': [],
+            });
+            FirebaseUser user = await auth.createUserWithEmailAndPassword(
+                email: _email, password: _password);
+            updater.displayName = _username;
+            await auth.signInWithEmailAndPassword(
+                email: _email, password: _password);
+            user.updateProfile(updater);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
           print(e.message);
         }
@@ -113,7 +120,10 @@ class _LoginState extends State<Login> {
               color: Constants.generalTextColor,
             ),
           ),
-          Text(Texts.flavor_text, style: TextStyle(color: Constants.flavorTextColor),),
+          Text(
+            Texts.flavor_text,
+            style: TextStyle(color: Constants.flavorTextColor),
+          ),
         ],
       ),
     );
@@ -127,22 +137,34 @@ class _LoginState extends State<Login> {
           style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
-          decoration: Decorations.emailBoxDecoration(),
+          decoration: Decorations.loginBoxDecoration("Email"),
           onSaved: (email) {
             _email = email;
           }),
     );
   }
 
+  isTaken() async{
+    DocumentSnapshot snap = await Firestore.instance.collection('users').document(this._usernameController.text).get();
+    setState(() {
+      _isTaken = (snap.data != null); 
+    });
+  }
+
   Padding buildUsernameBox() {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
-          validator: UsernameValidator.validate,
+          validator: (value){
+            if (this._isTaken) return "Username is taken already";
+            if (value.isEmpty) return "Username cannot be empty";
+            return null;
+          },
           style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
-          decoration: Decorations.usernameBoxDecoration(),
+          decoration: Decorations.loginBoxDecoration("Username"),
+          controller: _usernameController,
           onSaved: (username) {
             _username = username;
           }),
@@ -160,7 +182,7 @@ class _LoginState extends State<Login> {
         },
         validator: PasswordValidator.validate,
         obscureText: true,
-        decoration: Decorations.passwordBoxDecoration(),
+        decoration: Decorations.loginBoxDecoration("Password"),
       ),
     );
   }
@@ -179,7 +201,7 @@ class _LoginState extends State<Login> {
           return null;
         },
         obscureText: true,
-        decoration: Decorations.confirmPasswordBoxDecoration(),
+        decoration: Decorations.loginBoxDecoration("Confirm Password"),
       ),
     );
   }
@@ -202,7 +224,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-    SizedBox buildCreateAccountSubmitButton() {
+  SizedBox buildCreateAccountSubmitButton() {
     return new SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
@@ -215,7 +237,7 @@ class _LoginState extends State<Login> {
           color: Colors.amber,
           child: Text(
             'Create Account',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           )),
     );
   }
@@ -237,6 +259,11 @@ class _LoginState extends State<Login> {
         ),
       ),
       onPressed: () {
+        setState(() {
+          _email = "";
+          _password = "";
+          _passwordController.text = "";
+        });
         switchFormState('register');
       },
     );
@@ -259,6 +286,11 @@ class _LoginState extends State<Login> {
         ),
       ),
       onPressed: () {
+        setState(() {
+          _email = "";
+          _password = "";
+          _passwordController.text = "";
+        });
         switchFormState('login');
       },
     );
@@ -309,11 +341,5 @@ class _LoginState extends State<Login> {
         buildLoginButton(),
       ];
     }
-  }
-
-  showFlushbar(BuildContext context, argument) {
-    return Flushbar(
-      message: 'Logging $argument in',
-    ).show(context);
   }
 }
