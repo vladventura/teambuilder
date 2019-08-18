@@ -27,18 +27,20 @@ class Constants {
     // Decorations
   static formDecoration(String formName){
     return InputDecoration(
+      counterText: '',
       labelText: formName,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25),
+      labelStyle: const TextStyle(
+        color: generalTextColor,
+      ),
+      enabledBorder: new OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(20),
         borderSide: const BorderSide(
-          color: main_color,
-          width: decoration_width,
+          color: formInactiveColor,
         ),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: side_color,
-          width: decoration_width,
+      focusedBorder: new OutlineInputBorder(
+        borderSide: new BorderSide(
+          color: formActiveColor,
         ),
       ),
     );
@@ -47,8 +49,7 @@ class Constants {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(7),
       border: Border.all(
-        color: side_color,
-        width: decoration_width,
+        color: formInactiveColor,
         ),
     );
   }
@@ -57,7 +58,7 @@ class Constants {
   static buttonDecoration() {
     return BoxDecoration(
       border: Border.all(
-        color: acceptButtonColor,
+        color: flavorTextColor,
         width: decoration_width,
         style: BorderStyle.solid,
       )
