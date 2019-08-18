@@ -1,8 +1,8 @@
 import 'dart:async';
+import './decorations.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:teambuilder/decorations/loginform.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
           style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
-          decoration: Decorations.emailBoxDecoration(),
+          decoration: Decorations.loginBoxDecoration("Email"),
           onSaved: (email) {
             _email = email;
           }),
@@ -163,7 +163,7 @@ class _LoginState extends State<Login> {
           style: Decorations.inputStyle(),
           textInputAction: TextInputAction.next,
           autofocus: false,
-          decoration: Decorations.usernameBoxDecoration(),
+          decoration: Decorations.loginBoxDecoration("Username"),
           controller: _usernameController,
           onSaved: (username) {
             _username = username;
@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
         },
         validator: PasswordValidator.validate,
         obscureText: true,
-        decoration: Decorations.passwordBoxDecoration(),
+        decoration: Decorations.loginBoxDecoration("Password"),
       ),
     );
   }
@@ -201,7 +201,7 @@ class _LoginState extends State<Login> {
           return null;
         },
         obscureText: true,
-        decoration: Decorations.confirmPasswordBoxDecoration(),
+        decoration: Decorations.loginBoxDecoration("Confirm Password"),
       ),
     );
   }
@@ -237,7 +237,7 @@ class _LoginState extends State<Login> {
           color: Colors.amber,
           child: Text(
             'Create Account',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           )),
     );
   }
