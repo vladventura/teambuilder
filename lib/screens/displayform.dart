@@ -85,14 +85,21 @@ class _DisplayFormState extends State<DisplayForm> {
         margin: Constants.form_column_margins,
         padding: Constants.complexity_padding,
         decoration: Constants.complexitiesDecoration(),
-        child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-                hint: Texts.project_complexity_text,
-                value: _complexity,
-                onChanged: (String value) => _onChanged(value),
-                items: complexities.map((String value) {
-                  return new DropdownMenuItem(value: value, child: Text(value));
-                }).toList())));
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Constants.sideBackgroundColor
+          ),
+          child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                  style: TextStyle(color: Constants.flavorTextColor),
+                  hint: Texts.project_complexity_text,
+                  value: _complexity,
+                  onChanged: (String value) => _onChanged(value),
+                  items: complexities.map((String value) {
+                    return new DropdownMenuItem(
+                        value: value, child: Text(value));
+                  }).toList())),
+        ));
   }
 
   Container buildSubmitButton() {
@@ -108,18 +115,18 @@ class _DisplayFormState extends State<DisplayForm> {
         )));
   }
 
-  void submitProject() async{
-    if (_formKey.currentState.validate()){
+  void submitProject() async {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       FirebaseUser _user = await _auth.currentUser();
-      CollectionReference reference  = db.collection('projects');
+      CollectionReference reference = db.collection('projects');
       Project project = new Project(
-        _user.uid, 
-        _name, 
-        _description, 
-        _complexity, 
-        _contactPlatforms, 
-        _user.displayName
+        _complexity,
+        _contactPlatforms,
+        _description,
+        _name,
+        _user.displayName,
+        _user.uid,
       );
       reference.add(project.toMap());
     }
