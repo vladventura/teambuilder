@@ -15,7 +15,10 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
+  PageController _pageController;
   FirebaseUser _user;
+  int _currentIndex = 0;
+  String _currentTitle = "None";
 
   @override
   void initState() {
@@ -25,12 +28,14 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
     );
     _scrollController = ScrollController();
+    _pageController = new PageController();
   }
 
   @override
   void dispose(){
     _tabController.dispose();
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -49,24 +54,66 @@ class _MainScreenState extends State<MainScreen>
               return Scaffold(
                 resizeToAvoidBottomInset: false,
                 resizeToAvoidBottomPadding: false,
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Constants.mainBackgroundColor,
                 drawer: buildDrawer(),
+                bottomNavigationBar: new BottomNavigationBar(
+                  backgroundColor: Constants.sideBackgroundColor,
+                  selectedItemColor: Constants.formActiveColor,
+                  showSelectedLabels: false,
+                  items: [
+                    new BottomNavigationBarItem(
+                      icon: Constants.join_project['icon'],
+                      title: Text(Constants.join_project['text']),
+                    ),
+                    new BottomNavigationBarItem(
+                      icon: Constants.create_project['icon'],
+                      title: Text(Constants.create_project['text']),
+                    )
+                  ],
+                  currentIndex: _currentIndex,
+                  onTap: (index){
+                    _pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                      );
+                  },
+                ),
                 body: NestedScrollView(
                   physics: BouncingScrollPhysics(),
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
                     return <Widget>[
                       SliverAppBar(
-                        backgroundColor: Colors.deepOrangeAccent,
-                        title: Texts.appbar_title,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        iconTheme: IconThemeData(
+                          color: Constants.flavorTextColor,
+                        ),
+                        textTheme: TextTheme(
+                          title: TextStyle(
+                            color: Constants.generalTextColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                        title: (_currentIndex == 0) ? Texts.appbar_join_title : Texts.appbar_create_title,
                         forceElevated: isScrolled,
-                        pinned: true,
+                        pinned: isScrolled,
                         floating: true,
-                        bottom: buildTabBar(),
                       ),
                     ];
                   },
-                  body: buildTabBarView(),
+                  body: new PageView(
+                    controller: _pageController,
+                    onPageChanged:((index){
+                      setState(() {
+                       this._currentIndex = index;
+                      });
+                    }) ,
+                    children: <Widget>[
+                      DisplayProjects(),
+                      DisplayForm(),
+                    ],
+                  ),
                 ),
               );
             } // snapshot.hasData
