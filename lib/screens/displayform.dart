@@ -106,9 +106,15 @@ class _DisplayFormState extends State<DisplayForm> {
     return Container(
         margin: Constants.complexity_padding,
         child: Center(
-            child: FlatButton(
+          child: FlatButton(
           color: Colors.transparent,
-          child: Icon(Icons.add),
+          child: Column(
+            children: <Widget>[
+              Text('Add Project'),
+              Icon(Icons.add),
+            ],
+          ),
+          textColor: Constants.acceptButtonColor,
           onPressed: (() async {
             submitProject();
           }),
