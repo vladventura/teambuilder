@@ -92,7 +92,7 @@ class _DisplayFormState extends State<DisplayForm> {
           child: DropdownButtonHideUnderline(
               child: DropdownButton(
                   style: TextStyle(color: Constants.flavorTextColor),
-                  hint: Texts.project_complexity_text,
+                  hint: Text("Complexity", style: TextStyle(color: Constants.generalTextColor),),
                   value: _complexity,
                   onChanged: (String value) => _onChanged(value),
                   items: complexities.map((String value) {
