@@ -135,7 +135,37 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  List<Widget> joinCancelButtonRow(){
-    return [];
+  Future <List<Widget>> joinCancelButtonRow(DocumentSnapshot document) async {
+    
+    FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+    CollectionReference projects = _db.collection('projects');
+    CollectionReference users = _db.collection('users');
+    DocumentReference thisProject = projects.document(document.documentID);
+    DocumentReference userDocument = users.document(_user.displayName);
+    var isJoined = await thisProject.get().then((dcmnt){
+      return document['joinedUsers'].contains(_user.displayName);
+    });
+    if (isJoined) {return [
+        Container(
+        child: RaisedButton(
+          child: Text("Join Project"),
+          color: Constants.acceptButtonColor,
+          onPressed: () async{
+            thisProject.updateData({
+              'joinedUsers': FieldValue.arrayUnion([
+                _user.displayName
+              ])
+            });
+            userDocument.updateData({
+              'joinedProjects': FieldValue.arrayUnion([
+                document.documentID,
+                ])
+              });
+            },
+          ),
+        ),
+    ];} else {
+      return [];
+    }
   }
 }
