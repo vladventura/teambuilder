@@ -64,6 +64,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    backgroundColor: Constants.sideBackgroundColor,
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -134,4 +135,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
+  List<Widget> joinCancelButtonRow(){
+    return [];
+  }
 }
