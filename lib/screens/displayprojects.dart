@@ -143,7 +143,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     DocumentReference thisProject = projects.document(document.documentID);
     DocumentReference userDocument = users.document(_user.displayName);
     var isJoined = await thisProject.get().then((dcmnt){
-      return document['joinedUsers'].contains(_user.displayName);
+      return document.data['joinedUsers'].contains(_user.displayName);
     });
     if (!isJoined) {return [
         Container(
