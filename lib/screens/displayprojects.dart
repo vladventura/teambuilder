@@ -145,7 +145,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     var isJoined = await thisProject.get().then((dcmnt){
       return document['joinedUsers'].contains(_user.displayName);
     });
-    if (isJoined) {return [
+    if (!isJoined) {return [
         Container(
         child: RaisedButton(
           child: Text("Join Project"),
@@ -164,8 +164,36 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             },
           ),
         ),
+      SizedBox(
+        width: MediaQuery.of(context).size.width * 0.15,
+      ),
+      Container(
+        child: RaisedButton(
+          child: Text("Cancel"),
+              color: Constants.cancelButtonColor,
+                onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
     ];} else {
-      return [];
+      return [
+        Container(
+          child: RaisedButton(
+            child: Text('Already Joined!'),
+            color: Colors.grey,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        SizedBox(
+        width: MediaQuery.of(context).size.width * 0.15,
+      ),
+      Container(
+        child: RaisedButton(
+          child: Text("Cancel"),
+              color: Constants.cancelButtonColor,
+                onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      ];
     }
   }
 }
