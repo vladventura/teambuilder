@@ -72,48 +72,14 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                           alignment: Alignment.centerLeft,
                           child: Text(document.data['description']),
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
                         Container(
                           child: Text("Members!"),
                         ),
                         getTextWidgets(document.data['joinedUsers']),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: RaisedButton(
-                                child: Text("Join Project"),
-                                color: Constants.acceptButtonColor,
-                                onPressed: () async{
-                                  FirebaseUser _user = await FirebaseAuth.instance.currentUser();
-                                  CollectionReference projects = _db.collection('projects');
-                                  CollectionReference users = _db.collection('users');
-                                  DocumentReference thisProject = projects.document(document.documentID);
-                                  DocumentReference userDocument = users.document(_user.displayName);
-                                  thisProject.updateData({
-                                    'joinedUsers': FieldValue.arrayUnion([
-                                      _user.displayName
-                                    ])
-                                  });
-                                  userDocument.updateData({
-                                    'joinedProjects': FieldValue.arrayUnion([
-                                      document.documentID,
-                                    ])
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.15,
-                            ),
-                            Container(
-                              child: RaisedButton(
-                                child: Text("Cancel"),
-                                color: Constants.cancelButtonColor,
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                            ),
-                          ],
-                        ),
+                        buttons(document),
                       ],
                     ),
                     title: Text(document.data['name'] +
@@ -127,73 +93,97 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  Widget getTextWidgets(List<dynamic> users){
+  Widget getTextWidgets(List<dynamic> users) {
     return Container(
       alignment: Alignment.centerLeft,
-      child: new Column(
-        children: users.map((user) => new Text(user)).toList()),
+      child: new Column(children: users.map((user) => new Text(user)).toList()),
     );
   }
 
-  Future <List<Widget>> joinCancelButtonRow(DocumentSnapshot document) async {
-    
-    FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+  FutureBuilder buttons(DocumentSnapshot document) {
+    return FutureBuilder(
+        future: belongs(document),
+        builder: (context, snapshot) {
+          if (snapshot != null) {
+            if (snapshot.hasData) {
+              if (!snapshot.data == true) {
+                return Row(
+                  children: <Widget>[
+                    Container(
+                      child: RaisedButton(
+                        child: Text("Join Project"),
+                        color: Constants.acceptButtonColor,
+                        onPressed: () async {
+                          FirebaseUser _user;
+                          FirebaseAuth.instance
+                              .currentUser()
+                              .then((ref) => _user = ref);
+                          CollectionReference projects =
+                              _db.collection('projects');
+                          CollectionReference users = _db.collection('users');
+                          DocumentReference thisProject =
+                              projects.document(document.documentID);
+                          DocumentReference userDocument =
+                              users.document(_user.displayName);
+                          thisProject.updateData({
+                            'joinedUsers':
+                                FieldValue.arrayUnion([_user.displayName])
+                          });
+                          userDocument.updateData({
+                            'joinedProjects': FieldValue.arrayUnion([
+                              document.documentID,
+                            ])
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.15,
+                    ),
+                    Container(
+                      child: RaisedButton(
+                        child: Text("Cancel"),
+                        color: Constants.cancelButtonColor,
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Row(
+                  children: <Widget>[
+                    RaisedButton(
+                      color: Colors.grey,
+                      child: Text('Already Joined'),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.15,
+                    ),
+                    RaisedButton(
+                      color: Constants.cancelButtonColor,
+                      child: Text('Cancel'),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      }
+                    ),                    
+                  ],
+                );
+              }
+            }
+          } 
+            return CircularProgressIndicator();
+        });
+  }
+
+  Future<bool> belongs(DocumentSnapshot document) async {
+    FirebaseUser _user;
+    FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
     CollectionReference projects = _db.collection('projects');
-    CollectionReference users = _db.collection('users');
     DocumentReference thisProject = projects.document(document.documentID);
-    DocumentReference userDocument = users.document(_user.displayName);
-    var isJoined = await thisProject.get().then((dcmnt){
-      return document.data['joinedUsers'].contains(_user.displayName);
+    bool isJoined;
+    await thisProject.get().then((dmnt) {
+      isJoined = document.data['joinedUsers'].contains(_user.displayName);
     });
-    if (!isJoined) {return [
-        Container(
-        child: RaisedButton(
-          child: Text("Join Project"),
-          color: Constants.acceptButtonColor,
-          onPressed: () async{
-            thisProject.updateData({
-              'joinedUsers': FieldValue.arrayUnion([
-                _user.displayName
-              ])
-            });
-            userDocument.updateData({
-              'joinedProjects': FieldValue.arrayUnion([
-                document.documentID,
-                ])
-              });
-            },
-          ),
-        ),
-      SizedBox(
-        width: MediaQuery.of(context).size.width * 0.15,
-      ),
-      Container(
-        child: RaisedButton(
-          child: Text("Cancel"),
-              color: Constants.cancelButtonColor,
-                onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ];} else {
-      return [
-        Container(
-          child: RaisedButton(
-            child: Text('Already Joined!'),
-            color: Colors.grey,
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        SizedBox(
-        width: MediaQuery.of(context).size.width * 0.15,
-      ),
-      Container(
-        child: RaisedButton(
-          child: Text("Cancel"),
-              color: Constants.cancelButtonColor,
-                onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      ];
-    }
+    return isJoined;
   }
 }
