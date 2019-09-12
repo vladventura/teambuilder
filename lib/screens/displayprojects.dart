@@ -115,7 +115,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                         color: Constants.acceptButtonColor,
                         onPressed: () async {
                           FirebaseUser _user;
-                          FirebaseAuth.instance
+                          await FirebaseAuth.instance
                               .currentUser()
                               .then((ref) => _user = ref);
                           CollectionReference projects =
@@ -134,6 +134,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                               document.documentID,
                             ])
                           });
+                          Navigator.pop(context);
                         },
                       ),
                     ),
@@ -154,24 +155,46 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                   children: <Widget>[
                     RaisedButton(
                       color: Colors.grey,
-                      child: Text('Already Joined'),
+                      child: Text('Leave Project'),
+                      onPressed: () async {
+                          FirebaseUser _user;
+                          await FirebaseAuth.instance
+                              .currentUser()
+                              .then((ref) => _user = ref);
+                          CollectionReference projects =
+                              _db.collection('projects');
+                          CollectionReference users = _db.collection('users');
+                          DocumentReference thisProject =
+                              projects.document(document.documentID);
+                          DocumentReference userDocument =
+                              users.document(_user.displayName);
+                          thisProject.updateData({
+                            'joinedUsers':
+                                FieldValue.arrayRemove([_user.displayName])
+                          });
+                          userDocument.updateData({
+                            'joinedProjects': FieldValue.arrayRemove([
+                              document.documentID,
+                            ])
+                          });
+                          Navigator.pop(context);
+                      },
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.15,
                     ),
                     RaisedButton(
-                      color: Constants.cancelButtonColor,
-                      child: Text('Cancel'),
-                      onPressed: (){
-                        Navigator.pop(context);
-                      }
-                    ),                    
+                        color: Constants.cancelButtonColor,
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
                   ],
                 );
               }
             }
-          } 
-            return CircularProgressIndicator();
+          }
+          return CircularProgressIndicator();
         });
   }
 
