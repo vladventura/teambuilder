@@ -109,86 +109,17 @@ class _DisplayProjectsState extends State<DisplayProjects> {
               if (!snapshot.data == true) {
                 return Row(
                   children: <Widget>[
-                    Container(
-                      child: RaisedButton(
-                        child: Text("Join Project"),
-                        color: Constants.acceptButtonColor,
-                        onPressed: () async {
-                          FirebaseUser _user;
-                          await FirebaseAuth.instance
-                              .currentUser()
-                              .then((ref) => _user = ref);
-                          CollectionReference projects =
-                              _db.collection('projects');
-                          CollectionReference users = _db.collection('users');
-                          DocumentReference thisProject =
-                              projects.document(document.documentID);
-                          DocumentReference userDocument =
-                              users.document(_user.displayName);
-                          thisProject.updateData({
-                            'joinedUsers':
-                                FieldValue.arrayUnion([_user.displayName])
-                          });
-                          userDocument.updateData({
-                            'joinedProjects': FieldValue.arrayUnion([
-                              document.documentID,
-                            ])
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.15,
-                    ),
-                    Container(
-                      child: RaisedButton(
-                        child: Text("Cancel"),
-                        color: Constants.cancelButtonColor,
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ),
+                    buildJoinButton(document),
+                    buildButtonSeparator(),
+                    buildCancelButton(),
                   ],
                 );
               } else {
                 return Row(
                   children: <Widget>[
-                    RaisedButton(
-                      color: Colors.grey,
-                      child: Text('Leave Project'),
-                      onPressed: () async {
-                          FirebaseUser _user;
-                          await FirebaseAuth.instance
-                              .currentUser()
-                              .then((ref) => _user = ref);
-                          CollectionReference projects =
-                              _db.collection('projects');
-                          CollectionReference users = _db.collection('users');
-                          DocumentReference thisProject =
-                              projects.document(document.documentID);
-                          DocumentReference userDocument =
-                              users.document(_user.displayName);
-                          thisProject.updateData({
-                            'joinedUsers':
-                                FieldValue.arrayRemove([_user.displayName])
-                          });
-                          userDocument.updateData({
-                            'joinedProjects': FieldValue.arrayRemove([
-                              document.documentID,
-                            ])
-                          });
-                          Navigator.pop(context);
-                      },
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.15,
-                    ),
-                    RaisedButton(
-                        color: Constants.cancelButtonColor,
-                        child: Text('Cancel'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
+                    buildLeaveButton(document),
+                    buildButtonSeparator(),
+                    buildCancelButton(),
                   ],
                 );
               }
@@ -196,6 +127,68 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           }
           return CircularProgressIndicator();
         });
+  }
+
+  RaisedButton buildLeaveButton(DocumentSnapshot document) {
+    return RaisedButton(
+      color: Colors.grey,
+      child: Text('Leave Project'),
+      onPressed: () async {
+        FirebaseUser _user;
+        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
+        CollectionReference projects = _db.collection('projects');
+        CollectionReference users = _db.collection('users');
+        DocumentReference thisProject = projects.document(document.documentID);
+        DocumentReference userDocument = users.document(_user.displayName);
+        thisProject.updateData({
+          'joinedUsers': FieldValue.arrayRemove([_user.displayName])
+        });
+        userDocument.updateData({
+          'joinedProjects': FieldValue.arrayRemove([
+            document.documentID,
+          ])
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  SizedBox buildButtonSeparator() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.15,
+    );
+  }
+
+  RaisedButton buildJoinButton(DocumentSnapshot document) {
+    return RaisedButton(
+      child: Text("Join Project"),
+      color: Constants.acceptButtonColor,
+      onPressed: () async {
+        FirebaseUser _user;
+        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
+        CollectionReference projects = _db.collection('projects');
+        CollectionReference users = _db.collection('users');
+        DocumentReference thisProject = projects.document(document.documentID);
+        DocumentReference userDocument = users.document(_user.displayName);
+        thisProject.updateData({
+          'joinedUsers': FieldValue.arrayUnion([_user.displayName])
+        });
+        userDocument.updateData({
+          'joinedProjects': FieldValue.arrayUnion([
+            document.documentID,
+          ])
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  RaisedButton buildCancelButton() {
+    return RaisedButton(
+      child: Text("Cancel"),
+      color: Constants.cancelButtonColor,
+      onPressed: () => Navigator.of(context).pop(),
+    );
   }
 
   Future<bool> belongs(DocumentSnapshot document) async {
