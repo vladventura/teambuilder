@@ -6,6 +6,7 @@ import 'package:teambuilder/models/project.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
+import 'package:flash/flash.dart';
 
 class DisplayForm extends StatefulWidget {
   @override
@@ -118,7 +119,25 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-            // TODO: Flash snackbar goes here
+                        showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Creating project...",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
             submitProject();
           }),
         )));
@@ -148,6 +167,25 @@ class _DisplayFormState extends State<DisplayForm> {
           createdProject.documentID
         ]),
       });
+                  showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Project created!",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
     }
   }
 }
