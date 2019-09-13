@@ -135,6 +135,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       color: Colors.grey,
       child: Text('Leave Project'),
       onPressed: () async {
+        // TODO: Flash snackbar goes here
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -149,6 +150,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             document.documentID,
           ])
         });
+        // TODO: Flash snackbar goes here
         Navigator.pop(context);
       },
     );
@@ -165,6 +167,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       child: Text("Join Project"),
       color: Constants.acceptButtonColor,
       onPressed: () async {
+        // TODO: Flash snackbar goes here
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -179,6 +182,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             document.documentID,
           ])
         });
+        // TODO: Flash snackbar goes here
         Navigator.pop(context);
       },
     );

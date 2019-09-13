@@ -118,6 +118,7 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
+            // TODO: Flash snackbar goes here
             submitProject();
           }),
         )));
