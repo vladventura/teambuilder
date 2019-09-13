@@ -2,17 +2,17 @@ class Project{
   String complexity;
   String contactPlatforms;
   String description;
+  List <String> joinedUsers;
   String name;
   String originator;
-  String originatorId;
 
   Project(
     this.complexity, 
     this.contactPlatforms, 
     this.description, 
-    this.name, 
+    this.name,
+    this.joinedUsers, 
     this.originator,
-    this.originatorId, 
   );
 
   Map <String, dynamic> toMap(){
@@ -21,8 +21,8 @@ class Project{
       'contactPlatforms': 'Feature coming soon',
       'description': this.description,
       'name': this.name,
+      'joinedUsers': this.joinedUsers,
       'originator': this.originator,
-      'originator_id': this.originatorId,
     };
   }
 }

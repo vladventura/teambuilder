@@ -127,16 +127,26 @@ class _DisplayFormState extends State<DisplayForm> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       FirebaseUser _user = await _auth.currentUser();
-      CollectionReference reference = db.collection('projects');
+      CollectionReference projects = db.collection('projects');
       Project project = new Project(
         _complexity,
         _contactPlatforms,
         _description,
         _name,
+        [_user.displayName],
         _user.displayName,
-        _user.uid,
       );
-      reference.add(project.toMap());
+      CollectionReference users = db.collection('users');
+      DocumentReference createdProject = await projects.add(project.toMap());
+      DocumentReference userDocument = users.document(_user.displayName);
+      userDocument.updateData({
+        'joinedProjects': FieldValue.arrayUnion([
+          createdProject.documentID,
+        ]),
+        'createdProjects': FieldValue.arrayUnion([
+          createdProject.documentID
+        ]),
+      });
     }
   }
 }

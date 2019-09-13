@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  flushbar:
+  flash:
   cloud_firestore: 0.8.2+3
   firebase_auth: 0.7.0
   firebase_core: 0.2.5+1 # Add dependency for Firebase Core
