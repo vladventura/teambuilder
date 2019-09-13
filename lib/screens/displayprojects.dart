@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:teambuilder/util/constants.dart';
 
 import 'package:flash/flash.dart';
+
 class DisplayProjects extends StatefulWidget {
   _DisplayProjectsState createState() => _DisplayProjectsState();
 }
@@ -135,6 +136,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       color: Colors.grey,
       child: Text('Leave Project'),
       onPressed: () async {
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Leaving team...",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -150,6 +170,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           ])
         });
         Navigator.pop(context);
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Left team successfully.",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
       },
     );
   }
@@ -165,6 +204,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       child: Text("Join Project"),
       color: Constants.acceptButtonColor,
       onPressed: () async {
+                    showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Joining team...",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -180,6 +238,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           ])
         });
         Navigator.pop(context);
+                    showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Team joined!",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
       },
     );
   }
