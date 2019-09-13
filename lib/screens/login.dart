@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
 
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    if (_formType == FormType.register){
+    if (_formType == FormType.register) {
       await isTaken();
     }
     if (validate()) {
@@ -72,22 +72,22 @@ class _LoginState extends State<Login> {
         }
       } else {
         try {
-            UserUpdateInfo updater = UserUpdateInfo();
-            await Firestore.instance
-                .collection('users')
-                .document(_username)
-                .setData({
-              'joinedProjects': [],
-              'createdProjects': [],
-            });
-            FirebaseUser user = await auth.createUserWithEmailAndPassword(
-                email: _email, password: _password);
-            updater.displayName = _username;
-            await auth.signInWithEmailAndPassword(
-                email: _email, password: _password);
-            user.updateProfile(updater);
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/Home', (Route<dynamic> route) => false);
+          UserUpdateInfo updater = UserUpdateInfo();
+          await Firestore.instance
+              .collection('users')
+              .document(_username)
+              .setData({
+            'joinedProjects': [],
+            'createdProjects': [],
+          });
+          FirebaseUser user = await auth.createUserWithEmailAndPassword(
+              email: _email, password: _password);
+          updater.displayName = _username;
+          await auth.signInWithEmailAndPassword(
+              email: _email, password: _password);
+          user.updateProfile(updater);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
           print(e.message);
         }
@@ -145,10 +145,13 @@ class _LoginState extends State<Login> {
     );
   }
 
-  isTaken() async{
-    DocumentSnapshot snap = await Firestore.instance.collection('users').document(this._usernameController.text).get();
+  isTaken() async {
+    DocumentSnapshot snap = await Firestore.instance
+        .collection('users')
+        .document(this._usernameController.text)
+        .get();
     setState(() {
-      _isTaken = (snap.data != null); 
+      _isTaken = (snap.data != null);
     });
   }
 
@@ -156,7 +159,7 @@ class _LoginState extends State<Login> {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
-          validator: (value){
+          validator: (value) {
             if (this._isTaken) return "Username is taken already";
             if (value.isEmpty) return "Username cannot be empty";
             return null;
@@ -213,24 +216,24 @@ class _LoginState extends State<Login> {
       child: new RaisedButton(
           onPressed: () async {
             showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Logging in...",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
-                  ),
-                );
-              }
-            );
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Logging in...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
+                        ),
+                      ),
+                    ),
+                  );
+                });
             await submit();
           },
           shape:
@@ -249,7 +252,25 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
-            //TODO: Flash snackbar goes here
+            showFlash(
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Creating account...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
+                        ),
+                      ),
+                    ),
+                  );
+                });
             await submit();
           },
           shape:
