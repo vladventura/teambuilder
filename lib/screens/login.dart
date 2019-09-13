@@ -1,5 +1,6 @@
 import 'dart:async';
 import './decorations.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -213,6 +214,7 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
+            //TODO: Flash snackbar here
             await submit();
           },
           shape:
@@ -231,6 +233,7 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
+            //TODO: Flash snackbar goes here
             await submit();
           },
           shape:
