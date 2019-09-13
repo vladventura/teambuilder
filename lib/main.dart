@@ -5,6 +5,8 @@ import 'package:teambuilder/screens/mainscreen.dart';
 
 /* 
 TODO: Sign user out after certain amount of time.
+TODO: Handle 'User is Offline' case
+TODO: Docstrings for all functions. Should maybe do before the project gets out-of-hand big.
 */
 
 void main() {
