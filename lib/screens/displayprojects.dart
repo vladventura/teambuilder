@@ -204,7 +204,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       child: Text("Join Project"),
       color: Constants.acceptButtonColor,
       onPressed: () async {
-        // TODO: Flash snackbar goes here
+                    showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Joining team...",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -219,8 +237,26 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             document.documentID,
           ])
         });
-        // TODO: Flash snackbar goes here
         Navigator.pop(context);
+                    showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller){
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Team joined!",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),),
+                  ),
+                );
+              }
+            );
       },
     );
   }
