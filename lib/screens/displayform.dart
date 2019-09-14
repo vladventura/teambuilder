@@ -18,6 +18,8 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> complexities = new List<String>();
   List<Widget> _textboxes = new List<Widget>();
   List<String> _textboxesData = new List<String>();
+  List<Widget> _techTextboxes = new List<Widget>();
+  List<String> _techTextboxesData = new List<String>();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -46,6 +48,7 @@ class _DisplayFormState extends State<DisplayForm> {
           buildDescriptionBox(),
           buildComplexityDropdow(),
           buildLanguagesDTB(),
+          buildTechDTB(),
           buildSubmitButton(),
         ],
       ),
@@ -86,6 +89,40 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
+  Column buildTechDTB() {
+    return Column(
+      children: <Widget>[
+        OutlineButton(
+          onPressed: generateTechTextBox,
+          borderSide: BorderSide(
+            color: Constants.formInactiveColor,
+          ),
+          highlightedBorderColor: Constants.formActiveColor,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: new BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Add Frameworks, SDKs or Tools",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
+                  ),
+                ),
+                Icon(Icons.add)
+              ],
+            ),
+          ),
+        ),
+        Column(
+          children: _techTextboxes,
+        ),
+      ],
+    );
+  }
+
   void generateTextBox() {
     setState(() {
       TextEditingController _textboxesController = new TextEditingController();
@@ -94,6 +131,11 @@ class _DisplayFormState extends State<DisplayForm> {
           new TextFormField(
             onSaved: (String value) {
               _textboxesData.add(_textboxesController.text);
+            },
+            validator: (String value) {
+              if (value.isEmpty)
+                return "Please add a Language or delete this box!";
+              return null;
             },
             controller: _textboxesController,
             decoration: Constants.dynamicFormDecoration(
@@ -104,6 +146,38 @@ class _DisplayFormState extends State<DisplayForm> {
                     setState(() {
                       _textboxesController.text = "";
                       _textboxes.removeLast();
+                    });
+                  },
+                )),
+          ),
+        );
+    });
+  }
+
+  void generateTechTextBox() {
+    setState(() {
+      TextEditingController _techTextboxesController =
+          new TextEditingController();
+      _techTextboxes = List.from(_techTextboxes)
+        ..add(
+          new TextFormField(
+            onSaved: (String value) {
+              _techTextboxesData.add(_techTextboxesController.text);
+            },
+            validator: (String value) {
+              if (value.isEmpty)
+                return "Please add a Technology or remove this box!";
+              return null;
+            },
+            controller: _techTextboxesController,
+            decoration: Constants.dynamicFormDecoration(
+                "Technology Used",
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _techTextboxesController.text = "";
+                      _techTextboxes.removeLast();
                     });
                   },
                 )),
@@ -220,10 +294,13 @@ class _DisplayFormState extends State<DisplayForm> {
         [],
         _user.displayName,
         _textboxesData,
+        _techTextboxesData,
       );
       setState(() {
         _textboxesData = new List<String>();
-        _textboxes = new List<Widget>(); 
+        _textboxes = new List<Widget>();
+        _techTextboxes = new List<Widget>();
+        _techTextboxesData = new List<String>();
       });
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
