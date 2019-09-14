@@ -219,6 +219,21 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
+  Container buildTeamSizeInput(){
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Text("Team Size"),
+          ),
+          TextFormField(
+            keyboardType: TextInputType.number,
+          ),
+        ],
+      ),
+    );
+  }
+
   Container buildComplexityDropdow() {
     return Container(
         margin: Constants.form_column_margins,
