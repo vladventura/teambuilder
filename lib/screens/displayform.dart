@@ -38,45 +38,66 @@ class _DisplayFormState extends State<DisplayForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           buildNameBox(),
           buildDescriptionBox(),
           buildComplexityDropdow(),
+          buildLanguagesDTB(),
           buildSubmitButton(),
         ],
       ),
     );
   }
 
-  Column buildLanguagesDTB(){
+  Column buildLanguagesDTB() {
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text("Programming Languages Used"),
-            RaisedButton(
-              child: Icon(Icons.add),
-              onPressed: generateTextBox,
+        Container(
+          height: MediaQuery.of(context).size.height * 0.1,
+          child: RaisedButton(
+            onPressed: generateTextBox,
+            child: Column(
+              children: <Widget>[
+                Text("Add Programming Languages"),
+                Icon(Icons.add)
+              ],
             ),
-          ],
+          ),
         ),
-        ListView(
+        Column(
           children: _textboxes,
         ),
-      ], 
+      ],
     );
   }
 
-  void generateTextBox(){
-    _textboxes = List.from(_textboxes)..add(
-      TextFormField(
-        decoration: InputDecoration(
-          hintText: "This is working!"
-        ),
-      ),
-    );
+  void generateTextBox() {
+    setState(() {
+      TextEditingController _textboxesController = new TextEditingController();
+      _textboxes = List.from(_textboxes)
+        ..add(
+          new TextFormField(
+            onSaved: (String value) {
+              _textboxesData.add(value);
+            },
+            controller: _textboxesController,
+            decoration: InputDecoration(
+              hintText: "This is working!",
+              suffixIcon: IconButton(
+                icon: Icon(Icons.delete_forever),
+                onPressed:(){
+                  setState(() {
+                    _textboxesController.text = "";
+                   _textboxes.removeLast(); 
+                  });
+                }
+              ),),
+          ),
+        );
+    });
   }
 
   Container buildNameBox() {
@@ -150,25 +171,25 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-                        showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Creating project...",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
-                  ),
-                );
-              }
-            );
+            showFlash(
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Creating project...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
+                        ),
+                      ),
+                    ),
+                  );
+                });
             submitProject();
           }),
         )));
@@ -194,29 +215,27 @@ class _DisplayFormState extends State<DisplayForm> {
         'joinedProjects': FieldValue.arrayUnion([
           createdProject.documentID,
         ]),
-        'createdProjects': FieldValue.arrayUnion([
-          createdProject.documentID
-        ]),
+        'createdProjects': FieldValue.arrayUnion([createdProject.documentID]),
       });
-                  showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Project created!",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
+      showFlash(
+          context: context,
+          duration: Duration(seconds: 1),
+          builder: (context, controller) {
+            return Flash(
+              controller: controller,
+              style: FlashStyle.grounded,
+              backgroundColor: Constants.sideBackgroundColor,
+              boxShadows: kElevationToShadow[4],
+              child: FlashBar(
+                message: Text(
+                  "Project created!",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
                   ),
-                );
-              }
+                ),
+              ),
             );
+          });
     }
   }
 }
