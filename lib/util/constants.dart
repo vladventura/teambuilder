@@ -45,6 +45,26 @@ class Constants {
       ),
     );
   }
+    static dynamicFormDecoration (String formName, IconButton ib){
+    return InputDecoration(
+      hintText: formName,
+      hintStyle: TextStyle(
+        color: generalTextColor,
+      ),
+      enabledBorder: new OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: formInactiveColor,
+        ),
+      ),
+      focusedBorder: new OutlineInputBorder(
+        borderSide: new BorderSide(
+          color: formActiveColor,
+        ),
+      ),
+      suffixIcon: ib,
+    );
+  }
   static complexitiesDecoration(){
     return BoxDecoration(
       borderRadius: BorderRadius.circular(7),
