@@ -94,7 +94,6 @@ class _DisplayFormState extends State<DisplayForm> {
           new TextFormField(
             onSaved: (String value) {
               _textboxesData.add(_textboxesController.text);
-              print("inside onSaved " + _textboxesController.text);
             },
             controller: _textboxesController,
             decoration: Constants.dynamicFormDecoration(
@@ -211,9 +210,6 @@ class _DisplayFormState extends State<DisplayForm> {
   void submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-          for (String s in _textboxesData){
-              print(s);
-            }
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
