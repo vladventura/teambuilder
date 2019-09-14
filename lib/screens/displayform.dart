@@ -94,7 +94,7 @@ class _DisplayFormState extends State<DisplayForm> {
           new TextFormField(
             onSaved: (String value) {
               _textboxesData.add(_textboxesController.text);
-              print("inside onSaved" + _textboxesController.text);
+              print("inside onSaved " + _textboxesController.text);
             },
             controller: _textboxesController,
             decoration: Constants.dynamicFormDecoration(
@@ -203,13 +203,6 @@ class _DisplayFormState extends State<DisplayForm> {
                     ),
                   );
                 });
-            if (_textboxes != null){
-              if (_textboxesData.length < 0){
-                for (String element in _textboxesData){
-                  print(element);
-                }
-              }
-            }
             submitProject();
           }),
         )));
@@ -218,6 +211,9 @@ class _DisplayFormState extends State<DisplayForm> {
   void submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+          for (String s in _textboxesData){
+              print(s);
+            }
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
@@ -225,16 +221,13 @@ class _DisplayFormState extends State<DisplayForm> {
         _contactPlatforms,
         _description,
         _name,
-        [_user.displayName],
+        [],
         _user.displayName,
       );
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);
       userDocument.updateData({
-        'joinedProjects': FieldValue.arrayUnion([
-          createdProject.documentID,
-        ]),
         'createdProjects': FieldValue.arrayUnion([createdProject.documentID]),
       });
       showFlash(
