@@ -221,8 +221,10 @@ class _DisplayFormState extends State<DisplayForm> {
         _user.displayName,
         _textboxesData,
       );
-      _textboxesData = new List<String>();
-      _textboxes = new List<Widget>();
+      setState(() {
+        _textboxesData = new List<String>();
+        _textboxes = new List<Widget>(); 
+      });
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);
