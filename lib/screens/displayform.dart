@@ -55,13 +55,25 @@ class _DisplayFormState extends State<DisplayForm> {
   Column buildLanguagesDTB() {
     return Column(
       children: <Widget>[
-        Container(
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: RaisedButton(
-            onPressed: generateTextBox,
+        OutlineButton(
+          onPressed: generateTextBox,
+          borderSide: BorderSide(
+            color: Constants.formInactiveColor,
+          ),
+          highlightedBorderColor: Constants.formActiveColor,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: new BorderRadius.circular(20),
+            ),
             child: Column(
               children: <Widget>[
-                Text("Add Programming Languages"),
+                Text(
+                  "Add Programming Languages",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
+                  ),
+                ),
                 Icon(Icons.add)
               ],
             ),
@@ -81,20 +93,21 @@ class _DisplayFormState extends State<DisplayForm> {
         ..add(
           new TextFormField(
             onSaved: (String value) {
-              _textboxesData.add(value);
+              _textboxesData.add(_textboxesController.text);
+              print("inside onSaved" + _textboxesController.text);
             },
             controller: _textboxesController,
-            decoration: InputDecoration(
-              hintText: "This is working!",
-              suffixIcon: IconButton(
-                icon: Icon(Icons.delete_forever),
-                onPressed:(){
-                  setState(() {
-                    _textboxesController.text = "";
-                   _textboxes.removeLast(); 
-                  });
-                }
-              ),),
+            decoration: Constants.dynamicFormDecoration(
+                "Language Used",
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _textboxesController.text = "";
+                      _textboxes.removeLast();
+                    });
+                  },
+                )),
           ),
         );
     });
@@ -190,6 +203,13 @@ class _DisplayFormState extends State<DisplayForm> {
                     ),
                   );
                 });
+            if (_textboxes != null){
+              if (_textboxesData.length < 0){
+                for (String element in _textboxesData){
+                  print(element);
+                }
+              }
+            }
             submitProject();
           }),
         )));
