@@ -50,6 +50,35 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
+  Column buildLanguagesDTB(){
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text("Programming Languages Used"),
+            RaisedButton(
+              child: Icon(Icons.add),
+              onPressed: generateTextBox,
+            ),
+          ],
+        ),
+        ListView(
+          children: _textboxes,
+        ),
+      ], 
+    );
+  }
+
+  void generateTextBox(){
+    _textboxes = List.from(_textboxes)..add(
+      TextFormField(
+        decoration: InputDecoration(
+          hintText: "This is working!"
+        ),
+      ),
+    );
+  }
+
   Container buildNameBox() {
     return Container(
       margin: Constants.form_column_margins,
