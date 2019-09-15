@@ -216,6 +216,7 @@ class _DisplayFormState extends State<DisplayForm> {
           maxLength: Constants.description_max_length,
           maxLengthEnforced: Constants.max_length_enforced,
           autocorrect: Constants.has_autocorrect,
+          style: Constants.formContentStyle(),
           validator: ProjectDescriptionValidator.validate,
           onSaved: (description) => this._description = description,
           decoration: Constants.formDecoration(Texts.project_description)),
