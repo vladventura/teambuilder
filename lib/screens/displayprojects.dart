@@ -108,6 +108,10 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         builder: (context, snapshot) {
           if (snapshot != null) {
             if (snapshot.hasData) {
+              //TODO: This is the product of lazyness. Now I have to refactor this thing so I can have it work as I need
+              //I need it so the snapshot briengs the whole document, so I can now decide which set of buttons to build.
+              //TODO: Step two of this process will be to adjust this with what follows the then() of the first step.
+              //TODO: Step three will be to check if the team accepts more members or not, and then check if the user is one of these members
               if (!snapshot.data == true) {
                 return Row(
                   children: <Widget>[
@@ -275,6 +279,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     CollectionReference projects = _db.collection('projects');
     DocumentReference thisProject = projects.document(document.documentID);
     bool isJoined;
+    //TODO: Change this to return this future right here.
     await thisProject.get().then((dmnt) {
       isJoined = document.data['joinedUsers'].contains(_user.displayName);
     });
