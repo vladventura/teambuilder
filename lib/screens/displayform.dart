@@ -15,7 +15,7 @@ class DisplayForm extends StatefulWidget {
 }
 
 class _DisplayFormState extends State<DisplayForm> {
-  String _complexity, _name, _description, _contactPlatforms;
+  String _complexity, _name, _description, _contactPlatforms, _teamMembers;
   List<String> complexities = new List<String>();
   List<Widget> _textboxes = new List<Widget>();
   List<String> _textboxesData = new List<String>();
@@ -254,6 +254,9 @@ class _DisplayFormState extends State<DisplayForm> {
                 if (parsed > 99) return "That's way to many people!";
                 return null;
               },
+              onSaved: (String value){
+                this._teamMembers = value;
+              },
             ),
           ),
         ],
@@ -336,6 +339,7 @@ class _DisplayFormState extends State<DisplayForm> {
         _user.displayName,
         _textboxesData,
         _techTextboxesData,
+        _teamMembers
       );
       setState(() {
         _textboxesData = new List<String>();
