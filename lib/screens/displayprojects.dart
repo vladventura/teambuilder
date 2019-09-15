@@ -102,11 +102,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  Future<String> getUsername() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user.displayName;
-  }
-
   Widget buttons(DocumentSnapshot document) {
     return FutureBuilder(
         future: FirebaseAuth.instance.currentUser(),
@@ -291,18 +286,5 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       color: Constants.cancelButtonColor,
       onPressed: () => Navigator.of(context).pop(),
     );
-  }
-
-  Future<bool> belongs(DocumentSnapshot document) async {
-    FirebaseUser _user;
-    FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-    CollectionReference projects = _db.collection('projects');
-    DocumentReference thisProject = projects.document(document.documentID);
-    bool isJoined;
-    //TODO: Change this to return this future right here.
-    await thisProject.get().then((dmnt) {
-      isJoined = document.data['joinedUsers'].contains(_user.displayName);
-    });
-    return isJoined;
   }
 }
