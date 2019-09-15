@@ -235,7 +235,7 @@ class _DisplayFormState extends State<DisplayForm> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.5,
             height: MediaQuery.of(context).size.height * 0.06,
             margin: EdgeInsets.all(3),
             padding: EdgeInsets.all(7),
@@ -246,7 +246,14 @@ class _DisplayFormState extends State<DisplayForm> {
                 WhitelistingTextInputFormatter.digitsOnly
               ],
               decoration: Constants.formDecoration(''),
-
+              validator: (String value){
+                if (value.isEmpty) return "You must have at least one team mate!";
+                int parsed = int.parse(value);
+                if (parsed < 0) return "You cannot have less than 0 team mates!";
+                if (parsed == 0) return "You cannot have no team mates!";
+                if (parsed > 99) return "That's way to many people!";
+                return null;
+              },
             ),
           ),
         ],
