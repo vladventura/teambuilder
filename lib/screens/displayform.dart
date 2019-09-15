@@ -197,6 +197,7 @@ class _DisplayFormState extends State<DisplayForm> {
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
         autocorrect: Constants.has_autocorrect,
+        style: Constants.formContentStyle(),
         decoration: Constants.formDecoration(Texts.project_name),
         onSaved: (name) {
           this._name = name;
