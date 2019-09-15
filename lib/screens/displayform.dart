@@ -139,6 +139,7 @@ class _DisplayFormState extends State<DisplayForm> {
                 return "Please add a Language or delete this box!";
               return null;
             },
+            style: Constants.formContentStyle(),
             controller: _textboxesController,
             decoration: Constants.dynamicFormDecoration(
                 "Language Used",
@@ -171,6 +172,7 @@ class _DisplayFormState extends State<DisplayForm> {
                 return "Please add a Technology or remove this box!";
               return null;
             },
+            style: Constants.formContentStyle(),
             controller: _techTextboxesController,
             decoration: Constants.dynamicFormDecoration(
                 "Technology Used",
