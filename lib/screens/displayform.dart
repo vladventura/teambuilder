@@ -225,8 +225,6 @@ class _DisplayFormState extends State<DisplayForm> {
 
   Row buildTeamSizeInput(){
     return Row(
-      verticalDirection: VerticalDirection.down,
-
         children: <Widget>[
           Text(
             "Number of Team Members ",
@@ -241,6 +239,7 @@ class _DisplayFormState extends State<DisplayForm> {
             padding: EdgeInsets.all(7),
             child: TextFormField(
               keyboardType: TextInputType.number,
+              style: Constants.formContentStyle(),
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly
               ],
