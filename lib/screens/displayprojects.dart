@@ -102,30 +102,50 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  FutureBuilder buttons(DocumentSnapshot document) {
+  Future<String> getUsername() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.displayName;
+  }
+
+  Widget buttons(DocumentSnapshot document) {
     return FutureBuilder(
-        future: belongs(document),
+        future: FirebaseAuth.instance.currentUser(),
         builder: (context, snapshot) {
           if (snapshot != null) {
             if (snapshot.hasData) {
-              //TODO: This is the product of lazyness. Now I have to refactor this thing so I can have it work as I need
-              //I need it so the snapshot briengs the whole document, so I can now decide which set of buttons to build.
-              //TODO: Step two of this process will be to adjust this with what follows the then() of the first step.
-              //TODO: Step three will be to check if the team accepts more members or not, and then check if the user is one of these members
-              if (!snapshot.data == true) {
-                return Row(
-                  children: <Widget>[
-                    buildJoinButton(document),
-                    buildButtonSeparator(),
-                    buildCancelButton(),
-                  ],
+              bool owner =
+                  (document.data['originator'] == snapshot.data.displayName);
+              bool belongs = (document.data['joinedUsers']
+                      .contains(snapshot.data.displayName) ||
+                  owner);
+              bool slotAvailable = (document.data['joinedUsers'].length <
+                  int.parse(document.data['teamMembers']));
+              if (!belongs) {
+                if (slotAvailable == true) {
+                  return Row(
+                    children: <Widget>[
+                      buildJoinButton(document),
+                      buildButtonSeparator(),
+                      buildCancelButton(),
+                    ],
+                  );
+                } else {
+                  return FlatButton(
+                    child: Text("The team is full."),
+                    onPressed: null,
+                  );
+                }
+              } else if (owner) {
+                return FlatButton(
+                  child: Text("You cannot join your own project!"),
+                  onPressed: null,
                 );
-              } else {
+              } else if (belongs) {
                 return Row(
                   children: <Widget>[
                     buildLeaveButton(document),
                     buildButtonSeparator(),
-                    buildCancelButton(),
+                    buildCancelButton()
                   ],
                 );
               }
@@ -208,25 +228,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       child: Text("Join Project"),
       color: Constants.acceptButtonColor,
       onPressed: () async {
-                    showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Joining team...",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Joining team...",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
                   ),
-                );
-              }
-            );
+                ),
+              );
+            });
         FirebaseUser _user;
         await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
         CollectionReference projects = _db.collection('projects');
@@ -242,25 +262,25 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           ])
         });
         Navigator.pop(context);
-                    showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Team joined!",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Team joined!",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
                   ),
-                );
-              }
-            );
+                ),
+              );
+            });
       },
     );
   }
