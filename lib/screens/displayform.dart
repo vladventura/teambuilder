@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:teambuilder/models/project.dart';
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
@@ -49,6 +50,7 @@ class _DisplayFormState extends State<DisplayForm> {
           buildComplexityDropdow(),
           buildLanguagesDTB(),
           buildTechDTB(),
+          buildTeamSizeInput(),
           buildSubmitButton(),
         ],
       ),
@@ -219,18 +221,32 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
-  Container buildTeamSizeInput(){
-    return Container(
-      child: Row(
+  Row buildTeamSizeInput(){
+    return Row(
+      verticalDirection: VerticalDirection.down,
+
         children: <Widget>[
-          Container(
-            child: Text("Team Size"),
+          Text(
+            "Number of Team Members ",
+            style: TextStyle(
+              color: Constants.generalTextColor,
+            ),
           ),
-          TextFormField(
-            keyboardType: TextInputType.number,
+          Container(
+            width: MediaQuery.of(context).size.width * 0.2,
+            height: MediaQuery.of(context).size.height * 0.06,
+            margin: EdgeInsets.all(3),
+            padding: EdgeInsets.all(7),
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              decoration: Constants.formDecoration(''),
+
+            ),
           ),
         ],
-      ),
     );
   }
 
