@@ -7,6 +7,7 @@ class Project{
   String originator;
   List<String> languagesUsed;
   List<String> technologiesUsed; 
+  String teamMembers;
 
   Project(
     this.complexity, 
@@ -16,7 +17,8 @@ class Project{
     this.joinedUsers, 
     this.originator,
     this.languagesUsed,
-    this.technologiesUsed
+    this.technologiesUsed,
+    this.teamMembers
   );
 
   Map <String, dynamic> toMap(){
@@ -29,6 +31,7 @@ class Project{
       'originator': this.originator,
       'languagesUsed': this.languagesUsed,
       'technologiesUsed': this.technologiesUsed,
+      'teamMembers': this.teamMembers
     };
   }
 }
