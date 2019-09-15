@@ -73,6 +73,11 @@ class Constants {
         ),
     );
   }
+  static formContentStyle(){
+    return TextStyle(
+      color: formActiveColor,
+    );
+  }
 
   // Team button information
   static buttonDecoration() {
