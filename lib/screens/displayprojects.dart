@@ -96,14 +96,14 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                         Container(
                           child: Text("Languages Used!"),
                         ),
-                        getTextWidgets(document.data['languagesUsed']),
+                        getGeneralTexts(document.data['languagesUsed']),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
                         Container(
                           child: Text("Technologies Used!"),
                         ),
-                        getTextWidgets(document.data['technologiesUsed']),
+                        getGeneralTexts(document.data['technologiesUsed']),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
@@ -131,7 +131,20 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       return Container(
         alignment: Alignment.centerLeft,
         child:
-            new Column(children: users.map((user) => new Text(user)).toList()),
+            new Column(children: users.map((user) => new Text("${user['name']} (${user['specialization']})")).toList()),
+      );
+    return Container(
+      child: Text("Nothing to show here~!"),
+    );
+  }
+
+  Widget getGeneralTexts(List<dynamic> elements){
+    bool isEmpty = (elements.length <= 0 || elements == null);
+    if (!isEmpty)
+      return Container(
+        alignment: Alignment.centerLeft,
+        child:
+            new Column(children: elements.map((element) => new Text(element)).toList()),
       );
     return Container(
       child: Text("Nothing to show here~!"),
@@ -350,7 +363,10 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         DocumentReference thisProject = projects.document(document.documentID);
         DocumentReference userDocument = users.document(_user.displayName);
         thisProject.updateData({
-          'joinedUsers': FieldValue.arrayUnion([_user.displayName])
+          'joinedUsers': FieldValue.arrayUnion([{
+            'name': _user.displayName,
+            'specialization': _specialization
+          }])
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
