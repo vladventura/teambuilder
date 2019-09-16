@@ -106,7 +106,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                         ),
                         Container(
                           child: Text(
-                              "${document.data['joinedUsers'].length + 1}/${document.data['teamMembers']} members joined."),
+                              "${document.data['joinedUsers'].length}/${document.data['teamMembers']} members joined."),
                         ),
                         buttons(document),
                       ],
@@ -123,10 +123,13 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   }
 
   Widget getTextWidgets(List<dynamic> users) {
-    //TODO: if users.length == 0 return "none"
-    return Container(
+    bool isEmpty = (users.length <= 0 || users == null);
+    if (!isEmpty) return Container(
       alignment: Alignment.centerLeft,
       child: new Column(children: users.map((user) => new Text(user)).toList()),
+    );
+    return Container(
+      child: Text("Nothing to show here~!"),
     );
   }
 
