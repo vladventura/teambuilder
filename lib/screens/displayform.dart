@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:teambuilder/models/project.dart';
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
@@ -14,8 +15,12 @@ class DisplayForm extends StatefulWidget {
 }
 
 class _DisplayFormState extends State<DisplayForm> {
-  String _complexity, _name, _description, _contactPlatforms;
+  String _complexity, _name, _description, _contactPlatforms, _teamMembers;
   List<String> complexities = new List<String>();
+  List<Widget> _textboxes = new List<Widget>();
+  List<String> _textboxesData = new List<String>();
+  List<Widget> _techTextboxes = new List<Widget>();
+  List<String> _techTextboxesData = new List<String>();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -36,16 +41,153 @@ class _DisplayFormState extends State<DisplayForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           buildNameBox(),
           buildDescriptionBox(),
           buildComplexityDropdow(),
+          buildLanguagesDTB(),
+          buildTechDTB(),
+          buildTeamSizeInput(),
           buildSubmitButton(),
         ],
       ),
     );
+  }
+
+  Column buildLanguagesDTB() {
+    return Column(
+      children: <Widget>[
+        OutlineButton(
+          onPressed: generateTextBox,
+          borderSide: BorderSide(
+            color: Constants.formInactiveColor,
+          ),
+          highlightedBorderColor: Constants.formActiveColor,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: new BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Add Programming Languages",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
+                  ),
+                ),
+                Icon(Icons.add)
+              ],
+            ),
+          ),
+        ),
+        Column(
+          children: _textboxes,
+        ),
+      ],
+    );
+  }
+
+  Column buildTechDTB() {
+    return Column(
+      children: <Widget>[
+        OutlineButton(
+          onPressed: generateTechTextBox,
+          borderSide: BorderSide(
+            color: Constants.formInactiveColor,
+          ),
+          highlightedBorderColor: Constants.formActiveColor,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: new BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Add Frameworks, SDKs or Tools",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
+                  ),
+                ),
+                Icon(Icons.add)
+              ],
+            ),
+          ),
+        ),
+        Column(
+          children: _techTextboxes,
+        ),
+      ],
+    );
+  }
+
+  void generateTextBox() {
+    setState(() {
+      TextEditingController _textboxesController = new TextEditingController();
+      _textboxes = List.from(_textboxes)
+        ..add(
+          new TextFormField(
+            onSaved: (String value) {
+              _textboxesData.add(_textboxesController.text);
+            },
+            validator: (String value) {
+              if (value.isEmpty)
+                return "Please add a Language or delete this box!";
+              return null;
+            },
+            style: Constants.formContentStyle(),
+            controller: _textboxesController,
+            decoration: Constants.dynamicFormDecoration(
+                "Language Used",
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _textboxesController.text = "";
+                      _textboxes.removeLast();
+                    });
+                  },
+                )),
+          ),
+        );
+    });
+  }
+
+  void generateTechTextBox() {
+    setState(() {
+      TextEditingController _techTextboxesController =
+          new TextEditingController();
+      _techTextboxes = List.from(_techTextboxes)
+        ..add(
+          new TextFormField(
+            onSaved: (String value) {
+              _techTextboxesData.add(_techTextboxesController.text);
+            },
+            validator: (String value) {
+              if (value.isEmpty)
+                return "Please add a Technology or remove this box!";
+              return null;
+            },
+            style: Constants.formContentStyle(),
+            controller: _techTextboxesController,
+            decoration: Constants.dynamicFormDecoration(
+                "Technology Used",
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _techTextboxesController.text = "";
+                      _techTextboxes.removeLast();
+                    });
+                  },
+                )),
+          ),
+        );
+    });
   }
 
   Container buildNameBox() {
@@ -57,6 +199,7 @@ class _DisplayFormState extends State<DisplayForm> {
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
         autocorrect: Constants.has_autocorrect,
+        style: Constants.formContentStyle(),
         decoration: Constants.formDecoration(Texts.project_name),
         onSaved: (name) {
           this._name = name;
@@ -75,9 +218,48 @@ class _DisplayFormState extends State<DisplayForm> {
           maxLength: Constants.description_max_length,
           maxLengthEnforced: Constants.max_length_enforced,
           autocorrect: Constants.has_autocorrect,
+          style: Constants.formContentStyle(),
           validator: ProjectDescriptionValidator.validate,
           onSaved: (description) => this._description = description,
           decoration: Constants.formDecoration(Texts.project_description)),
+    );
+  }
+
+  Row buildTeamSizeInput(){
+    return Row(
+        children: <Widget>[
+          Text(
+            "Number of Team Members ",
+            style: TextStyle(
+              color: Constants.generalTextColor,
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            height: MediaQuery.of(context).size.height * 0.06,
+            margin: EdgeInsets.all(3),
+            padding: EdgeInsets.all(7),
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              style: Constants.formContentStyle(),
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              decoration: Constants.formDecoration(''),
+              validator: (String value){
+                if (value.isEmpty) return "You must have at least one team mate!";
+                int parsed = int.parse(value);
+                if (parsed < 0) return "You cannot have less than 0 team mates!";
+                if (parsed == 0) return "You cannot have no team mates!";
+                if (parsed > 99) return "That's way to many people!";
+                return null;
+              },
+              onSaved: (String value){
+                this._teamMembers = value;
+              },
+            ),
+          ),
+        ],
     );
   }
 
@@ -119,25 +301,25 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-                        showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Creating project...",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
-                  ),
-                );
-              }
-            );
+            showFlash(
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Creating project...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
+                        ),
+                      ),
+                    ),
+                  );
+                });
             submitProject();
           }),
         )));
@@ -153,39 +335,43 @@ class _DisplayFormState extends State<DisplayForm> {
         _contactPlatforms,
         _description,
         _name,
-        [_user.displayName],
+        [],
         _user.displayName,
+        _textboxesData,
+        _techTextboxesData,
+        _teamMembers
       );
+      setState(() {
+        _textboxesData = new List<String>();
+        _textboxes = new List<Widget>();
+        _techTextboxes = new List<Widget>();
+        _techTextboxesData = new List<String>();
+      });
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);
       userDocument.updateData({
-        'joinedProjects': FieldValue.arrayUnion([
-          createdProject.documentID,
-        ]),
-        'createdProjects': FieldValue.arrayUnion([
-          createdProject.documentID
-        ]),
+        'createdProjects': FieldValue.arrayUnion([createdProject.documentID]),
       });
-                  showFlash(
-              context: context,
-              duration: Duration(seconds: 1),
-              builder: (context, controller){
-                return Flash(
-                  controller: controller,
-                  style: FlashStyle.grounded,
-                  backgroundColor: Constants.sideBackgroundColor,
-                  boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
-                      "Project created!",
-                      style: TextStyle(
-                        color: Constants.generalTextColor,
-                      ),),
+      showFlash(
+          context: context,
+          duration: Duration(seconds: 1),
+          builder: (context, controller) {
+            return Flash(
+              controller: controller,
+              style: FlashStyle.grounded,
+              backgroundColor: Constants.sideBackgroundColor,
+              boxShadows: kElevationToShadow[4],
+              child: FlashBar(
+                message: Text(
+                  "Project created!",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
                   ),
-                );
-              }
+                ),
+              ),
             );
+          });
     }
   }
 }
