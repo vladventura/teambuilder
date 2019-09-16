@@ -12,6 +12,8 @@ class DisplayProjects extends StatefulWidget {
 
 class _DisplayProjectsState extends State<DisplayProjects> {
   final _db = Firestore.instance;
+  int _groupValue = 1;
+  String _specialization;
 
   @override
   void initState() {
@@ -71,7 +73,8 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          child: Text("The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
+                          child: Text(
+                              "The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.03,
@@ -124,10 +127,12 @@ class _DisplayProjectsState extends State<DisplayProjects> {
 
   Widget getTextWidgets(List<dynamic> users) {
     bool isEmpty = (users.length <= 0 || users == null);
-    if (!isEmpty) return Container(
-      alignment: Alignment.centerLeft,
-      child: new Column(children: users.map((user) => new Text(user)).toList()),
-    );
+    if (!isEmpty)
+      return Container(
+        alignment: Alignment.centerLeft,
+        child:
+            new Column(children: users.map((user) => new Text(user)).toList()),
+      );
     return Container(
       child: Text("Nothing to show here~!"),
     );
@@ -249,7 +254,72 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
+  void handleRadioChange(DocumentSnapshot document, int val) {
+    setState(() {
+      _groupValue = val;
+      if (val == 1) {
+        _specialization = "Frontend";
+      } else if (val == 2) {
+        _specialization = "Backend";
+      }
+    });
+    // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
+    Navigator.of(context).pop();
+    _showSpecializationChooser(document);
+  }
+
+  Future<Null> _showSpecializationChooser(DocumentSnapshot document) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Most comfortable area?"),
+            backgroundColor: Constants.sideBackgroundColor,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  RadioListTile(
+                    activeColor: Constants.flavorTextColor,
+                    groupValue: _groupValue,
+                    onChanged: (int val) {
+                      handleRadioChange(document, val);
+                    },
+                    value: 1,
+                    title: Text("Frontend"),
+                  ),
+                  RadioListTile(
+                    activeColor: Constants.flavorTextColor,
+                    groupValue: _groupValue,
+                    onChanged: (int val) {
+                      handleRadioChange(document, val);
+                    },
+                    value: 2,
+                    title: Text("Backend"),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      buildJoinConfirm(document),
+                      buildButtonSeparator(),
+                      buildCancelButton()
+                    ],
+                  ),
+                ],
+            ),
+          );
+        });
+  }
+
   RaisedButton buildJoinButton(DocumentSnapshot document) {
+    return RaisedButton(
+      color: Constants.acceptButtonColor,
+      child: Text("Join Project"),
+      onPressed: () {
+        _showSpecializationChooser(document);
+      },
+    );
+  }
+
+  RaisedButton buildJoinConfirm(DocumentSnapshot document) {
     return RaisedButton(
       child: Text("Join Project"),
       color: Constants.acceptButtonColor,
