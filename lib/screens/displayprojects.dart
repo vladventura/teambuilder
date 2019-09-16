@@ -71,6 +71,12 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
+                          child: Text("The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                        Container(
                           alignment: Alignment.centerLeft,
                           child: Text(document.data['description']),
                         ),
@@ -81,6 +87,27 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                           child: Text("Members!"),
                         ),
                         getTextWidgets(document.data['joinedUsers']),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                        Container(
+                          child: Text("Languages Used!"),
+                        ),
+                        getTextWidgets(document.data['languagesUsed']),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                        Container(
+                          child: Text("Technologies Used!"),
+                        ),
+                        getTextWidgets(document.data['technologiesUsed']),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                        Container(
+                          child: Text(
+                              "${document.data['joinedUsers'].length + 1}/${document.data['teamMembers']} members joined."),
+                        ),
                         buttons(document),
                       ],
                     ),
@@ -96,6 +123,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   }
 
   Widget getTextWidgets(List<dynamic> users) {
+    //TODO: if users.length == 0 return "none"
     return Container(
       alignment: Alignment.centerLeft,
       child: new Column(children: users.map((user) => new Text(user)).toList()),
