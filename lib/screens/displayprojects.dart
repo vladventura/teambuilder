@@ -64,7 +64,10 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DisplayProject(document: document,)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => DisplayProject(
+                      document: document,
+                    )));
             // return showDialog(
             //     context: context,
             //     builder: (BuildContext context) {
@@ -126,26 +129,13 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  Widget getTextWidgets(List<dynamic> users) {
-    bool isEmpty = (users.length <= 0 || users == null);
-    if (!isEmpty)
-      return Container(
-        alignment: Alignment.centerLeft,
-        child:
-            new Column(children: users.map((user) => new Text("${user['name']} (${user['specialization']})")).toList()),
-      );
-    return Container(
-      child: Text("Nothing to show here~!"),
-    );
-  }
-
-  Widget getGeneralTexts(List<dynamic> elements){
+  Widget getGeneralTexts(List<dynamic> elements) {
     bool isEmpty = (elements.length <= 0 || elements == null);
     if (!isEmpty)
       return Container(
         alignment: Alignment.centerLeft,
-        child:
-            new Column(children: elements.map((element) => new Text(element)).toList()),
+        child: new Column(
+            children: elements.map((element) => new Text(element)).toList()),
       );
     return Container(
       child: Text("Nothing to show here~!"),
@@ -291,33 +281,33 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             backgroundColor: Constants.sideBackgroundColor,
             content: Column(
               mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  RadioListTile(
-                    activeColor: Constants.flavorTextColor,
-                    groupValue: _groupValue,
-                    onChanged: (int val) {
-                      handleRadioChange(document, val);
-                    },
-                    value: 1,
-                    title: Text("Frontend"),
-                  ),
-                  RadioListTile(
-                    activeColor: Constants.flavorTextColor,
-                    groupValue: _groupValue,
-                    onChanged: (int val) {
-                      handleRadioChange(document, val);
-                    },
-                    value: 2,
-                    title: Text("Backend"),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      buildJoinConfirm(document),
-                      buildButtonSeparator(),
-                      buildCancelButton()
-                    ],
-                  ),
-                ],
+              children: <Widget>[
+                RadioListTile(
+                  activeColor: Constants.flavorTextColor,
+                  groupValue: _groupValue,
+                  onChanged: (int val) {
+                    handleRadioChange(document, val);
+                  },
+                  value: 1,
+                  title: Text("Frontend"),
+                ),
+                RadioListTile(
+                  activeColor: Constants.flavorTextColor,
+                  groupValue: _groupValue,
+                  onChanged: (int val) {
+                    handleRadioChange(document, val);
+                  },
+                  value: 2,
+                  title: Text("Backend"),
+                ),
+                Row(
+                  children: <Widget>[
+                    buildJoinConfirm(document),
+                    buildButtonSeparator(),
+                    buildCancelButton()
+                  ],
+                ),
+              ],
             ),
           );
         });
@@ -364,10 +354,9 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         DocumentReference thisProject = projects.document(document.documentID);
         DocumentReference userDocument = users.document(_user.displayName);
         thisProject.updateData({
-          'joinedUsers': FieldValue.arrayUnion([{
-            'name': _user.displayName,
-            'specialization': _specialization
-          }])
+          'joinedUsers': FieldValue.arrayUnion([
+            {'name': _user.displayName, 'specialization': _specialization}
+          ])
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
@@ -407,12 +396,12 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   }
 }
 
-class DisplayProject extends StatelessWidget{
+class DisplayProject extends StatelessWidget {
   DisplayProject({@required this.document});
   final DocumentSnapshot document;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     print("I'm here");
     return Scaffold(
       appBar: AppBar(
@@ -422,35 +411,44 @@ class DisplayProject extends StatelessWidget{
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         children: <Widget>[
-          Text("${document.data['name']} by ${document.data['originator']}",
+          Text(
+            "${document.data['name']} by ${document.data['originator']}",
             style: TextStyle(
               fontSize: 30,
-            ),),
+            ),
+          ),
           Divider(
             thickness: 1.5,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
-          Text("Description",
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          Text(
+            "Description",
             style: TextStyle(
               fontSize: 25,
-            ),),
+            ),
+          ),
           Divider(
             thickness: 1.5,
           ),
-          Text(document.data['description'],
-            style: TextStyle(
-              fontSize: 18
-            )),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
-          Text("Members!",
+          Text(document.data['description'], style: TextStyle(fontSize: 18)),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+          ),
+          Text(
+            "Members!",
             style: TextStyle(
               fontSize: 25,
-            ),),
+            ),
+          ),
           Divider(
             thickness: 1.5,
           ),
-          Text("All the members' list"),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+          buildMembersList(document.data['joinedUsers']),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+          ),
           Row(
             children: <Widget>[
               RaisedButton(
@@ -465,6 +463,26 @@ class DisplayProject extends StatelessWidget{
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildMembersList(List<dynamic> users) {
+    bool isEmpty = (users.length <= 0 || users == null);
+    if (!isEmpty)
+      return Container(
+        alignment: Alignment.centerLeft,
+        child: new Column(
+            children: users
+                .map((user) => new Text(
+                      "${user['name']} (${user['specialization']})",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ))
+                .toList()),
+      );
+    return Container(
+      child: Text("Nothing to show here~!"),
     );
   }
 }
