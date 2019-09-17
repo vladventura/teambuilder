@@ -63,7 +63,8 @@ class _DisplayProjectsState extends State<DisplayProjects> {
               ],
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
+            FirebaseUser user = await FirebaseAuth.instance.currentUser();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => DisplayProject(
                       document: document,
