@@ -64,61 +64,61 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             ),
           ),
           onPressed: () {
-            return showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Constants.sideBackgroundColor,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                              "The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(document.data['description']),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Members!"),
-                        ),
-                        getTextWidgets(document.data['joinedUsers']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Languages Used!"),
-                        ),
-                        getGeneralTexts(document.data['languagesUsed']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Technologies Used!"),
-                        ),
-                        getGeneralTexts(document.data['technologiesUsed']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text(
-                              "${document.data['joinedUsers'].length}/${document.data['teamMembers']} members joined."),
-                        ),
-                        buttons(document),
-                      ],
-                    ),
-                    title: Text(document.data['name'] +
-                        ' by ' +
-                        document.data['originator']),
-                  );
-                });
+            // return showDialog(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return AlertDialog(
+            //         backgroundColor: Constants.sideBackgroundColor,
+            //         content: Column(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: <Widget>[
+            //             Container(
+            //               child: Text(
+            //                   "The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
+            //             ),
+            //             SizedBox(
+            //               height: MediaQuery.of(context).size.height * 0.03,
+            //             ),
+            //             Container(
+            //               alignment: Alignment.centerLeft,
+            //               child: Text(document.data['description']),
+            //             ),
+            //             SizedBox(
+            //               height: MediaQuery.of(context).size.height * 0.03,
+            //             ),
+            //             Container(
+            //               child: Text("Members!"),
+            //             ),
+            //             getTextWidgets(document.data['joinedUsers']),
+            //             SizedBox(
+            //               height: MediaQuery.of(context).size.height * 0.03,
+            //             ),
+            //             Container(
+            //               child: Text("Languages Used!"),
+            //             ),
+            //             getGeneralTexts(document.data['languagesUsed']),
+            //             SizedBox(
+            //               height: MediaQuery.of(context).size.height * 0.03,
+            //             ),
+            //             Container(
+            //               child: Text("Technologies Used!"),
+            //             ),
+            //             getGeneralTexts(document.data['technologiesUsed']),
+            //             SizedBox(
+            //               height: MediaQuery.of(context).size.height * 0.03,
+            //             ),
+            //             Container(
+            //               child: Text(
+            //                   "${document.data['joinedUsers'].length}/${document.data['teamMembers']} members joined."),
+            //             ),
+            //             buttons(document),
+            //           ],
+            //         ),
+            //         title: Text(document.data['name'] +
+            //             ' by ' +
+            //             document.data['originator']),
+            //       );
+            //     });
           },
         ),
       ),
@@ -411,6 +411,35 @@ class DisplayProject extends StatelessWidget{
   final DocumentSnapshot document;
 
   Widget build(BuildContext context){
-    return Scaffold();
+    return Scaffold(
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        children: <Widget>[
+          Text("Name"),
+          Divider(),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+          Text("Description"),
+          Divider(),
+          Text("Blah blah blah"),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+          Text("Members!"),
+          Divider(),
+          Text("All the members' list"),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+          Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: null,
+                child: Text("Button one"),
+              ),
+              RaisedButton(
+                onPressed: null,
+                child: Text("Button two"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
