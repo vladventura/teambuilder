@@ -217,15 +217,13 @@ class _DisplayFormState extends State<DisplayForm> {
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
       child: TextFormField(
-        textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
-        autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration(Texts.project_name),
         onSaved: (name) {
           this._name = name;
         },
-        validator: ProjectNameValidator.validate,
+        validator: EmailValidator.validate,
       ),
     );
   }
