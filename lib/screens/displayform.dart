@@ -244,12 +244,9 @@ class _DisplayFormState extends State<DisplayForm> {
         textInputAction: TextInputAction.next,
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
-        decoration: Constants.formDecoration(Texts.project_name),
+        decoration: Constants.formDecoration("Github username, if any"),
         onSaved: (name) {
           this._name = name;
-        },
-        validator:(String githubUser){
-          if (githubUser.isEmpty) return
         },
       ),
     );
