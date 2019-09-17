@@ -168,45 +168,18 @@ class _DisplayProjectState extends State<_DisplayProject> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.03,
           ),
-          Text(
-            "Description",
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          Divider(
-            thickness: 1.5,
-          ),
+          buildHeaderText("Description"),
+          buildDivider(),
           Text(document.data['description'], style: TextStyle(fontSize: 18)),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          Text(
-            "Members!",
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          Divider(
-            thickness: 1.5,
-          ),
+          buildSizedBoxHeight(0.1),
+          buildHeaderText("Members"),
+          buildDivider(),
           buildMembersList(document.data['joinedUsers']),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          Text(
-            "Langauges Used",
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          Divider(
-            thickness: 1.5,
-          ),
+          buildSizedBoxHeight(0.1),
+          buildHeaderText("Languages Used"),
+          buildDivider(),
           buildElements(document.data['languagesUsed']),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
+          buildSizedBoxHeight(0.1),
           buildHeaderText("SDKs and Frameworks Used"),
           buildDivider(),
           buildElements(document.data['technologiesUsed']),
@@ -228,6 +201,12 @@ class _DisplayProjectState extends State<_DisplayProject> {
   Divider buildDivider() {
     return Divider(
       thickness: 1.5,
+    );
+  }
+
+  SizedBox buildSizedBoxHeight(double height){
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * height,
     );
   }
 
