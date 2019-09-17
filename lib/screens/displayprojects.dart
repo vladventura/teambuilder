@@ -66,9 +66,8 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           onPressed: () async {
             FirebaseUser user = await FirebaseAuth.instance.currentUser();
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => DisplayProject(
-                      document: document,
-                    )));
+                builder: (context) =>
+                    DisplayProject(document: document, user: user)));
             // return showDialog(
             //     context: context,
             //     builder: (BuildContext context) {
@@ -130,54 +129,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  Widget buttons(DocumentSnapshot document) {
-    return FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (context, snapshot) {
-          if (snapshot != null) {
-            if (snapshot.hasData) {
-              bool owner =
-                  (document.data['originator'] == snapshot.data.displayName);
-              bool belongs = (document.data['joinedUsers']
-                      .contains(snapshot.data.displayName) ||
-                  owner);
-              bool slotAvailable = (document.data['joinedUsers'].length <
-                  int.parse(document.data['teamMembers']));
-              if (!belongs) {
-                if (slotAvailable == true) {
-                  return Row(
-                    children: <Widget>[
-                      buildJoinButton(document),
-                      buildButtonSeparator(),
-                      buildCancelButton(),
-                    ],
-                  );
-                } else {
-                  return FlatButton(
-                    child: Text("The team is full."),
-                    onPressed: null,
-                  );
-                }
-              } else if (owner) {
-                return FlatButton(
-                  child: Text("You cannot join your own project!"),
-                  onPressed: null,
-                );
-              } else if (belongs) {
-                return Row(
-                  children: <Widget>[
-                    buildLeaveButton(document),
-                    buildButtonSeparator(),
-                    buildCancelButton()
-                  ],
-                );
-              }
-            }
-          }
-          return CircularProgressIndicator();
-        });
-  }
-
+  
   RaisedButton buildLeaveButton(DocumentSnapshot document) {
     return RaisedButton(
       color: Colors.grey,
@@ -385,8 +337,9 @@ class _DisplayProjectsState extends State<DisplayProjects> {
 }
 
 class DisplayProject extends StatelessWidget {
-  DisplayProject({@required this.document});
+  DisplayProject({@required this.document, @required this.user});
   final DocumentSnapshot document;
+  final FirebaseUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -450,26 +403,17 @@ class DisplayProject extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.1,
           ),
-          Text("SDKs and Frameworks Used",
+          Text(
+            "SDKs and Frameworks Used",
             style: TextStyle(
               fontSize: 25,
-            ),),
+            ),
+          ),
           Divider(
             thickness: 1.5,
           ),
           buildElements(document.data['technologiesUsed']),
-          Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: null,
-                child: Text("Button one"),
-              ),
-              RaisedButton(
-                onPressed: null,
-                child: Text("Button two"),
-              ),
-            ],
-          ),
+          buildButtons(document, user),
         ],
       ),
     );
@@ -514,4 +458,42 @@ class DisplayProject extends StatelessWidget {
       child: Text("Nothing to show here~!"),
     );
   }
+
+  Widget buildButtons(DocumentSnapshot document, FirebaseUser user) {
+    bool owner = (document.data['originator'] == user.displayName);
+    bool belongs =
+        (document.data['joinedUsers'].contains(user.displayName) || owner);
+    bool slotAvailable = (document.data['joinedUsers'].length <
+        int.parse(document.data['teamMembers']));
+    if (!belongs) {
+      if (slotAvailable == true) {
+        return Row(
+          children: <Widget>[
+            buildJoinButton(document),
+            buildButtonSeparator(),
+            buildCancelButton(),
+          ],
+        );
+      } else {
+        return FlatButton(
+          child: Text("The team is full."),
+          onPressed: null,
+        );
+      }
+    } else if (owner) {
+      return FlatButton(
+        child: Text("You cannot join your own project!"),
+        onPressed: null,
+      );
+    } else if (belongs) {
+      return Row(
+        children: <Widget>[
+          buildLeaveButton(document),
+          buildButtonSeparator(),
+          buildCancelButton()
+        ],
+      );
+    }
+  }
+
 }
