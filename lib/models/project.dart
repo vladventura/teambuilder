@@ -1,6 +1,6 @@
 class Project{
   String complexity;
-  String contactPlatforms;
+  List <String> contactPlatforms;
   String description;
   List <String> joinedUsers;
   String name;
