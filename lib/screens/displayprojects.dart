@@ -190,8 +190,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     bool isEmpty = (elements.length <= 0 || elements == null);
     if (!isEmpty)
       return Container(
-        alignment: Alignment.centerLeft,
-        margin: EdgeInsets.all(1),
+        margin: EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
             children: elements
                 .map((element) => new Text(
