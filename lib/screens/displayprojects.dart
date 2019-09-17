@@ -65,7 +65,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             FirebaseUser user = await FirebaseAuth.instance.currentUser();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    _DisplayProject(document: document, user: user)));
+                    new _DisplayProject(document: document, user: user)));
           },
         ),
       ),
@@ -89,7 +89,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
   final FirebaseUser user;
   final Firestore _db = Firestore.instance;
   int _groupValue = 1;
-  String _specialization;
+  String _specialization = "Frontend";
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +122,8 @@ class _DisplayProjectState extends State<_DisplayProject> {
           buildSizedBoxHeight(0.05),
           buildHeaderText("Description"),
           buildDivider(),
-          Text(document.data['description'], style: TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
+          Text(document.data['description'],
+              style: TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
           buildSizedBoxHeight(0.1),
           buildHeaderText("Members"),
           buildDivider(),
@@ -157,7 +158,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  SizedBox buildSizedBoxHeight(double height){
+  SizedBox buildSizedBoxHeight(double height) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * height,
     );
@@ -173,9 +174,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Constants.flavorTextColor
-                      ),
+                          fontSize: 18, color: Constants.flavorTextColor),
                     ))
                 .toList()),
       );
@@ -194,9 +193,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                 .map((element) => new Text(
                       element,
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Constants.flavorTextColor
-                      ),
+                          fontSize: 18, color: Constants.flavorTextColor),
                     ))
                 .toList()),
       );
@@ -207,47 +204,58 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
   dynamic buildButtons(DocumentSnapshot document, FirebaseUser user) {
     bool owner = (document.data['originator'] == user.displayName);
-    bool belongs =
-        (document.data['joinedUsers'].contains(user.displayName) || owner);
+    bool isJoined = (document.data['joinedUsers']
+            .where((element) => element['name'] == user.displayName).length >
+        0);
+    bool belongs = (isJoined || owner);
     bool slotAvailable = (document.data['joinedUsers'].length <
         int.parse(document.data['teamMembers']));
     if (!belongs) {
       if (slotAvailable == true) {
-        buildJoinButton(document);
+        return buildJoinButton(document);
       } else {
         return FlatButton(
-          child: Text("The team is full."),
+          child: Text(
+            "The team is full.",
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
           onPressed: null,
         );
       }
     } else if (owner) {
       return FlatButton(
-        child: Text("You cannot join your own project!",
-          style: TextStyle(
-            fontSize: 18,
-            color: Constants.cancelButtonColor
-          ),),
+        child: Text(
+          "You cannot join your own project!",
+          style: TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
+        ),
         onPressed: null,
       );
     } else if (belongs) {
-      buildLeaveButton(document);
+      return buildLeaveButton(document);
     }
   }
 
-  RaisedButton buildJoinButton(DocumentSnapshot document) {
-    return RaisedButton(
+  FlatButton buildJoinButton(DocumentSnapshot document) {
+    return FlatButton(
       color: Constants.acceptButtonColor,
-      child: Text("Join Project"),
+      child: Text("Join Project", style: TextStyle(fontSize: 15)),
       onPressed: () {
         _showSpecializationChooser(document);
       },
     );
   }
 
-  RaisedButton buildLeaveButton(DocumentSnapshot document) {
-    return RaisedButton(
-      color: Colors.grey,
-      child: Text('Leave Project'),
+  FlatButton buildLeaveButton(DocumentSnapshot document) {
+    return FlatButton(
+      color: Constants.cancelButtonColor,
+      child: Text(
+        'Leave Project',
+        style: TextStyle(
+          fontSize: 15,
+        ),
+      ),
       onPressed: () async {
         showFlash(
             context: context,
@@ -274,34 +282,38 @@ class _DisplayProjectState extends State<_DisplayProject> {
         CollectionReference users = _db.collection('users');
         DocumentReference thisProject = projects.document(document.documentID);
         DocumentReference userDocument = users.document(_user.displayName);
-        thisProject.updateData({
-          'joinedUsers': FieldValue.arrayRemove([_user.displayName])
-        });
+        DocumentSnapshot currentJoinedUsers = await thisProject.get();
+        dynamic without = currentJoinedUsers.data['joinedUsers']
+            .where((element) => element['name'] != _user.displayName);
+
+        thisProject.updateData({'joinedUsers': without.toList()});
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayRemove([
             document.documentID,
           ])
-        });
-        Navigator.pop(context);
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Left team successfully.",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
+        }).then((onValue) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/Home', (Route<dynamic> route) => false);
+          showFlash(
+              context: context,
+              duration: Duration(seconds: 1),
+              builder: (context, controller) {
+                return Flash(
+                  controller: controller,
+                  style: FlashStyle.grounded,
+                  backgroundColor: Constants.sideBackgroundColor,
+                  boxShadows: kElevationToShadow[4],
+                  child: FlashBar(
+                    message: Text(
+                      "Left team successfully.",
+                      style: TextStyle(
+                        color: Constants.generalTextColor,
+                      ),
                     ),
                   ),
-                ),
-              );
-            });
+                );
+              });
+        });
       },
     );
   }
@@ -395,7 +407,8 @@ class _DisplayProjectState extends State<_DisplayProject> {
             document.documentID,
           ])
         });
-        Navigator.pop(context);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
         showFlash(
             context: context,
             duration: Duration(seconds: 1),
