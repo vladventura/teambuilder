@@ -223,8 +223,8 @@ class _DisplayFormState extends State<DisplayForm> {
         onSaved: (String email) {
           _contactPlatforms['email'] = email;
         },
-        validator: (String email){
-          if (email.length >= 1){
+        validator: (String email) {
+          if (email.length >= 1) {
             if (!email.contains('@')) return "This email is not valid!";
           }
           return null;
@@ -266,15 +266,31 @@ class _DisplayFormState extends State<DisplayForm> {
         onSaved: (name) {
           this._name = name;
         },
-        validator: (String discordUsername){
-          if (discordUsername.length >= 1){
-            if (!discordUsername.contains('#')) return "Invalid Discord Username";
-            //TODO: If the substring after the hashtag is not digit only, fails
-            //TODO: If the substring from the hashtag to the end is not a lenght of 5, fails
+        validator: (String value) {
+          if (value.length >= 1) {
+            if (!value.contains('#')) {
+              return "This is not a valid Discord username";
+            }
+            List separatedValue = value.split('#');
+            if (!_isNumeric(separatedValue[1])) {
+              return "These are not numeric values!";
+            } else {
+              if (separatedValue[1].length < 4) {
+                return "There is less than 4 digits after the #.";
+              }
+            }
           }
+          return null;
         },
       ),
     );
+  }
+
+  bool _isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return (int.parse(s) != null);
   }
 
   Container buildDescriptionBox() {
