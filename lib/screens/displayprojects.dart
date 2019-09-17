@@ -64,6 +64,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             ),
           ),
           onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DisplayProject(document: document,)));
             // return showDialog(
             //     context: context,
             //     builder: (BuildContext context) {
@@ -410,8 +411,13 @@ class DisplayProject extends StatelessWidget{
   DisplayProject({@required this.document});
   final DocumentSnapshot document;
 
+  @override
   Widget build(BuildContext context){
+    print("I'm here");
     return Scaffold(
+      appBar: AppBar(
+        title: Text(document.data['name']),
+      ),
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: <Widget>[
