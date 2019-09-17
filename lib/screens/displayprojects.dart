@@ -12,8 +12,6 @@ class DisplayProjects extends StatefulWidget {
 
 class _DisplayProjectsState extends State<DisplayProjects> {
   final _db = Firestore.instance;
-  int _groupValue = 1;
-  String _specialization;
 
   @override
   void initState() {
@@ -67,7 +65,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             FirebaseUser user = await FirebaseAuth.instance.currentUser();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    DisplayProject(document: document, user: user)));
+                    _DisplayProject(document: document, user: user)));
             // return showDialog(
             //     context: context,
             //     builder: (BuildContext context) {
@@ -129,74 +127,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  RaisedButton buildLeaveButton(DocumentSnapshot document) {
-    return RaisedButton(
-      color: Colors.grey,
-      child: Text('Leave Project'),
-      onPressed: () async {
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Leaving team...",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
-        thisProject.updateData({
-          'joinedUsers': FieldValue.arrayRemove([_user.displayName])
-        });
-        userDocument.updateData({
-          'joinedProjects': FieldValue.arrayRemove([
-            document.documentID,
-          ])
-        });
-        Navigator.pop(context);
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Left team successfully.",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  SizedBox buildButtonSeparator() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.15,
-    );
-  }
-
   void handleRadioChange(DocumentSnapshot document, int val) {
     setState(() {
       _groupValue = val;
@@ -209,47 +139,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
     Navigator.of(context).pop();
     _showSpecializationChooser(document);
-  }
-
-  Future<Null> _showSpecializationChooser(DocumentSnapshot document) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Most comfortable area?"),
-            backgroundColor: Constants.sideBackgroundColor,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                RadioListTile(
-                  activeColor: Constants.flavorTextColor,
-                  groupValue: _groupValue,
-                  onChanged: (int val) {
-                    handleRadioChange(document, val);
-                  },
-                  value: 1,
-                  title: Text("Frontend"),
-                ),
-                RadioListTile(
-                  activeColor: Constants.flavorTextColor,
-                  groupValue: _groupValue,
-                  onChanged: (int val) {
-                    handleRadioChange(document, val);
-                  },
-                  value: 2,
-                  title: Text("Backend"),
-                ),
-                Row(
-                  children: <Widget>[
-                    buildJoinConfirm(document),
-                    buildButtonSeparator(),
-                    buildCancelButton()
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   RaisedButton buildJoinConfirm(DocumentSnapshot document) {
@@ -317,10 +206,23 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   }
 }
 
-class DisplayProject extends StatelessWidget {
-  DisplayProject({@required this.document, @required this.user});
+class _DisplayProject extends StatefulWidget {
+  _DisplayProject({@required this.document, @required this.user});
   final DocumentSnapshot document;
   final FirebaseUser user;
+  _DisplayProjectState createState() => new _DisplayProjectState(
+        document: document,
+        user: user,
+      );
+}
+
+class _DisplayProjectState extends State<_DisplayProject> {
+  _DisplayProjectState({@required this.document, @required this.user});
+  final DocumentSnapshot document;
+  final FirebaseUser user;
+  final Firestore _db = Firestore.instance;
+  int _groupValue = 1;
+  String _specialization;
 
   @override
   Widget build(BuildContext context) {
@@ -474,4 +376,102 @@ class DisplayProject extends StatelessWidget {
       },
     );
   }
+
+  RaisedButton buildLeaveButton(DocumentSnapshot document) {
+    return RaisedButton(
+      color: Colors.grey,
+      child: Text('Leave Project'),
+      onPressed: () async {
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Leaving team...",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
+        FirebaseUser _user;
+        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
+        CollectionReference projects = _db.collection('projects');
+        CollectionReference users = _db.collection('users');
+        DocumentReference thisProject = projects.document(document.documentID);
+        DocumentReference userDocument = users.document(_user.displayName);
+        thisProject.updateData({
+          'joinedUsers': FieldValue.arrayRemove([_user.displayName])
+        });
+        userDocument.updateData({
+          'joinedProjects': FieldValue.arrayRemove([
+            document.documentID,
+          ])
+        });
+        Navigator.pop(context);
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Left team successfully.",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  Future<Null> _showSpecializationChooser(DocumentSnapshot document) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Most comfortable area?"),
+            backgroundColor: Constants.sideBackgroundColor,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                RadioListTile(
+                  activeColor: Constants.flavorTextColor,
+                  groupValue: _groupValue,
+                  onChanged: (int val) {
+                    handleRadioChange(document, val);
+                  },
+                  value: 1,
+                  title: Text("Frontend"),
+                ),
+                RadioListTile(
+                  activeColor: Constants.flavorTextColor,
+                  groupValue: _groupValue,
+                  onChanged: (int val) {
+                    handleRadioChange(document, val);
+                  },
+                  value: 2,
+                  title: Text("Backend"),
+                ),
+                buildJoinConfirm(document),
+              ],
+            ),
+          );
+        });
+  }
+
 }
