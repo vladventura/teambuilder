@@ -251,8 +251,8 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
-  Container buildDiscordBox() {
-    //TODO: This will be the Discord box
+  //TODO: This has to be a row that returns a textformfield, a text with a hastag and also another textformfield that takes digits only
+  Container buildDiscordUsernameBox() {
     return Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
@@ -262,11 +262,17 @@ class _DisplayFormState extends State<DisplayForm> {
         textInputAction: TextInputAction.next,
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
-        decoration: Constants.formDecoration(Texts.project_name),
+        decoration: Constants.formDecoration("Discord username"),
         onSaved: (name) {
           this._name = name;
         },
-        validator: ProjectNameValidator.validate,
+        validator: (String discordUsername){
+          if (discordUsername.length >= 1){
+            if (!discordUsername.contains('#')) return "Invalid Discord Username";
+            //TODO: If the substring after the hashtag is not digit only, fails
+            //TODO: If the substring from the hashtag to the end is not a lenght of 5, fails
+          }
+        },
       ),
     );
   }
