@@ -416,14 +416,14 @@ class DisplayProject extends StatelessWidget{
     print("I'm here");
     return Scaffold(
       appBar: AppBar(
-        title: Text(document.data['name']),
+        title: Text("Project Details"),
       ),
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: <Widget>[
-          Text("Name"),
+          Text("${document.data['name']} by ${document.data['originator']}"),
           Divider(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
           Text("Description"),
           Divider(),
           Text("Blah blah blah"),
