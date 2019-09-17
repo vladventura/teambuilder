@@ -234,7 +234,6 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildGithubBox() {
-    //TODO: This will be the github box
     return Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
@@ -245,8 +244,8 @@ class _DisplayFormState extends State<DisplayForm> {
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Github username, if any"),
-        onSaved: (name) {
-          this._name = name;
+        onSaved: (String gitUser) {
+          this._contactPlatforms['githubUsername'] = gitUser;
         },
       ),
     );
