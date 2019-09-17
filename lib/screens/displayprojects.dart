@@ -96,7 +96,18 @@ class _DisplayProjectState extends State<_DisplayProject> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Project Details"),
+        backgroundColor: Constants.sideBackgroundColor,
+        iconTheme: IconThemeData(
+          color: Constants.flavorTextColor,
+        ),
+        textTheme: TextTheme(
+          title: TextStyle(
+            color: Constants.generalTextColor,
+            fontSize: 20,
+          ),
+        ),
       ),
+      backgroundColor: Constants.mainBackgroundColor,
       body: ListView(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -105,12 +116,13 @@ class _DisplayProjectState extends State<_DisplayProject> {
             "${document.data['name']} by ${document.data['originator']}",
             style: TextStyle(
               fontSize: 30,
+              color: Constants.flavorTextColor,
             ),
           ),
           buildSizedBoxHeight(0.05),
           buildHeaderText("Description"),
           buildDivider(),
-          Text(document.data['description'], style: TextStyle(fontSize: 18)),
+          Text(document.data['description'], style: TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
           buildSizedBoxHeight(0.1),
           buildHeaderText("Members"),
           buildDivider(),
@@ -134,6 +146,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
       headerText,
       style: TextStyle(
         fontSize: 25,
+        color: Constants.generalTextColor,
       ),
     );
   }
@@ -161,6 +174,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                       "${user['name']} (${user['specialization']})",
                       style: TextStyle(
                         fontSize: 18,
+                        color: Constants.flavorTextColor
                       ),
                     ))
                 .toList()),
@@ -181,6 +195,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                       element,
                       style: TextStyle(
                         fontSize: 18,
+                        color: Constants.flavorTextColor
                       ),
                     ))
                 .toList()),
@@ -207,7 +222,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
       }
     } else if (owner) {
       return FlatButton(
-        child: Text("You cannot join your own project!"),
+        child: Text("You cannot join your own project!",
+          style: TextStyle(
+            fontSize: 18,
+            color: Constants.cancelButtonColor
+          ),),
         onPressed: null,
       );
     } else if (belongs) {
