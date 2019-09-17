@@ -440,7 +440,7 @@ class DisplayProject extends StatelessWidget {
     );
   }
 
-  Widget buildButtons(DocumentSnapshot document, FirebaseUser user) {
+  dynamic buildButtons(DocumentSnapshot document, FirebaseUser user) {
     bool owner = (document.data['originator'] == user.displayName);
     bool belongs =
         (document.data['joinedUsers'].contains(user.displayName) || owner);
@@ -448,13 +448,7 @@ class DisplayProject extends StatelessWidget {
         int.parse(document.data['teamMembers']));
     if (!belongs) {
       if (slotAvailable == true) {
-        return Row(
-          children: <Widget>[
-            buildJoinButton(document),
-            buildButtonSeparator(),
-            buildCancelButton(),
-          ],
-        );
+        buildJoinButton(document);
       } else {
         return FlatButton(
           child: Text("The team is full."),
@@ -467,13 +461,7 @@ class DisplayProject extends StatelessWidget {
         onPressed: null,
       );
     } else if (belongs) {
-      return Row(
-        children: <Widget>[
-          buildLeaveButton(document),
-          buildButtonSeparator(),
-          buildCancelButton()
-        ],
-      );
+      buildLeaveButton(document);
     }
   }
 
