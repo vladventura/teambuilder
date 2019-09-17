@@ -405,3 +405,12 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 }
+
+class DisplayProject extends StatelessWidget{
+  DisplayProject({@required this.document});
+  final DocumentSnapshot document;
+
+  Widget build(BuildContext context){
+    return Scaffold();
+  }
+}
