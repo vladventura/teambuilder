@@ -129,7 +129,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  
   RaisedButton buildLeaveButton(DocumentSnapshot document) {
     return RaisedButton(
       color: Colors.grey,
@@ -253,16 +252,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         });
   }
 
-  RaisedButton buildJoinButton(DocumentSnapshot document) {
-    return RaisedButton(
-      color: Constants.acceptButtonColor,
-      child: Text("Join Project"),
-      onPressed: () {
-        _showSpecializationChooser(document);
-      },
-    );
-  }
-
   RaisedButton buildJoinConfirm(DocumentSnapshot document) {
     return RaisedButton(
       child: Text("Join Project"),
@@ -324,14 +313,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
               );
             });
       },
-    );
-  }
-
-  RaisedButton buildCancelButton() {
-    return RaisedButton(
-      child: Text("Cancel"),
-      color: Constants.cancelButtonColor,
-      onPressed: () => Navigator.of(context).pop(),
     );
   }
 }
@@ -496,4 +477,13 @@ class DisplayProject extends StatelessWidget {
     }
   }
 
+  RaisedButton buildJoinButton(DocumentSnapshot document) {
+    return RaisedButton(
+      color: Constants.acceptButtonColor,
+      child: Text("Join Project"),
+      onPressed: () {
+        _showSpecializationChooser(document);
+      },
+    );
+  }
 }
