@@ -52,6 +52,7 @@ class _DisplayFormState extends State<DisplayForm> {
           buildLanguagesDTB(),
           buildTechDTB(),
           buildTeamSizeInput(),
+          buildEmailBox(),
           buildSubmitButton(),
         ],
       ),
@@ -211,7 +212,6 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildEmailBox() {
-    //TODO: Change this form to an email form.
     return Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
@@ -219,9 +219,9 @@ class _DisplayFormState extends State<DisplayForm> {
       child: TextFormField(
         textInputAction: TextInputAction.next,
         style: Constants.formContentStyle(),
-        decoration: Constants.formDecoration(Texts.project_name),
-        onSaved: (name) {
-          this._name = name;
+        decoration: Constants.formDecoration("Contact Email, if any"),
+        onSaved: (String email) {
+          _contactPlatforms['email'] = email;
         },
         validator: EmailValidator.validate,
       ),
