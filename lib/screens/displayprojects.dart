@@ -169,8 +169,10 @@ class _DisplayProjectState extends State<_DisplayProject> {
     bool isEmpty = (users.length <= 0 || users == null);
     if (!isEmpty)
       return Container(
-        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: users
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
@@ -189,6 +191,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     if (!isEmpty)
       return Container(
         alignment: Alignment.centerLeft,
+        margin: EdgeInsets.all(1),
         child: new Column(
             children: elements
                 .map((element) => new Text(
