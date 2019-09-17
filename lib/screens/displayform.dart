@@ -223,7 +223,12 @@ class _DisplayFormState extends State<DisplayForm> {
         onSaved: (String email) {
           _contactPlatforms['email'] = email;
         },
-        validator: EmailValidator.validate,
+        validator: (String email){
+          if (email.length >= 1){
+            if (!email.contains('@')) return "This email is not valid!";
+          }
+          return null;
+        },
       ),
     );
   }
@@ -243,7 +248,9 @@ class _DisplayFormState extends State<DisplayForm> {
         onSaved: (name) {
           this._name = name;
         },
-        validator: ProjectNameValidator.validate,
+        validator:(String githubUser){
+          if (githubUser.isEmpty) return
+        },
       ),
     );
   }
