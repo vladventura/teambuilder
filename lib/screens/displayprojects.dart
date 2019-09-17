@@ -122,8 +122,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
           buildSizedBoxHeight(0.05),
           buildHeaderText("Description"),
           buildDivider(),
-          Text(document.data['description'],
-              style: TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(document.data['description'],
+                style: TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
+          ),
           buildSizedBoxHeight(0.1),
           buildHeaderText("Members"),
           buildDivider(),
@@ -192,6 +195,8 @@ class _DisplayProjectState extends State<_DisplayProject> {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: elements
                 .map((element) => new Text(
                       element,
