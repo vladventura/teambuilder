@@ -129,19 +129,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     );
   }
 
-  Widget getGeneralTexts(List<dynamic> elements) {
-    bool isEmpty = (elements.length <= 0 || elements == null);
-    if (!isEmpty)
-      return Container(
-        alignment: Alignment.centerLeft,
-        child: new Column(
-            children: elements.map((element) => new Text(element)).toList()),
-      );
-    return Container(
-      child: Text("Nothing to show here~!"),
-    );
-  }
-
   Widget buttons(DocumentSnapshot document) {
     return FutureBuilder(
         future: FirebaseAuth.instance.currentUser(),
@@ -449,6 +436,27 @@ class DisplayProject extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.1,
           ),
+          Text(
+            "Langauges Used",
+            style: TextStyle(
+              fontSize: 25,
+            ),
+          ),
+          Divider(
+            thickness: 1.5,
+          ),
+          buildElements(document.data['languagesUsed']),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+          ),
+          Text("SDKs and Frameworks Used",
+            style: TextStyle(
+              fontSize: 25,
+            ),),
+          Divider(
+            thickness: 1.5,
+          ),
+          buildElements(document.data['technologiesUsed']),
           Row(
             children: <Widget>[
               RaisedButton(
@@ -475,6 +483,26 @@ class DisplayProject extends StatelessWidget {
             children: users
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ))
+                .toList()),
+      );
+    return Container(
+      child: Text("Nothing to show here~!"),
+    );
+  }
+
+  Widget buildElements(List<dynamic> elements) {
+    bool isEmpty = (elements.length <= 0 || elements == null);
+    if (!isEmpty)
+      return Container(
+        alignment: Alignment.centerLeft,
+        child: new Column(
+            children: elements
+                .map((element) => new Text(
+                      element,
                       style: TextStyle(
                         fontSize: 18,
                       ),
