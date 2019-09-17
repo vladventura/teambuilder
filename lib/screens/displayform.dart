@@ -210,6 +210,66 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
+  Container buildEmailBox() {
+    //TODO: Change this form to an email form.
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
+        textInputAction: TextInputAction.next,
+        autocorrect: Constants.has_autocorrect,
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration(Texts.project_name),
+        onSaved: (name) {
+          this._name = name;
+        },
+        validator: ProjectNameValidator.validate,
+      ),
+    );
+  }
+
+  Container buildGithubBox() {
+    //TODO: This will be the github box
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
+        textInputAction: TextInputAction.next,
+        autocorrect: Constants.has_autocorrect,
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration(Texts.project_name),
+        onSaved: (name) {
+          this._name = name;
+        },
+        validator: ProjectNameValidator.validate,
+      ),
+    );
+  }
+
+  Container buildDiscordBox() {
+    //TODO: This will be the Discord box
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
+        textInputAction: TextInputAction.next,
+        autocorrect: Constants.has_autocorrect,
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration(Texts.project_name),
+        onSaved: (name) {
+          this._name = name;
+        },
+        validator: ProjectNameValidator.validate,
+      ),
+    );
+  }
+
   Container buildDescriptionBox() {
     return Container(
       margin: Constants.form_column_margins,
@@ -226,41 +286,41 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
-  Row buildTeamSizeInput(){
+  Row buildTeamSizeInput() {
     return Row(
-        children: <Widget>[
-          Text(
-            "Number of Team Members ",
-            style: TextStyle(
-              color: Constants.generalTextColor,
-            ),
+      children: <Widget>[
+        Text(
+          "Number of Team Members ",
+          style: TextStyle(
+            color: Constants.generalTextColor,
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.06,
-            margin: EdgeInsets.all(3),
-            padding: EdgeInsets.all(7),
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              style: Constants.formContentStyle(),
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
-              decoration: Constants.formDecoration(''),
-              validator: (String value){
-                if (value.isEmpty) return "You must have at least one team mate!";
-                int parsed = int.parse(value);
-                if (parsed < 0) return "You cannot have less than 0 team mates!";
-                if (parsed == 0) return "You cannot have no team mates!";
-                if (parsed > 99) return "That's way to many people!";
-                return null;
-              },
-              onSaved: (String value){
-                this._teamMembers = value;
-              },
-            ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.06,
+          margin: EdgeInsets.all(3),
+          padding: EdgeInsets.all(7),
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            style: Constants.formContentStyle(),
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
+            decoration: Constants.formDecoration(''),
+            validator: (String value) {
+              if (value.isEmpty) return "You must have at least one team mate!";
+              int parsed = int.parse(value);
+              if (parsed < 0) return "You cannot have less than 0 team mates!";
+              if (parsed == 0) return "You cannot have no team mates!";
+              if (parsed > 99) return "That's way to many people!";
+              return null;
+            },
+            onSaved: (String value) {
+              this._teamMembers = value;
+            },
           ),
-        ],
+        ),
+      ],
     );
   }
 
@@ -332,16 +392,15 @@ class _DisplayFormState extends State<DisplayForm> {
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
-        _complexity,
-        _contactPlatforms,
-        _description,
-        _name,
-        [],
-        _user.displayName,
-        _textboxesData,
-        _techTextboxesData,
-        _teamMembers
-      );
+          _complexity,
+          _contactPlatforms,
+          _description,
+          _name,
+          [],
+          _user.displayName,
+          _textboxesData,
+          _techTextboxesData,
+          _teamMembers);
       setState(() {
         _textboxesData = new List<String>();
         _textboxes = new List<Widget>();
