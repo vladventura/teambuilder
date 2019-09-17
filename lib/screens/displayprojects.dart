@@ -66,61 +66,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
                     _DisplayProject(document: document, user: user)));
-            // return showDialog(
-            //     context: context,
-            //     builder: (BuildContext context) {
-            //       return AlertDialog(
-            //         backgroundColor: Constants.sideBackgroundColor,
-            //         content: Column(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: <Widget>[
-            //             Container(
-            //               child: Text(
-            //                   "The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
-            //             ),
-            //             SizedBox(
-            //               height: MediaQuery.of(context).size.height * 0.03,
-            //             ),
-            //             Container(
-            //               alignment: Alignment.centerLeft,
-            //               child: Text(document.data['description']),
-            //             ),
-            //             SizedBox(
-            //               height: MediaQuery.of(context).size.height * 0.03,
-            //             ),
-            //             Container(
-            //               child: Text("Members!"),
-            //             ),
-            //             getTextWidgets(document.data['joinedUsers']),
-            //             SizedBox(
-            //               height: MediaQuery.of(context).size.height * 0.03,
-            //             ),
-            //             Container(
-            //               child: Text("Languages Used!"),
-            //             ),
-            //             getGeneralTexts(document.data['languagesUsed']),
-            //             SizedBox(
-            //               height: MediaQuery.of(context).size.height * 0.03,
-            //             ),
-            //             Container(
-            //               child: Text("Technologies Used!"),
-            //             ),
-            //             getGeneralTexts(document.data['technologiesUsed']),
-            //             SizedBox(
-            //               height: MediaQuery.of(context).size.height * 0.03,
-            //             ),
-            //             Container(
-            //               child: Text(
-            //                   "${document.data['joinedUsers'].length}/${document.data['teamMembers']} members joined."),
-            //             ),
-            //             buttons(document),
-            //           ],
-            //         ),
-            //         title: Text(document.data['name'] +
-            //             ' by ' +
-            //             document.data['originator']),
-            //       );
-            //     });
           },
         ),
       ),
