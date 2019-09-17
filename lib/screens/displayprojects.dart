@@ -155,6 +155,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
   Divider buildDivider() {
     return Divider(
       thickness: 1.5,
+      color: Constants.acceptButtonColor,
     );
   }
 
