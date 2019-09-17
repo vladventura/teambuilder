@@ -15,7 +15,8 @@ class DisplayForm extends StatefulWidget {
 }
 
 class _DisplayFormState extends State<DisplayForm> {
-  String _complexity, _name, _description, _contactPlatforms, _teamMembers;
+  String _complexity, _name, _description, _teamMembers;
+  List<String> _contactPlatforms = new List<String>();
   List<String> complexities = new List<String>();
   List<Widget> _textboxes = new List<Widget>();
   List<String> _textboxesData = new List<String>();
