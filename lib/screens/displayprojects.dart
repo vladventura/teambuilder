@@ -420,16 +420,35 @@ class DisplayProject extends StatelessWidget{
       ),
       body: ListView(
         physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         children: <Widget>[
-          Text("${document.data['name']} by ${document.data['originator']}"),
-          Divider(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
-          Text("Description"),
-          Divider(),
-          Text("Blah blah blah"),
+          Text("${document.data['name']} by ${document.data['originator']}",
+            style: TextStyle(
+              fontSize: 30,
+            ),),
+          Divider(
+            thickness: 1.5,
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+          Text("Description",
+            style: TextStyle(
+              fontSize: 25,
+            ),),
+          Divider(
+            thickness: 1.5,
+          ),
+          Text(document.data['description'],
+            style: TextStyle(
+              fontSize: 18
+            )),
           SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
-          Text("Members!"),
-          Divider(),
+          Text("Members!",
+            style: TextStyle(
+              fontSize: 25,
+            ),),
+          Divider(
+            thickness: 1.5,
+          ),
           Text("All the members' list"),
           SizedBox(height: MediaQuery.of(context).size.height * 0.1,),
           Row(
