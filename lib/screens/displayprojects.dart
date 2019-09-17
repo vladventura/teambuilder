@@ -162,12 +162,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
               fontSize: 30,
             ),
           ),
-          Divider(
-            thickness: 1.5,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
+          buildSizedBoxHeight(0.05),
           buildHeaderText("Description"),
           buildDivider(),
           Text(document.data['description'], style: TextStyle(fontSize: 18)),
