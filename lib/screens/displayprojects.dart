@@ -126,84 +126,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
       ),
     );
   }
-
-  void handleRadioChange(DocumentSnapshot document, int val) {
-    setState(() {
-      _groupValue = val;
-      if (val == 1) {
-        _specialization = "Frontend";
-      } else if (val == 2) {
-        _specialization = "Backend";
-      }
-    });
-    // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
-    Navigator.of(context).pop();
-    _showSpecializationChooser(document);
-  }
-
-  RaisedButton buildJoinConfirm(DocumentSnapshot document) {
-    return RaisedButton(
-      child: Text("Join Project"),
-      color: Constants.acceptButtonColor,
-      onPressed: () async {
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Joining team...",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
-        thisProject.updateData({
-          'joinedUsers': FieldValue.arrayUnion([
-            {'name': _user.displayName, 'specialization': _specialization}
-          ])
-        });
-        userDocument.updateData({
-          'joinedProjects': FieldValue.arrayUnion([
-            document.documentID,
-          ])
-        });
-        Navigator.pop(context);
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Team joined!",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
 }
 
 class _DisplayProject extends StatefulWidget {
@@ -226,7 +148,6 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
   @override
   Widget build(BuildContext context) {
-    print("I'm here");
     return Scaffold(
       appBar: AppBar(
         title: Text("Project Details"),
@@ -286,19 +207,27 @@ class _DisplayProjectState extends State<_DisplayProject> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.1,
           ),
-          Text(
-            "SDKs and Frameworks Used",
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          Divider(
-            thickness: 1.5,
-          ),
+          buildHeaderText("SDKs and Frameworks Used"),
+          buildDivider(),
           buildElements(document.data['technologiesUsed']),
           buildButtons(document, user),
         ],
       ),
+    );
+  }
+
+  Text buildHeaderText(String headerText) {
+    return Text(
+      headerText,
+      style: TextStyle(
+        fontSize: 25,
+      ),
+    );
+  }
+
+  Divider buildDivider() {
+    return Divider(
+      thickness: 1.5,
     );
   }
 
@@ -474,4 +403,81 @@ class _DisplayProjectState extends State<_DisplayProject> {
         });
   }
 
+  void handleRadioChange(DocumentSnapshot document, int val) {
+    setState(() {
+      _groupValue = val;
+      if (val == 1) {
+        _specialization = "Frontend";
+      } else if (val == 2) {
+        _specialization = "Backend";
+      }
+    });
+    // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
+    Navigator.of(context).pop();
+    _showSpecializationChooser(document);
+  }
+
+  RaisedButton buildJoinConfirm(DocumentSnapshot document) {
+    return RaisedButton(
+      child: Text("Join Project"),
+      color: Constants.acceptButtonColor,
+      onPressed: () async {
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Joining team...",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
+        FirebaseUser _user;
+        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
+        CollectionReference projects = _db.collection('projects');
+        CollectionReference users = _db.collection('users');
+        DocumentReference thisProject = projects.document(document.documentID);
+        DocumentReference userDocument = users.document(_user.displayName);
+        thisProject.updateData({
+          'joinedUsers': FieldValue.arrayUnion([
+            {'name': _user.displayName, 'specialization': _specialization}
+          ])
+        });
+        userDocument.updateData({
+          'joinedProjects': FieldValue.arrayUnion([
+            document.documentID,
+          ])
+        });
+        Navigator.pop(context);
+        showFlash(
+            context: context,
+            duration: Duration(seconds: 1),
+            builder: (context, controller) {
+              return Flash(
+                controller: controller,
+                style: FlashStyle.grounded,
+                backgroundColor: Constants.sideBackgroundColor,
+                boxShadows: kElevationToShadow[4],
+                child: FlashBar(
+                  message: Text(
+                    "Team joined!",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
 }
