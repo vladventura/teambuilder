@@ -1,6 +1,6 @@
 class Project{
   String complexity;
-  List <String> contactPlatforms;
+  Map <String, dynamic> contactPlatforms;
   String description;
   List <String> joinedUsers;
   String name;
