@@ -53,6 +53,8 @@ class _DisplayFormState extends State<DisplayForm> {
           buildTechDTB(),
           buildTeamSizeInput(),
           buildEmailBox(),
+          buildGithubBox(),
+          buildDiscordUsernameBox(),
           buildSubmitButton(),
         ],
       ),
@@ -251,7 +253,6 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
-  //TODO: This has to be a row that returns a textformfield, a text with a hastag and also another textformfield that takes digits only
   Container buildDiscordUsernameBox() {
     return Container(
       margin: Constants.form_column_margins,
