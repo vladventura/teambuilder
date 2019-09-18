@@ -205,7 +205,7 @@ class _DisplayFormState extends State<DisplayForm> {
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration(Texts.project_name),
-        onSaved: (name) {
+        onSaved: (String name) {
           this._name = name;
         },
         validator: ProjectNameValidator.validate,
@@ -420,12 +420,6 @@ class _DisplayFormState extends State<DisplayForm> {
           _textboxesData,
           _techTextboxesData,
           _teamMembers);
-      setState(() {
-        _textboxesData = new List<String>();
-        _textboxes = new List<Widget>();
-        _techTextboxes = new List<Widget>();
-        _techTextboxesData = new List<String>();
-      });
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);
