@@ -241,9 +241,7 @@ class _DisplayFormState extends State<DisplayForm> {
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
       child: TextFormField(
-        textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
-        autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Github username, if any"),
         onSaved: (String gitUser) {
@@ -259,9 +257,6 @@ class _DisplayFormState extends State<DisplayForm> {
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
       child: TextFormField(
-        textCapitalization: TextCapitalization.sentences,
-        textInputAction: TextInputAction.next,
-        autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Discord username"),
         onSaved: (String discordUsername) {
