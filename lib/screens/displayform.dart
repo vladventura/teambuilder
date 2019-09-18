@@ -264,8 +264,8 @@ class _DisplayFormState extends State<DisplayForm> {
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Discord username"),
-        onSaved: (name) {
-          this._name = name;
+        onSaved: (String discordUsername) {
+          this._contactPlatforms['discordUsername'] = discordUsername;
         },
         validator: (String value) {
           if (value.length >= 1) {
