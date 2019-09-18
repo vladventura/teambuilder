@@ -24,7 +24,7 @@ class Project{
   Map <String, dynamic> toMap(){
     return{
       'complexity': this.complexity,
-      'contactPlatforms': 'Feature coming soon',
+      'contactPlatforms': this.contactPlatforms,
       'description': this.description,
       'name': this.name,
       'joinedUsers': this.joinedUsers,
