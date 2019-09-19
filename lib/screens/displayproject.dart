@@ -124,7 +124,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
             color: Color.fromARGB(212, 70, 56, 1),
             child: Row(
               children: <Widget>[
-                Icon(MdiIcons.outlook),
+                Icon(MdiIcons.gmail),
                 Text(emailAndDomain[0] + "@" + emailAndDomain[1]),
               ],
             ),
@@ -141,7 +141,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
           color: Color.fromARGB(115, 138, 219, 1),
           child: Row(
             children: <Widget>[
-              Icon(MdiIcons.outlook),
+              Icon(MdiIcons.discord),
               Text(discordAndHash[0] + "#" + discordAndHash[1]),
             ],
           ),
