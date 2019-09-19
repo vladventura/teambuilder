@@ -111,9 +111,12 @@ class _DisplayProjectState extends State<_DisplayProject> {
             color: Color.fromARGB(0, 114, 198, 1),
             child: Row(
               children: <Widget>[
-                Icon(MdiIcons.outlook, color: Colors.white,),
+                Icon(
+                  MdiIcons.outlook,
+                  color: Colors.white,
+                ),
                 Text(emailAndDomain[0] + "@" + emailAndDomain[1],
-                style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: Colors.white)),
               ],
             ),
             onPressed: null,
@@ -125,9 +128,14 @@ class _DisplayProjectState extends State<_DisplayProject> {
             color: Color.fromARGB(212, 70, 56, 1),
             child: Row(
               children: <Widget>[
-                Icon(MdiIcons.gmail, color: Colors.white,),
-                Text(emailAndDomain[0] + "@" + emailAndDomain[1], 
-                style: TextStyle(color: Colors.white),),
+                Icon(
+                  MdiIcons.gmail,
+                  color: Colors.white,
+                ),
+                Text(
+                  emailAndDomain[0] + "@" + emailAndDomain[1],
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
             onPressed: null,
@@ -140,9 +148,14 @@ class _DisplayProjectState extends State<_DisplayProject> {
           color: Colors.black,
           child: Row(
             children: <Widget>[
-              Icon(MdiIcons.email, color: Colors.white,),
-              Text(emailAndDomain[0] + "@" + emailAndDomain[1],
-              style: TextStyle(color: Colors.white),),
+              Icon(
+                MdiIcons.email,
+                color: Colors.white,
+              ),
+              Text(
+                emailAndDomain[0] + "@" + emailAndDomain[1],
+                style: TextStyle(color: Colors.white),
+              ),
             ],
           ),
           onPressed: null,
@@ -157,9 +170,14 @@ class _DisplayProjectState extends State<_DisplayProject> {
           color: Color.fromARGB(115, 138, 219, 1),
           child: Row(
             children: <Widget>[
-              Icon(MdiIcons.discord, color: Colors.white,),
-              Text(discordAndHash[0] + "#" + discordAndHash[1],
-              style: TextStyle(color: Colors.white),),
+              Icon(
+                MdiIcons.discord,
+                color: Colors.white,
+              ),
+              Text(
+                discordAndHash[0] + "#" + discordAndHash[1],
+                style: TextStyle(color: Colors.white),
+              ),
             ],
           ),
           onPressed: null,
@@ -167,9 +185,35 @@ class _DisplayProjectState extends State<_DisplayProject> {
       ));
     }
 
-    if (document.data['contactPlatforms']['github'] != null) {}
+    if (document.data['contactPlatforms']['github'] != null) {
+      contactPlatformButtons.add(new Container(
+        child: FlatButton(
+          color: Color.fromARGB(115, 138, 219, 1),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                MdiIcons.githubBox,
+                color: Colors.white,
+              ),
+              Text(
+                document.data['contactPlatforms']['github'],
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+          onPressed: null,
+        ),
+      ));
+    }
 
-    return Container();
+    if (contactPlatformButtons.isEmpty) {
+      return null;
+    }
+    return Container(
+      child: Column(
+        children: contactPlatformButtons,
+      ),
+    );
   }
 
   Widget buildMembersList(List<dynamic> users) {
