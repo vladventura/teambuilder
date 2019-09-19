@@ -67,6 +67,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
           buildHeaderText("SDKs and Frameworks Used"),
           buildDivider(),
           buildElements(document.data['technologiesUsed']),
+          buildSizedBoxHeight(0.1),
+          buildHeaderText("Contact Platforms"),
+          buildDivider(),
+          buildContactPlatformButtons(document),
+          buildSizedBoxHeight(0.1),
           buildButtons(document, user),
         ],
       ),
@@ -96,40 +101,72 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  Container buildContactPlatformButtons(DocumentSnapshot document) {
+  Column buildContactPlatformButtons(DocumentSnapshot document) {
     List<Widget> contactPlatformButtons = new List();
     List<String> emailAndDomain = new List();
     List<String> discordAndHash = new List();
 
-    if (document.data['contactPlatforms']['email'] != null) {
-      emailAndDomain = document.data['contactPlatforms']['email'].split('@');
-      if (emailAndDomain[1].contains('outlook') ||
-          emailAndDomain[1].contains('live') ||
-          emailAndDomain[1].contains('hotmail')) {
-        contactPlatformButtons.add(new Container(
-          child: FlatButton(
-            color: Color.fromARGB(0, 114, 198, 1),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  MdiIcons.outlook,
-                  color: Colors.white,
-                ),
-                Text(emailAndDomain[0] + "@" + emailAndDomain[1],
-                    style: TextStyle(color: Colors.white)),
-              ],
+    if (document.data['contactPlatforms'] != null) {
+      if (!document.data['contactPlatforms']['email'].isEmpty) {
+        emailAndDomain = document.data['contactPlatforms']['email'].split('@');
+        if (emailAndDomain[1].contains('outlook') ||
+            emailAndDomain[1].contains('live') ||
+            emailAndDomain[1].contains('hotmail')) {
+          contactPlatformButtons.add(
+            new Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color(0xFF0072C6), //#0072C6
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    MdiIcons.outlook,
+                    color: Colors.white,
+                  ),
+                  Text(emailAndDomain[0] + "@" + emailAndDomain[1],
+                      style: TextStyle(color: Colors.white)),
+                ],
+              ),
             ),
-            onPressed: null,
-          ),
-        ));
-      } else if (emailAndDomain[1].contains('gmail')) {
-        contactPlatformButtons.add(new Container(
-          child: FlatButton(
-            color: Color.fromARGB(212, 70, 56, 1),
+          );
+        } else if (emailAndDomain[1].contains('gmail')) {
+          contactPlatformButtons.add(
+            new Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color(0XFFD44638), //#D44638
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    MdiIcons.gmail,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    emailAndDomain[0] + "@" + emailAndDomain[1],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          contactPlatformButtons.add(new Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black,
+            ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Icon(
-                  MdiIcons.gmail,
+                  MdiIcons.email,
                   color: Colors.white,
                 ),
                 Text(
@@ -138,81 +175,73 @@ class _DisplayProjectState extends State<_DisplayProject> {
                 ),
               ],
             ),
-            onPressed: null,
-          ),
-        ));
+          ));
+        }
       }
-    } else {
-      contactPlatformButtons.add(new Container(
-        child: FlatButton(
-          color: Colors.black,
-          child: Row(
-            children: <Widget>[
-              Icon(
-                MdiIcons.email,
-                color: Colors.white,
-              ),
-              Text(
-                emailAndDomain[0] + "@" + emailAndDomain[1],
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          onPressed: null,
-        ),
-      ));
-    }
 
-    if (document.data['contactPlatforms']['discord'] != null) {
-      discordAndHash = document.data['contactPlatforms']['discord'].split('#');
-      contactPlatformButtons.add(new Container(
-        child: FlatButton(
-          color: Color.fromARGB(115, 138, 219, 1),
-          child: Row(
-            children: <Widget>[
-              Icon(
-                MdiIcons.discord,
-                color: Colors.white,
-              ),
-              Text(
-                discordAndHash[0] + "#" + discordAndHash[1],
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          onPressed: null,
-        ),
-      ));
-    }
+      if (!document.data['contactPlatforms']['discordUsername'].isEmpty) {
+        discordAndHash =
+            document.data['contactPlatforms']['discordUsername'].split('#');
+        contactPlatformButtons.add(new Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFF738ADB), //#738ADB
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  MdiIcons.discord,
+                  color: Colors.white,
+                ),
+                Text(
+                  discordAndHash[0] + "#" + discordAndHash[1],
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            )));
+      }
 
-    if (document.data['contactPlatforms']['github'] != null) {
-      contactPlatformButtons.add(new Container(
-        child: FlatButton(
-          color: Color.fromARGB(115, 138, 219, 1),
-          child: Row(
-            children: <Widget>[
-              Icon(
-                MdiIcons.githubBox,
-                color: Colors.white,
-              ),
-              Text(
-                document.data['contactPlatforms']['github'],
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          onPressed: null,
-        ),
-      ));
+      if (!document.data['contactPlatforms']['githubUsername'].isEmpty) {
+        contactPlatformButtons.add(new Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  MdiIcons.githubBox,
+                  color: Colors.white,
+                ),
+                Text(
+                  document.data['contactPlatforms']['githubUsername'],
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            )));
+      }
     }
 
     if (contactPlatformButtons.isEmpty) {
-      return null;
+      contactPlatformButtons.add(new Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(5)
+        ),
+        child: Text("The owner didn't specify no platform~!", 
+        style: TextStyle(
+          color: Colors.white
+        ),)
+      ));
     }
-    return Container(
-      child: Column(
-        children: contactPlatformButtons,
-      ),
+    return Column(
+      children: contactPlatformButtons,
+      crossAxisAlignment: CrossAxisAlignment.center,
     );
   }
 
