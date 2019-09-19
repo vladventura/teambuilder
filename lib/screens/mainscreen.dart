@@ -51,6 +51,7 @@ class _MainScreenState extends State<MainScreen>
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
+              //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
               return Scaffold(
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,

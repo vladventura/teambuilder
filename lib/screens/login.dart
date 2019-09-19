@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    //Start the stream for connectivity status
   }
 
   @override
@@ -215,6 +216,7 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
+            //Check connectivity status
             showFlash(
                 context: context,
                 duration: Duration(seconds: 1),
