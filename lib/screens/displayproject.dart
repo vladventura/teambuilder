@@ -96,6 +96,65 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
+  Container buildContactPlatformButtons(DocumentSnapshot document) {
+    List<Widget> contactPlatformButtons = new List();
+    List<String> emailAndDomain = new List();
+    List<String> discordAndHash = new List();
+
+    if (document.data['contactPlatforms']['email'] != null) {
+      emailAndDomain = document.data['contactPlatforms']['email'].split('@');
+      if (emailAndDomain[1].contains('outlook') ||
+          emailAndDomain[1].contains('live') ||
+          emailAndDomain[1].contains('hotmail')) {
+        contactPlatformButtons.add(new Container(
+          child: FlatButton(
+            color: Color.fromARGB(0, 114, 198, 1),
+            child: Row(
+              children: <Widget>[
+                Icon(MdiIcons.outlook),
+                Text(emailAndDomain[0] + "@" + emailAndDomain[1]),
+              ],
+            ),
+            onPressed: null,
+          ),
+        ));
+      } else if (emailAndDomain[1].contains('gmail')) {
+        contactPlatformButtons.add(new Container(
+          child: FlatButton(
+            color: Color.fromARGB(212, 70, 56, 1),
+            child: Row(
+              children: <Widget>[
+                Icon(MdiIcons.outlook),
+                Text(emailAndDomain[0] + "@" + emailAndDomain[1]),
+              ],
+            ),
+            onPressed: null,
+          ),
+        ));
+      }
+    }
+
+    if (document.data['contactPlatforms']['discord'] != null) {
+      discordAndHash = document.data['contactPlatforms']['discord'].split('#');
+      contactPlatformButtons.add(new Container(
+        child: FlatButton(
+          color: Color.fromARGB(115, 138, 219, 1),
+          child: Row(
+            children: <Widget>[
+              Icon(MdiIcons.outlook),
+              Text(discordAndHash[0] + "#" + discordAndHash[1]),
+            ],
+          ),
+          onPressed: null,
+        ),
+      ));
+    }
+
+    if (document.data['contactPlatforms']['github'] != null) {}
+
+    return Container();
+  }
+
   Widget buildMembersList(List<dynamic> users) {
     bool isEmpty = (users.length <= 0 || users == null);
     if (!isEmpty)
