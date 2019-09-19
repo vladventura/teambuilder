@@ -15,7 +15,8 @@ class DisplayForm extends StatefulWidget {
 }
 
 class _DisplayFormState extends State<DisplayForm> {
-  String _complexity, _name, _description, _contactPlatforms, _teamMembers;
+  String _complexity, _name, _description, _teamMembers;
+  Map<String, dynamic> _contactPlatforms = new Map<String, dynamic>();
   List<String> complexities = new List<String>();
   List<Widget> _textboxes = new List<Widget>();
   List<String> _textboxesData = new List<String>();
@@ -51,6 +52,9 @@ class _DisplayFormState extends State<DisplayForm> {
           buildLanguagesDTB(),
           buildTechDTB(),
           buildTeamSizeInput(),
+          buildEmailBox(),
+          buildGithubBox(),
+          buildDiscordUsernameBox(),
           buildSubmitButton(),
         ],
       ),
@@ -201,12 +205,88 @@ class _DisplayFormState extends State<DisplayForm> {
         autocorrect: Constants.has_autocorrect,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration(Texts.project_name),
-        onSaved: (name) {
+        onSaved: (String name) {
           this._name = name;
         },
         validator: ProjectNameValidator.validate,
       ),
     );
+  }
+
+  Container buildEmailBox() {
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        textInputAction: TextInputAction.next,
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration("Contact Email, if any"),
+        onSaved: (String email) {
+          _contactPlatforms['email'] = email;
+        },
+        validator: (String email) {
+          if (email.length >= 1) {
+            if (!email.contains('@')) return "This email is not valid!";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Container buildGithubBox() {
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        textInputAction: TextInputAction.next,
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration("Github username, if any"),
+        onSaved: (String gitUser) {
+          this._contactPlatforms['githubUsername'] = gitUser;
+        },
+      ),
+    );
+  }
+
+  Container buildDiscordUsernameBox() {
+    return Container(
+      margin: Constants.form_column_margins,
+      width: MediaQuery.of(context).size.width *
+          Constants.project_name_screen_percent,
+      child: TextFormField(
+        style: Constants.formContentStyle(),
+        decoration: Constants.formDecoration("Discord username"),
+        onSaved: (String discordUsername) {
+          this._contactPlatforms['discordUsername'] = discordUsername;
+        },
+        validator: (String value) {
+          if (value.length >= 1) {
+            if (!value.contains('#')) {
+              return "This is not a valid Discord username";
+            }
+            List separatedValue = value.split('#');
+            if (!_isNumeric(separatedValue[1])) {
+              return "These are not numeric values!";
+            } else {
+              if (separatedValue[1].length < 4) {
+                return "There is less than 4 digits after the #.";
+              }
+            }
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  bool _isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return (int.parse(s) != null);
   }
 
   Container buildDescriptionBox() {
@@ -225,41 +305,41 @@ class _DisplayFormState extends State<DisplayForm> {
     );
   }
 
-  Row buildTeamSizeInput(){
+  Row buildTeamSizeInput() {
     return Row(
-        children: <Widget>[
-          Text(
-            "Number of Team Members ",
-            style: TextStyle(
-              color: Constants.generalTextColor,
-            ),
+      children: <Widget>[
+        Text(
+          "Number of Team Members ",
+          style: TextStyle(
+            color: Constants.generalTextColor,
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.06,
-            margin: EdgeInsets.all(3),
-            padding: EdgeInsets.all(7),
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              style: Constants.formContentStyle(),
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
-              decoration: Constants.formDecoration(''),
-              validator: (String value){
-                if (value.isEmpty) return "You must have at least one team mate!";
-                int parsed = int.parse(value);
-                if (parsed < 0) return "You cannot have less than 0 team mates!";
-                if (parsed == 0) return "You cannot have no team mates!";
-                if (parsed > 99) return "That's way to many people!";
-                return null;
-              },
-              onSaved: (String value){
-                this._teamMembers = value;
-              },
-            ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.06,
+          margin: EdgeInsets.all(3),
+          padding: EdgeInsets.all(7),
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            style: Constants.formContentStyle(),
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
+            decoration: Constants.formDecoration(''),
+            validator: (String value) {
+              if (value.isEmpty) return "You must have at least one team mate!";
+              int parsed = int.parse(value);
+              if (parsed < 0) return "You cannot have less than 0 team mates!";
+              if (parsed == 0) return "You cannot have no team mates!";
+              if (parsed > 99) return "That's way to many people!";
+              return null;
+            },
+            onSaved: (String value) {
+              this._teamMembers = value;
+            },
           ),
-        ],
+        ),
+      ],
     );
   }
 
@@ -331,22 +411,15 @@ class _DisplayFormState extends State<DisplayForm> {
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
-        _complexity,
-        _contactPlatforms,
-        _description,
-        _name,
-        [],
-        _user.displayName,
-        _textboxesData,
-        _techTextboxesData,
-        _teamMembers
-      );
-      setState(() {
-        _textboxesData = new List<String>();
-        _textboxes = new List<Widget>();
-        _techTextboxes = new List<Widget>();
-        _techTextboxesData = new List<String>();
-      });
+          _complexity,
+          _contactPlatforms,
+          _description,
+          _name,
+          [],
+          _user.displayName,
+          _textboxesData,
+          _techTextboxesData,
+          _teamMembers);
       CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);

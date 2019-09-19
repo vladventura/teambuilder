@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen>
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               return Scaffold(
-                resizeToAvoidBottomInset: false,
+                resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: buildDrawer(),
