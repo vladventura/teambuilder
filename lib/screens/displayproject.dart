@@ -111,8 +111,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
             color: Color.fromARGB(0, 114, 198, 1),
             child: Row(
               children: <Widget>[
-                Icon(MdiIcons.outlook),
-                Text(emailAndDomain[0] + "@" + emailAndDomain[1]),
+                Icon(MdiIcons.outlook, color: Colors.white,),
+                Text(emailAndDomain[0] + "@" + emailAndDomain[1],
+                style: TextStyle(color: Colors.white)),
               ],
             ),
             onPressed: null,
@@ -124,14 +125,29 @@ class _DisplayProjectState extends State<_DisplayProject> {
             color: Color.fromARGB(212, 70, 56, 1),
             child: Row(
               children: <Widget>[
-                Icon(MdiIcons.gmail),
-                Text(emailAndDomain[0] + "@" + emailAndDomain[1]),
+                Icon(MdiIcons.gmail, color: Colors.white,),
+                Text(emailAndDomain[0] + "@" + emailAndDomain[1], 
+                style: TextStyle(color: Colors.white),),
               ],
             ),
             onPressed: null,
           ),
         ));
       }
+    } else {
+      contactPlatformButtons.add(new Container(
+        child: FlatButton(
+          color: Colors.black,
+          child: Row(
+            children: <Widget>[
+              Icon(MdiIcons.email, color: Colors.white,),
+              Text(emailAndDomain[0] + "@" + emailAndDomain[1],
+              style: TextStyle(color: Colors.white),),
+            ],
+          ),
+          onPressed: null,
+        ),
+      ));
     }
 
     if (document.data['contactPlatforms']['discord'] != null) {
@@ -141,8 +157,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
           color: Color.fromARGB(115, 138, 219, 1),
           child: Row(
             children: <Widget>[
-              Icon(MdiIcons.discord),
-              Text(discordAndHash[0] + "#" + discordAndHash[1]),
+              Icon(MdiIcons.discord, color: Colors.white,),
+              Text(discordAndHash[0] + "#" + discordAndHash[1],
+              style: TextStyle(color: Colors.white),),
             ],
           ),
           onPressed: null,
