@@ -42,21 +42,24 @@ class _DisplayFormState extends State<DisplayForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: ListView(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+      child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          buildNameBox(),
-          buildDescriptionBox(),
-          buildComplexityDropdow(),
-          buildLanguagesDTB(),
-          buildTechDTB(),
-          buildTeamSizeInput(),
-          buildEmailBox(),
-          buildGithubBox(),
-          buildDiscordUsernameBox(),
-          buildSubmitButton(),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            buildNameBox(),
+            buildDescriptionBox(),
+            buildComplexityDropdow(),
+            buildLanguagesDTB(),
+            buildTechDTB(),
+            buildTeamSizeInput(),
+            buildEmailBox(),
+            buildGithubBox(),
+            buildDiscordUsernameBox(),
+            buildSubmitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -197,8 +200,6 @@ class _DisplayFormState extends State<DisplayForm> {
   Container buildNameBox() {
     return Container(
       margin: Constants.form_column_margins,
-      width: MediaQuery.of(context).size.width *
-          Constants.project_name_screen_percent,
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
@@ -315,7 +316,7 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.3,
           height: MediaQuery.of(context).size.height * 0.06,
           margin: EdgeInsets.all(3),
           padding: EdgeInsets.all(7),
