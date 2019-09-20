@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:teambuilder/connectionstatussingleton.dart';
 
 import './displayprojects.dart';
 import './displayform.dart';
@@ -18,6 +22,8 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
+  StreamSubscription _connectionChangeStream;
+  bool isOffline;
 
   @override
   void initState() {
@@ -28,11 +34,21 @@ class _MainScreenState extends State<MainScreen>
     );
     _scrollController = ScrollController();
     _pageController = new PageController();
+    ConnectionStatusSingleton connectionStatus =
+        ConnectionStatusSingleton.getInstance();
+    _connectionChangeStream =
+        connectionStatus.connectionChange.listen(connectionChanged);
     loadUser();
   }
 
+  void connectionChanged(dynamic hasConnection) {
+    setState(() {
+      isOffline = !hasConnection;
+    });
+  }
+
   @override
-  void dispose(){
+  void dispose() {
     _tabController.dispose();
     _scrollController.dispose();
     _pageController.dispose();
@@ -40,8 +56,27 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Future<dynamic> loadUser() async {
-    _user = await FirebaseAuth.instance.currentUser();
-    return _user;
+    if (!isOffline) {
+      _user = await FirebaseAuth.instance.currentUser();
+      return _user;
+    } else {
+      showFlash(
+        context: context,
+        duration: Duration(seconds: 2),
+        builder: (context, controller){
+          return Flash(
+            controller: controller,
+            style: FlashStyle.grounded,
+            backgroundColor: Constants.sideBackgroundColor,
+            boxShadows: kElevationToShadow[4],
+            child: FlashBar(
+              message: Text("You're currently offline",
+              style: TextStyle(color: Constants.generalTextColor),),
+            ),
+          );
+        }
+      );
+    }
   }
 
   @override
@@ -72,12 +107,12 @@ class _MainScreenState extends State<MainScreen>
                     )
                   ],
                   currentIndex: _currentIndex,
-                  onTap: (index){
+                  onTap: (index) {
                     _pageController.animateToPage(
                       index,
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.ease,
-                      );
+                    );
                   },
                 ),
                 body: NestedScrollView(
@@ -96,7 +131,9 @@ class _MainScreenState extends State<MainScreen>
                             fontSize: 20,
                           ),
                         ),
-                        title: (_currentIndex == 0) ? Texts.appbar_join_title : Texts.appbar_create_title,
+                        title: (_currentIndex == 0)
+                            ? Texts.appbar_join_title
+                            : Texts.appbar_create_title,
                         forceElevated: isScrolled,
                         pinned: isScrolled,
                         floating: true,
@@ -105,11 +142,11 @@ class _MainScreenState extends State<MainScreen>
                   },
                   body: new PageView(
                     controller: _pageController,
-                    onPageChanged:((index){
+                    onPageChanged: ((index) {
                       setState(() {
-                       this._currentIndex = index;
+                        this._currentIndex = index;
                       });
-                    }) ,
+                    }),
                     children: <Widget>[
                       DisplayProjects(),
                       DisplayForm(),
@@ -123,7 +160,7 @@ class _MainScreenState extends State<MainScreen>
         });
   }
 
-  TabBarView buildTabBarView(){
+  TabBarView buildTabBarView() {
     return TabBarView(
       controller: _tabController,
       children: <Widget>[
@@ -133,7 +170,7 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  TabBar buildTabBar(){
+  TabBar buildTabBar() {
     return TabBar(
       controller: _tabController,
       tabs: <Widget>[
@@ -148,14 +185,14 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  Drawer buildDrawer(){
+  Drawer buildDrawer() {
     return Drawer(
       child: Center(
         child: Column(
           children: <Widget>[
             FlatButton(
               child: Text("Sign out, ${_user.displayName}"),
-              onPressed: () async{
+              onPressed: () async {
                 try {
                   await FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushNamedAndRemoveUntil(
