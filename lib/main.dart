@@ -11,7 +11,6 @@ TODO: Docstrings for all functions. Should maybe do before the project gets out-
 
 void main() {
   final _auth = FirebaseAuth.instance;
-  //Network singleton here
   runApp(MaterialApp(
     routes: <String, WidgetBuilder>{
       '/Home': (context) => MainScreen(),
