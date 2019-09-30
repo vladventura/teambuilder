@@ -42,6 +42,14 @@ class _DisplayFormState extends State<DisplayForm> {
     });
   }
 
+  void checkIfOnline(bool connection) {
+    if (connection) {
+      this._isConnected = true;
+    } else {
+      this._isConnected = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -386,26 +394,49 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-            showFlash(
-                context: context,
-                duration: Duration(seconds: 1),
-                builder: (context, controller) {
-                  return Flash(
-                    controller: controller,
-                    style: FlashStyle.grounded,
-                    backgroundColor: Constants.sideBackgroundColor,
-                    boxShadows: kElevationToShadow[4],
-                    child: FlashBar(
-                      message: Text(
-                        "Creating project...",
-                        style: TextStyle(
-                          color: Constants.generalTextColor,
+            _networkCheck.checkInternet(checkIfOnline);
+            if (_isConnected) {
+              showFlash(
+                  context: context,
+                  duration: Duration(seconds: 1),
+                  builder: (context, controller) {
+                    return Flash(
+                      controller: controller,
+                      style: FlashStyle.grounded,
+                      backgroundColor: Constants.sideBackgroundColor,
+                      boxShadows: kElevationToShadow[4],
+                      child: FlashBar(
+                        message: Text(
+                          "Creating project...",
+                          style: TextStyle(
+                            color: Constants.generalTextColor,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                });
-            submitProject();
+                    );
+                  });
+              submitProject();
+            } else {
+              showFlash(
+                  context: context,
+                  duration: Duration(seconds: 1),
+                  builder: (context, controller) {
+                    return Flash(
+                      controller: controller,
+                      style: FlashStyle.grounded,
+                      backgroundColor: Constants.sideBackgroundColor,
+                      boxShadows: kElevationToShadow[4],
+                      child: FlashBar(
+                        message: Text(
+                          "No internet conenction detected",
+                          style: TextStyle(
+                            color: Constants.generalTextColor,
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+            }
           }),
         )));
   }
