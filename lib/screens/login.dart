@@ -30,6 +30,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     networkCheck = new NetworkCheck();
+    networkCheck.checkInternet(fetchPreference);
   }
 
   void fetchPreference(bool isNetworkPresent) {
@@ -229,6 +230,7 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
+            await networkCheck.checkInternet(fetchPreference);
             if (_isConnected) {
               //Check connectivity status
               showFlash(
@@ -289,6 +291,7 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
+            await networkCheck.checkInternet(fetchPreference);
             if (_isConnected) {
               showFlash(
                   context: context,
