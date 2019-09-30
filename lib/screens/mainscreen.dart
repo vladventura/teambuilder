@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:teambuilder/connectionstatussingleton.dart';
 
 import './displayprojects.dart';
 import './displayform.dart';
@@ -22,8 +20,6 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
-  StreamSubscription _connectionChangeStream;
-  bool isOffline;
 
   @override
   void initState() {
@@ -34,17 +30,7 @@ class _MainScreenState extends State<MainScreen>
     );
     _scrollController = ScrollController();
     _pageController = new PageController();
-    ConnectionStatusSingleton connectionStatus =
-        ConnectionStatusSingleton.getInstance();
-    _connectionChangeStream =
-        connectionStatus.connectionChange.listen(connectionChanged);
     loadUser();
-  }
-
-  void connectionChanged(dynamic hasConnection) {
-    setState(() {
-      isOffline = !hasConnection;
-    });
   }
 
   @override
@@ -56,27 +42,8 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Future<dynamic> loadUser() async {
-    if (!isOffline) {
-      _user = await FirebaseAuth.instance.currentUser();
-      return _user;
-    } else {
-      showFlash(
-        context: context,
-        duration: Duration(seconds: 2),
-        builder: (context, controller){
-          return Flash(
-            controller: controller,
-            style: FlashStyle.grounded,
-            backgroundColor: Constants.sideBackgroundColor,
-            boxShadows: kElevationToShadow[4],
-            child: FlashBar(
-              message: Text("You're currently offline",
-              style: TextStyle(color: Constants.generalTextColor),),
-            ),
-          );
-        }
-      );
-    }
+    _user = await FirebaseAuth.instance.currentUser();
+    return _user;
   }
 
   @override
