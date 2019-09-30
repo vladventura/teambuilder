@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen>
     _scrollController = ScrollController();
     _pageController = new PageController();
     _networkCheck = new NetworkCheck();
+    _networkCheck.checkInternet(checkIfOnline);
     if (!_isConnected) {
       showFlash(
           context: context,
