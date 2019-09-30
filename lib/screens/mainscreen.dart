@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:teambuilder/util/networkcheck.dart';
 
 import './displayprojects.dart';
 import './displayform.dart';
@@ -16,6 +18,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  NetworkCheck _networkCheck;
+  bool _isConnected = false;
   ScrollController _scrollController;
   PageController _pageController;
   FirebaseUser _user;
@@ -30,6 +34,28 @@ class _MainScreenState extends State<MainScreen>
     );
     _scrollController = ScrollController();
     _pageController = new PageController();
+    _networkCheck = new NetworkCheck();
+    if (!_isConnected) {
+      showFlash(
+          context: context,
+          duration: Duration(seconds: 1),
+          builder: (context, controller) {
+            return Flash(
+              controller: controller,
+              style: FlashStyle.grounded,
+              backgroundColor: Constants.sideBackgroundColor,
+              boxShadows: kElevationToShadow[4],
+              child: FlashBar(
+                message: Text(
+                  "No internet conenction detected",
+                  style: TextStyle(
+                    color: Constants.generalTextColor,
+                  ),
+                ),
+              ),
+            );
+          });
+    }
     loadUser();
   }
 
@@ -39,6 +65,14 @@ class _MainScreenState extends State<MainScreen>
     _scrollController.dispose();
     _pageController.dispose();
     super.dispose();
+  }
+
+  void checkIfOnline(bool isNetworkPresent) {
+    if (isNetworkPresent) {
+      this._isConnected = true;
+    } else {
+      this._isConnected = false;
+    }
   }
 
   Future<dynamic> loadUser() async {
