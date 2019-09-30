@@ -289,26 +289,48 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
-            showFlash(
-                context: context,
-                duration: Duration(seconds: 1),
-                builder: (context, controller) {
-                  return Flash(
-                    controller: controller,
-                    style: FlashStyle.grounded,
-                    backgroundColor: Constants.sideBackgroundColor,
-                    boxShadows: kElevationToShadow[4],
-                    child: FlashBar(
-                      message: Text(
-                        "Creating account...",
-                        style: TextStyle(
-                          color: Constants.generalTextColor,
+            if (_isConnected) {
+              showFlash(
+                  context: context,
+                  duration: Duration(seconds: 1),
+                  builder: (context, controller) {
+                    return Flash(
+                      controller: controller,
+                      style: FlashStyle.grounded,
+                      backgroundColor: Constants.sideBackgroundColor,
+                      boxShadows: kElevationToShadow[4],
+                      child: FlashBar(
+                        message: Text(
+                          "Creating account...",
+                          style: TextStyle(
+                            color: Constants.generalTextColor,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                });
-            await submit();
+                    );
+                  });
+              await submit();
+            } else {
+              showFlash(
+                  context: context,
+                  duration: Duration(seconds: 1),
+                  builder: (context, controller) {
+                    return Flash(
+                      controller: controller,
+                      style: FlashStyle.grounded,
+                      backgroundColor: Constants.sideBackgroundColor,
+                      boxShadows: kElevationToShadow[4],
+                      child: FlashBar(
+                        message: Text(
+                          "No internet conenction detected",
+                          style: TextStyle(
+                            color: Constants.generalTextColor,
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+            }
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
