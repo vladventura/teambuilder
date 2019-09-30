@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen>
     if (!_isConnected) {
       showFlash(
           context: context,
-          duration: Duration(seconds: 1),
+          duration: Duration(seconds: 3),
           builder: (context, controller) {
             return Flash(
               controller: controller,
