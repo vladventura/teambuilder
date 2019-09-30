@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:teambuilder/models/project.dart';
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/networkcheck.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
 import 'package:flash/flash.dart';
@@ -16,6 +17,8 @@ class DisplayForm extends StatefulWidget {
 
 class _DisplayFormState extends State<DisplayForm> {
   String _complexity, _name, _description, _teamMembers;
+  NetworkCheck _networkCheck;
+  bool _isConnected = false;
   Map<String, dynamic> _contactPlatforms = new Map<String, dynamic>();
   List<String> complexities = new List<String>();
   List<Widget> _textboxes = new List<Widget>();
@@ -30,6 +33,7 @@ class _DisplayFormState extends State<DisplayForm> {
   void initState() {
     super.initState();
     complexities.addAll(Texts.complexities);
+    this._networkCheck = new NetworkCheck();
   }
 
   void _onChanged(String value) {
