@@ -238,7 +238,7 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.mobile:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 1),
+                    duration: Duration(seconds: 3),
                     builder: (context, controller) {
                       return Flash(
                         controller: controller,
@@ -260,7 +260,7 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.none:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 1),
+                    duration: Duration(seconds: 3),
                     builder: (context, controller) {
                       return Flash(
                         controller: controller,
@@ -301,7 +301,7 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.mobile:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 1),
+                    duration: Duration(seconds: 3),
                     builder: (context, controller) {
                       return Flash(
                         controller: controller,
@@ -323,7 +323,7 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.none:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 1),
+                    duration: Duration(seconds: 3),
                     builder: (context, controller) {
                       return Flash(
                         controller: controller,
