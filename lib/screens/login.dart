@@ -24,7 +24,6 @@ class _LoginState extends State<Login> {
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _usernameController = new TextEditingController();
   FormType _formType = FormType.login;
-
   Map _connectionSource = {ConnectivityResult.none: false};
   ConnectionStream _connectionStream = ConnectionStream.instance;
 
