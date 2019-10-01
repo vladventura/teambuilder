@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
+import 'package:teambuilder/util/connectionstream.dart';
+
 import './decorations.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +25,18 @@ class _LoginState extends State<Login> {
   TextEditingController _usernameController = new TextEditingController();
   FormType _formType = FormType.login;
 
+  Map _connectionSource = {ConnectivityResult.none: false};
+  ConnectionStream _connectionStream = ConnectionStream.instance;
+
   @override
   void initState() {
     super.initState();
+    _connectionStream.initialize();
+    _connectionStream.stream.listen((source) {
+      setState(() {
+        _connectionSource = source;
+      });
+    });
   }
 
   @override
@@ -216,27 +228,52 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
-            //Check connectivity status
-            showFlash(
-                context: context,
-                duration: Duration(seconds: 1),
-                builder: (context, controller) {
-                  return Flash(
-                    controller: controller,
-                    style: FlashStyle.grounded,
-                    backgroundColor: Constants.sideBackgroundColor,
-                    boxShadows: kElevationToShadow[4],
-                    child: FlashBar(
-                      message: Text(
-                        "Logging in...",
-                        style: TextStyle(
-                          color: Constants.generalTextColor,
+            switch (_connectionSource.keys.toList()[0]) {
+              case ConnectivityResult.wifi:
+              case ConnectivityResult.mobile:
+                showFlash(
+                    context: context,
+                    duration: Duration(seconds: 1),
+                    builder: (context, controller) {
+                      return Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: FlashBar(
+                          message: Text(
+                            "Logging in...",
+                            style: TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                });
-            await submit();
+                      );
+                    });
+                await submit();
+                break;
+              case ConnectivityResult.none:
+                showFlash(
+                    context: context,
+                    duration: Duration(seconds: 1),
+                    builder: (context, controller) {
+                      return Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: FlashBar(
+                          message: Text(
+                            "No Internet Connection Detected",
+                            style: TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+                break;
+            }
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
