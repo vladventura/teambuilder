@@ -79,7 +79,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             ),
           ),
           onPressed: () async {
-            //TODO: Check the network here
             switch (_connectionSource.keys.toList()[0]) {
               case ConnectivityResult.mobile:
               case ConnectivityResult.wifi:
