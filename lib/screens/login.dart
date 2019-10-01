@@ -1,12 +1,10 @@
 import 'dart:async';
-
-import 'package:teambuilder/util/networkcheck.dart';
-
 import './decorations.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
@@ -17,11 +15,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  NetworkCheck networkCheck;
   final _formKey = GlobalKey<FormState>();
   String _email, _password, _username;
   bool _isTaken = false;
-  bool _isConnected = false;
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _usernameController = new TextEditingController();
   FormType _formType = FormType.login;
@@ -29,16 +25,6 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    networkCheck = new NetworkCheck();
-    networkCheck.checkInternet(fetchPreference);
-  }
-
-  void fetchPreference(bool isNetworkPresent) {
-    if (isNetworkPresent) {
-      this._isConnected = true;
-    } else {
-      this._isConnected = false;
-    }
   }
 
   @override
@@ -230,50 +216,27 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
-            await networkCheck.checkInternet(fetchPreference);
-            if (_isConnected) {
-              //Check connectivity status
-              showFlash(
-                  context: context,
-                  duration: Duration(seconds: 1),
-                  builder: (context, controller) {
-                    return Flash(
-                      controller: controller,
-                      style: FlashStyle.grounded,
-                      backgroundColor: Constants.sideBackgroundColor,
-                      boxShadows: kElevationToShadow[4],
-                      child: FlashBar(
-                        message: Text(
-                          "Logging in...",
-                          style: TextStyle(
-                            color: Constants.generalTextColor,
-                          ),
+            //Check connectivity status
+            showFlash(
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Logging in...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
                         ),
                       ),
-                    );
-                  });
-              await submit();
-            } else {
-              showFlash(
-                  context: context,
-                  duration: Duration(seconds: 1),
-                  builder: (context, controller) {
-                    return Flash(
-                      controller: controller,
-                      style: FlashStyle.grounded,
-                      backgroundColor: Constants.sideBackgroundColor,
-                      boxShadows: kElevationToShadow[4],
-                      child: FlashBar(
-                        message: Text(
-                          "No internet conenction detected",
-                          style: TextStyle(
-                            color: Constants.generalTextColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  });
-            }
+                    ),
+                  );
+                });
+            await submit();
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -291,49 +254,26 @@ class _LoginState extends State<Login> {
       width: MediaQuery.of(context).size.width * 0.70,
       child: new RaisedButton(
           onPressed: () async {
-            await networkCheck.checkInternet(fetchPreference);
-            if (_isConnected) {
-              showFlash(
-                  context: context,
-                  duration: Duration(seconds: 1),
-                  builder: (context, controller) {
-                    return Flash(
-                      controller: controller,
-                      style: FlashStyle.grounded,
-                      backgroundColor: Constants.sideBackgroundColor,
-                      boxShadows: kElevationToShadow[4],
-                      child: FlashBar(
-                        message: Text(
-                          "Creating account...",
-                          style: TextStyle(
-                            color: Constants.generalTextColor,
-                          ),
+            showFlash(
+                context: context,
+                duration: Duration(seconds: 1),
+                builder: (context, controller) {
+                  return Flash(
+                    controller: controller,
+                    style: FlashStyle.grounded,
+                    backgroundColor: Constants.sideBackgroundColor,
+                    boxShadows: kElevationToShadow[4],
+                    child: FlashBar(
+                      message: Text(
+                        "Creating account...",
+                        style: TextStyle(
+                          color: Constants.generalTextColor,
                         ),
                       ),
-                    );
-                  });
-              await submit();
-            } else {
-              showFlash(
-                  context: context,
-                  duration: Duration(seconds: 1),
-                  builder: (context, controller) {
-                    return Flash(
-                      controller: controller,
-                      style: FlashStyle.grounded,
-                      backgroundColor: Constants.sideBackgroundColor,
-                      boxShadows: kElevationToShadow[4],
-                      child: FlashBar(
-                        message: Text(
-                          "No internet conenction detected",
-                          style: TextStyle(
-                            color: Constants.generalTextColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  });
-            }
+                    ),
+                  );
+                });
+            await submit();
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
