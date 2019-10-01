@@ -26,6 +26,8 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _techTextboxesData = new List<String>();
   ConnectionStream _connectionStream = ConnectionStream.instance;
   Map _connectionSources = {ConnectivityResult.none: false};
+  DateTime _time;
+  DateTime _oneToThen;
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -395,8 +397,38 @@ class _DisplayFormState extends State<DisplayForm> {
             switch (_connectionSources.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-              //TODO: The work will most likely be done here so nothing else is called
-                showFlash(
+                //TODO: The work will most likely be done here so nothing else is called
+                /* First check if the user has used this button before by determining
+                  1) Has it been assigned?
+                  2) Right*/
+                if (_time == null) {
+                  _time = DateTime.now();
+                }
+                _oneToThen = _time.add(new Duration(minutes: 1));
+                if (_oneToThen.isBefore(DateTime.now())) {
+                  showFlash(
+                      context: context,
+                      duration: Duration(seconds: 1),
+                      builder: (context, controller) {
+                        return Flash(
+                          controller: controller,
+                          style: FlashStyle.grounded,
+                          backgroundColor: Constants.sideBackgroundColor,
+                          boxShadows: kElevationToShadow[4],
+                          child: FlashBar(
+                            message: Text(
+                              "Creating project...",
+                              style: TextStyle(
+                                color: Constants.generalTextColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                  submitProject();
+                } else {
+                  Duration timeToThen = _oneToThen.difference(_time);
+                  showFlash(
                     context: context,
                     duration: Duration(seconds: 1),
                     builder: (context, controller) {
@@ -407,7 +439,7 @@ class _DisplayFormState extends State<DisplayForm> {
                         boxShadows: kElevationToShadow[4],
                         child: FlashBar(
                           message: Text(
-                            "Creating project...",
+                            "You must wait ${timeToThen.inSeconds} seconds",
                             style: TextStyle(
                               color: Constants.generalTextColor,
                             ),
@@ -415,10 +447,10 @@ class _DisplayFormState extends State<DisplayForm> {
                         ),
                       );
                     });
-                submitProject();
+                }
                 break;
               case ConnectivityResult.none:
-              showFlash(
+                showFlash(
                     context: context,
                     duration: Duration(seconds: 1),
                     builder: (context, controller) {
@@ -437,7 +469,7 @@ class _DisplayFormState extends State<DisplayForm> {
                         ),
                       );
                     });
-                    break;
+                break;
             }
           }),
         )));
