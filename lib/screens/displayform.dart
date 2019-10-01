@@ -395,6 +395,7 @@ class _DisplayFormState extends State<DisplayForm> {
             switch (_connectionSources.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
+              //TODO: The work will most likely be done here so nothing else is called
                 showFlash(
                     context: context,
                     duration: Duration(seconds: 1),
