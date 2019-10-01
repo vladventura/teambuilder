@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:teambuilder/models/project.dart';
+import 'package:teambuilder/util/connectionstream.dart';
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
@@ -22,6 +24,8 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _textboxesData = new List<String>();
   List<Widget> _techTextboxes = new List<Widget>();
   List<String> _techTextboxesData = new List<String>();
+  ConnectionStream _connectionStream = ConnectionStream.instance;
+  Map _connectionSources = {ConnectivityResult.none: false};
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -30,6 +34,12 @@ class _DisplayFormState extends State<DisplayForm> {
   void initState() {
     super.initState();
     complexities.addAll(Texts.complexities);
+    _connectionStream.initialize();
+    _connectionStream.stream.listen((source) {
+      setState(() {
+        _connectionSources = source;
+      });
+    });
   }
 
   void _onChanged(String value) {
@@ -382,26 +392,52 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-            showFlash(
-                context: context,
-                duration: Duration(seconds: 1),
-                builder: (context, controller) {
-                  return Flash(
-                    controller: controller,
-                    style: FlashStyle.grounded,
-                    backgroundColor: Constants.sideBackgroundColor,
-                    boxShadows: kElevationToShadow[4],
-                    child: FlashBar(
-                      message: Text(
-                        "Creating project...",
-                        style: TextStyle(
-                          color: Constants.generalTextColor,
+            switch (_connectionSources.keys.toList()[0]) {
+              case ConnectivityResult.wifi:
+              case ConnectivityResult.mobile:
+                showFlash(
+                    context: context,
+                    duration: Duration(seconds: 1),
+                    builder: (context, controller) {
+                      return Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: FlashBar(
+                          message: Text(
+                            "Creating project...",
+                            style: TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                });
-            submitProject();
+                      );
+                    });
+                submitProject();
+                break;
+              case ConnectivityResult.none:
+              showFlash(
+                    context: context,
+                    duration: Duration(seconds: 1),
+                    builder: (context, controller) {
+                      return Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: FlashBar(
+                          message: Text(
+                            "No Internet Connection Detected",
+                            style: TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+                    break;
+            }
           }),
         )));
   }

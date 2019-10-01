@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  connectivity: 0.4.4
   material_design_icons_flutter: 3.2.4096
   flash:
   cloud_firestore: 0.8.2+3
