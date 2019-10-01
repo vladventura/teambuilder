@@ -27,7 +27,7 @@ class _DisplayFormState extends State<DisplayForm> {
   ConnectionStream _connectionStream = ConnectionStream.instance;
   Map _connectionSources = {ConnectivityResult.none: false};
   DateTime _time = new DateTime.now();
-  DateTime _oneToThen = new DateTime.now();
+  DateTime _oneToThen = DateTime.now();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -404,7 +404,8 @@ class _DisplayFormState extends State<DisplayForm> {
             switch (_connectionSources.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                if (_oneToThen.isBefore(new DateTime.now())) {
+                if (_oneToThen.isBefore(new DateTime.now()) ||
+                    _oneToThen.isAtSameMomentAs(new DateTime.now())) {
                   showFlash(
                       context: context,
                       duration: Duration(seconds: 1),
@@ -425,10 +426,10 @@ class _DisplayFormState extends State<DisplayForm> {
                         );
                       });
                   //TODO: The work will most likely be done here so nothing else is called
-                  _oneToThen = _time.add(new Duration(minutes: 1));
                   submitProject();
                 } else {
-                  Duration timeToThen = _oneToThen.difference(new DateTime.now());
+                  Duration timeToThen =
+                      _oneToThen.difference(new DateTime.now());
                   showFlash(
                       context: context,
                       duration: Duration(seconds: 1),
@@ -479,6 +480,8 @@ class _DisplayFormState extends State<DisplayForm> {
   void submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      this._oneToThen = _time.add(new Duration(minutes: 1));
+      this._time = new DateTime.now();
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
@@ -499,9 +502,9 @@ class _DisplayFormState extends State<DisplayForm> {
       });
       showFlash(
           context: context,
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
           builder: (context, controller) {
-            return Flash(
+            return new Flash(
               controller: controller,
               style: FlashStyle.grounded,
               backgroundColor: Constants.sideBackgroundColor,
@@ -516,7 +519,6 @@ class _DisplayFormState extends State<DisplayForm> {
               ),
             );
           });
-          _time = new DateTime.now();
     }
   }
 }
