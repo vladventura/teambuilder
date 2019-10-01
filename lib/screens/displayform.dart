@@ -26,8 +26,8 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _techTextboxesData = new List<String>();
   ConnectionStream _connectionStream = ConnectionStream.instance;
   Map _connectionSources = {ConnectivityResult.none: false};
-  DateTime _time = DateTime.now();
-  DateTime _oneToThen;
+  DateTime _time = new DateTime.now();
+  DateTime _oneToThen = new DateTime.now();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -44,6 +44,11 @@ class _DisplayFormState extends State<DisplayForm> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _onChanged(String value) {
@@ -399,11 +404,7 @@ class _DisplayFormState extends State<DisplayForm> {
             switch (_connectionSources.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                /* First check if the user has used this button before by determining
-                  1) Has it been assigned?
-                  2) Right*/
-
-                if (_oneToThen.isBefore(DateTime.now())) {
+                if (_oneToThen.isBefore(new DateTime.now())) {
                   showFlash(
                       context: context,
                       duration: Duration(seconds: 1),
@@ -424,18 +425,15 @@ class _DisplayFormState extends State<DisplayForm> {
                         );
                       });
                   //TODO: The work will most likely be done here so nothing else is called
-                  if (_time == null) {
-                    _time = DateTime.now();
-                  }
                   _oneToThen = _time.add(new Duration(minutes: 1));
-                  if (_oneToThen.isBefore(_time)) submitProject();
+                  submitProject();
                 } else {
-                  Duration timeToThen = _oneToThen.difference(_time);
+                  Duration timeToThen = _oneToThen.difference(new DateTime.now());
                   showFlash(
                       context: context,
                       duration: Duration(seconds: 1),
                       builder: (context, controller) {
-                        return Flash(
+                        return new Flash(
                           controller: controller,
                           style: FlashStyle.grounded,
                           backgroundColor: Constants.sideBackgroundColor,
@@ -518,7 +516,7 @@ class _DisplayFormState extends State<DisplayForm> {
               ),
             );
           });
-      _time = DateTime.now();
+          _time = new DateTime.now();
     }
   }
 }
