@@ -425,7 +425,6 @@ class _DisplayFormState extends State<DisplayForm> {
                           ),
                         );
                       });
-                  //TODO: The work will most likely be done here so nothing else is called
                   submitProject();
                 } else {
                   Duration timeToThen =
