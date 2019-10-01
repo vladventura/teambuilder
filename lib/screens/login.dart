@@ -38,6 +38,12 @@ class _LoginState extends State<Login> {
       });
     });
   }
+  
+  @override
+  void dispose(){
+    super.dispose();
+    _connectionStream.disposeStream();
+  }
 
   @override
   Widget build(BuildContext context) {
