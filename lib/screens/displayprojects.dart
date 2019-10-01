@@ -22,11 +22,13 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   @override
   void initState() {
     super.initState();
-    _connectionStream.initialize();
-    _connectionStream.stream.listen((source) {
-      setState(() {
-       _connectionSource = source; 
-      });
+    this._connectionStream.initialize();
+    this._connectionStream.stream.listen((source) {
+      if (this.mounted) {
+        setState(() {
+          _connectionSource = source;
+        });
+      }
     });
   }
 
@@ -79,7 +81,6 @@ class _DisplayProjectsState extends State<DisplayProjects> {
             ),
           ),
           onPressed: () async {
-            //TODO: Check the network here
             switch (_connectionSource.keys.toList()[0]) {
               case ConnectivityResult.mobile:
               case ConnectivityResult.wifi:

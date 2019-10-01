@@ -26,6 +26,8 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _techTextboxesData = new List<String>();
   ConnectionStream _connectionStream = ConnectionStream.instance;
   Map _connectionSources = {ConnectivityResult.none: false};
+  DateTime _time = new DateTime.now();
+  DateTime _oneToThen = DateTime.now();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -35,11 +37,18 @@ class _DisplayFormState extends State<DisplayForm> {
     super.initState();
     complexities.addAll(Texts.complexities);
     _connectionStream.initialize();
-    _connectionStream.stream.listen((source) {
-      setState(() {
-        _connectionSources = source;
-      });
+    this._connectionStream.stream.listen((source) {
+      if (this.mounted) {
+        setState(() {
+          _connectionSources = source;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _onChanged(String value) {
@@ -395,29 +404,54 @@ class _DisplayFormState extends State<DisplayForm> {
             switch (_connectionSources.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                showFlash(
-                    context: context,
-                    duration: Duration(seconds: 1),
-                    builder: (context, controller) {
-                      return Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
-                            "Creating project...",
-                            style: TextStyle(
-                              color: Constants.generalTextColor,
+                if (_oneToThen.isBefore(new DateTime.now()) ||
+                    _oneToThen.isAtSameMomentAs(new DateTime.now())) {
+                  showFlash(
+                      context: context,
+                      duration: Duration(seconds: 1),
+                      builder: (context, controller) {
+                        return Flash(
+                          controller: controller,
+                          style: FlashStyle.grounded,
+                          backgroundColor: Constants.sideBackgroundColor,
+                          boxShadows: kElevationToShadow[4],
+                          child: FlashBar(
+                            message: Text(
+                              "Creating project...",
+                              style: TextStyle(
+                                color: Constants.generalTextColor,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    });
-                submitProject();
+                        );
+                      });
+                  submitProject();
+                } else {
+                  Duration timeToThen =
+                      _oneToThen.difference(new DateTime.now());
+                  showFlash(
+                      context: context,
+                      duration: Duration(seconds: 1),
+                      builder: (context, controller) {
+                        return new Flash(
+                          controller: controller,
+                          style: FlashStyle.grounded,
+                          backgroundColor: Constants.sideBackgroundColor,
+                          boxShadows: kElevationToShadow[4],
+                          child: new FlashBar(
+                            message: new Text(
+                              "You must wait ${timeToThen.inSeconds} seconds",
+                              style: TextStyle(
+                                color: Constants.generalTextColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                }
                 break;
               case ConnectivityResult.none:
-              showFlash(
+                showFlash(
                     context: context,
                     duration: Duration(seconds: 1),
                     builder: (context, controller) {
@@ -436,7 +470,7 @@ class _DisplayFormState extends State<DisplayForm> {
                         ),
                       );
                     });
-                    break;
+                break;
             }
           }),
         )));
@@ -445,6 +479,8 @@ class _DisplayFormState extends State<DisplayForm> {
   void submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      this._oneToThen = _time.add(new Duration(minutes: 1));
+      this._time = new DateTime.now();
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
@@ -465,9 +501,9 @@ class _DisplayFormState extends State<DisplayForm> {
       });
       showFlash(
           context: context,
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
           builder: (context, controller) {
-            return Flash(
+            return new Flash(
               controller: controller,
               style: FlashStyle.grounded,
               backgroundColor: Constants.sideBackgroundColor,

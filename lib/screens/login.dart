@@ -32,9 +32,11 @@ class _LoginState extends State<Login> {
     super.initState();
     _connectionStream.initialize();
     _connectionStream.stream.listen((source) {
-      setState(() {
-        _connectionSource = source;
-      });
+      if (this.mounted) {
+        setState(() {
+          _connectionSource = source;
+        });
+      }
     });
   }
 
