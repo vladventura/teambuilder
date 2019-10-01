@@ -420,9 +420,6 @@ class _DisplayFormState extends State<DisplayForm> {
                       );
                     });
                 //TODO: The work will most likely be done here so nothing else is called
-                if (_time == null) {
-                  _time = DateTime.now();
-                }
                 _oneToThen = _time.add(new Duration(minutes: 1));
                 if (_oneToThen.isBefore(DateTime.now())) {
                   submitProject();
@@ -437,8 +434,8 @@ class _DisplayFormState extends State<DisplayForm> {
                           style: FlashStyle.grounded,
                           backgroundColor: Constants.sideBackgroundColor,
                           boxShadows: kElevationToShadow[4],
-                          child: FlashBar(
-                            message: Text(
+                          child: new FlashBar(
+                            message: new Text(
                               "You must wait ${timeToThen.inSeconds} seconds",
                               style: TextStyle(
                                 color: Constants.generalTextColor,
@@ -515,6 +512,7 @@ class _DisplayFormState extends State<DisplayForm> {
               ),
             );
           });
+        _time = DateTime.now();
     }
   }
 }
