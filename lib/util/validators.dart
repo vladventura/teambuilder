@@ -19,10 +19,8 @@ class UsernameValidator{
 
 class EmailValidator{
   static String validate(String value){
-    final Filter filter = new Filter();
     if (value.isEmpty) return "Email cannot be empty";
     if (!value.contains('@')) return "Email is not valid";
-    if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), ''))) return "You cannot use these kind of words~!";
     return null;
   }
 }
