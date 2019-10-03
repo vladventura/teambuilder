@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bad_words/bad_words.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:teambuilder/util/connectionstream.dart';
 
@@ -18,6 +19,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final Filter filter = new Filter();
   final _formKey = GlobalKey<FormState>();
   String _email, _password, _username;
   bool _isTaken = false;
@@ -181,6 +183,8 @@ class _LoginState extends State<Login> {
           validator: (value) {
             if (this._isTaken) return "Username is taken already";
             if (value.isEmpty) return "Username cannot be empty";
+            if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+              return "You cannot use these kind of words~!";
             return null;
           },
           style: Decorations.inputStyle(),
