@@ -1,3 +1,4 @@
+import 'package:bad_words/bad_words.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _DisplayFormState extends State<DisplayForm> {
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
+  final Filter filter = new Filter();
 
   @override
   void initState() {
@@ -163,6 +165,8 @@ class _DisplayFormState extends State<DisplayForm> {
             validator: (String value) {
               if (value.isEmpty)
                 return "Please add a Language or delete this box!";
+              if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+                return "You cannot use these kind of words~!";
               return null;
             },
             style: Constants.formContentStyle(),
@@ -196,6 +200,8 @@ class _DisplayFormState extends State<DisplayForm> {
             validator: (String value) {
               if (value.isEmpty)
                 return "Please add a Technology or remove this box!";
+              if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+                return "You cannot use these kind of words~!";
               return null;
             },
             style: Constants.formContentStyle(),
@@ -248,6 +254,8 @@ class _DisplayFormState extends State<DisplayForm> {
         validator: (String email) {
           if (email.length >= 1) {
             if (!email.contains('@')) return "This email is not valid!";
+            if (filter.isProfane(email.replaceAll(new RegExp(r'\ '), '')))
+              return "You cannot use these kind of words~!";
           }
           return null;
         },
@@ -283,6 +291,8 @@ class _DisplayFormState extends State<DisplayForm> {
           this._contactPlatforms['discordUsername'] = discordUsername;
         },
         validator: (String value) {
+          if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+            return "You cannot use these kind of words~!";
           if (value.length >= 1) {
             if (!value.contains('#')) {
               return "This is not a valid Discord username";
