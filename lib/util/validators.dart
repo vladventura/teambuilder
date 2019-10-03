@@ -4,12 +4,15 @@
   It also holds the validators for each form field.
 */
 import 'package:teambuilder/util/texts.dart';
+import 'package:bad_words/bad_words.dart';
 
 enum FormType {login, register}
 
 class UsernameValidator{
   static String validate(String value) {
+  final Filter filter = new Filter();
     if (value.isEmpty) return "Username may not be empty";
+    if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), ''))) return "You cannot use these kind of words~!";
     return null;
   }
 }
@@ -34,6 +37,8 @@ class PasswordValidator{
 
 class ProjectNameValidator{
   static String validate(String value){
+    final Filter filter = new Filter();
+    if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), ''))) return "You cannot use these kind of words~!";
     if (value.isEmpty) return Texts.project_name_error_msg;
     return null;
   }
@@ -41,6 +46,8 @@ class ProjectNameValidator{
 
 class ProjectDescriptionValidator{
   static String validate(String value){
+    final Filter filter = new Filter();
+    if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), ''))) return "You cannot use these kind of words~!";
     if (value.isEmpty) return Texts.project_description_error_msg;
     return null;
   }
