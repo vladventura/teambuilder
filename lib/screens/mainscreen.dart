@@ -49,7 +49,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: loadUser(),
+        future: this.loadUser(),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
@@ -58,12 +58,12 @@ class _MainScreenState extends State<MainScreen>
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
-                drawer: buildDrawer(),
+                drawer: this.buildDrawer(),
                 bottomNavigationBar: new BottomNavigationBar(
                   backgroundColor: Constants.sideBackgroundColor,
                   selectedItemColor: Constants.formActiveColor,
                   showSelectedLabels: false,
-                  items: buildBottomNavBarItems(),
+                  items: this.buildBottomNavBarItems(),
                   currentIndex: _currentIndex,
                   onTap: (index) {
                     _pageController.animateToPage(
@@ -73,7 +73,7 @@ class _MainScreenState extends State<MainScreen>
                     );
                   },
                 ),
-                body: NestedScrollView(
+                body: new NestedScrollView(
                   physics: BouncingScrollPhysics(),
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
