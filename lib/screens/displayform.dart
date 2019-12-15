@@ -1,8 +1,11 @@
+import 'package:bad_words/bad_words.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:teambuilder/models/project.dart';
+import 'package:teambuilder/util/connectionstream.dart';
 // Constant values and texts
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
@@ -22,14 +25,32 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _textboxesData = new List<String>();
   List<Widget> _techTextboxes = new List<Widget>();
   List<String> _techTextboxesData = new List<String>();
+  ConnectionStream _connectionStream = ConnectionStream.instance;
+  Map _connectionSources = {ConnectivityResult.none: false};
+  DateTime _time = new DateTime.now();
+  DateTime _oneToThen = DateTime.now();
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
+  final Filter filter = new Filter();
 
   @override
   void initState() {
     super.initState();
     complexities.addAll(Texts.complexities);
+    _connectionStream.initialize();
+    this._connectionStream.stream.listen((source) {
+      if (this.mounted) {
+        setState(() {
+          _connectionSources = source;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _onChanged(String value) {
@@ -42,21 +63,24 @@ class _DisplayFormState extends State<DisplayForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: ListView(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+      child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          buildNameBox(),
-          buildDescriptionBox(),
-          buildComplexityDropdow(),
-          buildLanguagesDTB(),
-          buildTechDTB(),
-          buildTeamSizeInput(),
-          buildEmailBox(),
-          buildGithubBox(),
-          buildDiscordUsernameBox(),
-          buildSubmitButton(),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            buildNameBox(),
+            buildDescriptionBox(),
+            buildComplexityDropdow(),
+            buildLanguagesDTB(),
+            buildTechDTB(),
+            buildTeamSizeInput(),
+            buildEmailBox(),
+            buildGithubBox(),
+            buildDiscordUsernameBox(),
+            buildSubmitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -141,6 +165,8 @@ class _DisplayFormState extends State<DisplayForm> {
             validator: (String value) {
               if (value.isEmpty)
                 return "Please add a Language or delete this box!";
+              if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+                return "You cannot use these kind of words~!";
               return null;
             },
             style: Constants.formContentStyle(),
@@ -174,6 +200,8 @@ class _DisplayFormState extends State<DisplayForm> {
             validator: (String value) {
               if (value.isEmpty)
                 return "Please add a Technology or remove this box!";
+              if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+                return "You cannot use these kind of words~!";
               return null;
             },
             style: Constants.formContentStyle(),
@@ -197,8 +225,6 @@ class _DisplayFormState extends State<DisplayForm> {
   Container buildNameBox() {
     return Container(
       margin: Constants.form_column_margins,
-      width: MediaQuery.of(context).size.width *
-          Constants.project_name_screen_percent,
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
@@ -228,6 +254,8 @@ class _DisplayFormState extends State<DisplayForm> {
         validator: (String email) {
           if (email.length >= 1) {
             if (!email.contains('@')) return "This email is not valid!";
+            if (filter.isProfane(email.replaceAll(new RegExp(r'\ '), '')))
+              return "You cannot use these kind of words~!";
           }
           return null;
         },
@@ -263,6 +291,8 @@ class _DisplayFormState extends State<DisplayForm> {
           this._contactPlatforms['discordUsername'] = discordUsername;
         },
         validator: (String value) {
+          if (filter.isProfane(value.replaceAll(new RegExp(r'\ '), '')))
+            return "You cannot use these kind of words~!";
           if (value.length >= 1) {
             if (!value.contains('#')) {
               return "This is not a valid Discord username";
@@ -315,7 +345,7 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.3,
           height: MediaQuery.of(context).size.height * 0.06,
           margin: EdgeInsets.all(3),
           padding: EdgeInsets.all(7),
@@ -381,26 +411,77 @@ class _DisplayFormState extends State<DisplayForm> {
           ),
           textColor: Constants.acceptButtonColor,
           onPressed: (() async {
-            showFlash(
-                context: context,
-                duration: Duration(seconds: 1),
-                builder: (context, controller) {
-                  return Flash(
-                    controller: controller,
-                    style: FlashStyle.grounded,
-                    backgroundColor: Constants.sideBackgroundColor,
-                    boxShadows: kElevationToShadow[4],
-                    child: FlashBar(
-                      message: Text(
-                        "Creating project...",
-                        style: TextStyle(
-                          color: Constants.generalTextColor,
+            switch (_connectionSources.keys.toList()[0]) {
+              case ConnectivityResult.wifi:
+              case ConnectivityResult.mobile:
+                if (_oneToThen.isBefore(new DateTime.now()) ||
+                    _oneToThen.isAtSameMomentAs(new DateTime.now())) {
+                  showFlash(
+                      context: context,
+                      duration: Duration(seconds: 1),
+                      builder: (context, controller) {
+                        return Flash(
+                          controller: controller,
+                          style: FlashStyle.grounded,
+                          backgroundColor: Constants.sideBackgroundColor,
+                          boxShadows: kElevationToShadow[4],
+                          child: FlashBar(
+                            message: Text(
+                              "Creating project...",
+                              style: TextStyle(
+                                color: Constants.generalTextColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                  submitProject();
+                } else {
+                  Duration timeToThen =
+                      _oneToThen.difference(new DateTime.now());
+                  showFlash(
+                      context: context,
+                      duration: Duration(seconds: 1),
+                      builder: (context, controller) {
+                        return new Flash(
+                          controller: controller,
+                          style: FlashStyle.grounded,
+                          backgroundColor: Constants.sideBackgroundColor,
+                          boxShadows: kElevationToShadow[4],
+                          child: new FlashBar(
+                            message: new Text(
+                              "You must wait ${timeToThen.inSeconds} seconds",
+                              style: TextStyle(
+                                color: Constants.generalTextColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                }
+                break;
+              case ConnectivityResult.none:
+                showFlash(
+                    context: context,
+                    duration: Duration(seconds: 1),
+                    builder: (context, controller) {
+                      return Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: FlashBar(
+                          message: Text(
+                            "No Internet Connection Detected",
+                            style: TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                });
-            submitProject();
+                      );
+                    });
+                break;
+            }
           }),
         )));
   }
@@ -408,6 +489,8 @@ class _DisplayFormState extends State<DisplayForm> {
   void submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      this._oneToThen = _time.add(new Duration(minutes: 1));
+      this._time = new DateTime.now();
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
       Project project = new Project(
@@ -428,9 +511,9 @@ class _DisplayFormState extends State<DisplayForm> {
       });
       showFlash(
           context: context,
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
           builder: (context, controller) {
-            return Flash(
+            return new Flash(
               controller: controller,
               style: FlashStyle.grounded,
               backgroundColor: Constants.sideBackgroundColor,
