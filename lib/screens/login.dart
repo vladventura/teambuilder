@@ -51,12 +51,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Constants.mainBackgroundColor,
-      body: Center(
-        child: Form(
+      body: new Center(
+        child: new Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
+          child: new SingleChildScrollView(
+            physics: new BouncingScrollPhysics(),
+            child: new Column(
               children: buildScreen(),
             ),
           ),
@@ -93,7 +93,7 @@ class _LoginState extends State<Login> {
         }
       } else {
         try {
-          UserUpdateInfo updater = UserUpdateInfo();
+          UserUpdateInfo updater = new UserUpdateInfo();
           await Firestore.instance
               .collection('users')
               .document(_username)
@@ -140,16 +140,16 @@ class _LoginState extends State<Login> {
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
+          new Text(
             Texts.app_title,
-            style: TextStyle(
+            style: new TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.10,
               color: Constants.generalTextColor,
             ),
           ),
-          Text(
+          new Text(
             Texts.flavor_text,
-            style: TextStyle(color: Constants.flavorTextColor),
+            style: new TextStyle(color: Constants.flavorTextColor),
           ),
         ],
       ),
@@ -158,7 +158,7 @@ class _LoginState extends State<Login> {
 
   Padding buildEmailBox() {
     return new Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: new EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
           validator: EmailValidator.validate,
           style: Decorations.inputStyle(),
@@ -183,8 +183,8 @@ class _LoginState extends State<Login> {
 
   Padding buildUsernameBox() {
     return new Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: TextFormField(
+      padding: new EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
           validator: (value) {
             if (this._isTaken) return "Username is taken already";
             if (value.isEmpty) return "Username cannot be empty";
@@ -205,7 +205,7 @@ class _LoginState extends State<Login> {
 
   Padding buildPasswordBox() {
     return new Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: new EdgeInsets.symmetric(horizontal: 8.0),
       child: new TextFormField(
         style: Decorations.inputStyle(),
         controller: _passwordController,
@@ -221,8 +221,8 @@ class _LoginState extends State<Login> {
 
   Padding buildConfirmPasswordBox() {
     return new Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: TextFormField(
+      padding: new EdgeInsets.symmetric(horizontal: 8.0),
+      child: new TextFormField(
         style: Decorations.inputStyle(),
         onSaved: (password) {
           _password = password;
@@ -248,17 +248,17 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.mobile:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 3),
+                    duration: new Duration(seconds: 3),
                     builder: (context, controller) {
-                      return Flash(
+                      return new Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "Logging in...",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
@@ -270,17 +270,17 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.none:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 3),
+                    duration: new Duration(seconds: 3),
                     builder: (context, controller) {
-                      return Flash(
+                      return new Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "No Internet Connection Detected",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
@@ -290,13 +290,13 @@ class _LoginState extends State<Login> {
                 break;
             }
           },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          padding: EdgeInsets.all(12),
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(20)),
+          padding: new EdgeInsets.all(12),
           color: Colors.amber,
-          child: Text(
+          child: new Text(
             'Log In',
-            style: TextStyle(color: Colors.black),
+            style: new TextStyle(color: Colors.black),
           )),
     );
   }
@@ -311,17 +311,17 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.mobile:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 3),
+                    duration: new Duration(seconds: 3),
                     builder: (context, controller) {
-                      return Flash(
+                      return new Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "Creating account...",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
@@ -333,17 +333,17 @@ class _LoginState extends State<Login> {
               case ConnectivityResult.none:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 3),
+                    duration: new Duration(seconds: 3),
                     builder: (context, controller) {
-                      return Flash(
+                      return new Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "No Internet Connection Detected",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
@@ -353,31 +353,31 @@ class _LoginState extends State<Login> {
                 break;
             }
           },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          padding: EdgeInsets.all(12),
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+          padding: new EdgeInsets.all(12),
           color: Colors.amber,
-          child: Text(
+          child: new Text(
             'Create Account',
-            style: TextStyle(color: Colors.black),
+            style: new TextStyle(color: Colors.black),
           )),
     );
   }
 
   FlatButton buildCreateAccountButton() {
     return new FlatButton(
-      child: Container(
+      child: new Container(
         width: MediaQuery.of(context).size.width * 0.30,
-        padding: EdgeInsets.symmetric(vertical: 5),
+        padding: new EdgeInsets.symmetric(vertical: 5),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Constants.flavorTextColor),
+        decoration: new BoxDecoration(
+          border: new Border(
+            bottom: new BorderSide(color: Constants.flavorTextColor),
           ),
         ),
-        child: Text(
+        child: new Text(
           "Create Account",
-          style: TextStyle(color: Constants.flavorTextColor),
+          style: new TextStyle(color: Constants.flavorTextColor),
         ),
       ),
       onPressed: () {
@@ -393,18 +393,18 @@ class _LoginState extends State<Login> {
 
   FlatButton buildLoginButton() {
     return new FlatButton(
-      child: Container(
+      child: new Container(
         width: MediaQuery.of(context).size.width * 0.30,
-        padding: EdgeInsets.symmetric(vertical: 5),
+        padding: new EdgeInsets.symmetric(vertical: 5),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Constants.flavorTextColor),
+        decoration: new BoxDecoration(
+          border: new Border(
+            bottom: new BorderSide(color: Constants.flavorTextColor),
           ),
         ),
-        child: Text(
+        child: new Text(
           "Log into Account",
-          style: TextStyle(color: Constants.flavorTextColor),
+          style: new TextStyle(color: Constants.flavorTextColor),
         ),
       ),
       onPressed: () {
@@ -422,15 +422,15 @@ class _LoginState extends State<Login> {
     if (_formType == FormType.login) {
       return [
         buildTopText(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.30,
         ),
         buildEmailBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildPasswordBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
         ),
         buildLoginSubmitButton(),
@@ -440,23 +440,23 @@ class _LoginState extends State<Login> {
     } else {
       return [
         buildTopText(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.30,
         ),
         buildEmailBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildUsernameBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildPasswordBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         buildConfirmPasswordBox(),
-        SizedBox(
+        new SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
         ),
         buildCreateAccountSubmitButton(),
