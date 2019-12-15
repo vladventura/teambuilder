@@ -335,6 +335,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
                       child: new Text("Yes"),
                     ),
                   ],
+                  title: new Text("Delete Project"),
+                  content:
+                      new Text("Are you sure you want to delete this project?"),
                 );
               });
         },
