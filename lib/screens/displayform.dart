@@ -423,28 +423,32 @@ class _DisplayFormState extends State<DisplayForm> {
                   DocumentReference thisUser = Firestore.instance
                       .collection('users')
                       .document(user.displayName);
-
-                  this.submitProject().then(() {
-                    showFlash(
-                        context: context,
-                        duration: new Duration(seconds: 1),
-                        builder: (context, controller) {
-                          return new Flash(
-                            controller: controller,
-                            style: FlashStyle.grounded,
-                            backgroundColor: Constants.sideBackgroundColor,
-                            boxShadows: kElevationToShadow[4],
-                            child: new FlashBar(
-                              message: new Text(
-                                "Creating project...",
-                                style: new TextStyle(
-                                  color: Constants.generalTextColor,
+                  DocumentSnapshot snapshot = await thisUser.get();
+                  if (snapshot.data['createdProjects'].length() <= 5) {
+                    this.submitProject().then(() {
+                      showFlash(
+                          context: context,
+                          duration: new Duration(seconds: 1),
+                          builder: (context, controller) {
+                            return new Flash(
+                              controller: controller,
+                              style: FlashStyle.grounded,
+                              backgroundColor: Constants.sideBackgroundColor,
+                              boxShadows: kElevationToShadow[4],
+                              child: new FlashBar(
+                                message: new Text(
+                                  "Creating project...",
+                                  style: new TextStyle(
+                                    color: Constants.generalTextColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        });
-                  });
+                            );
+                          });
+                    });
+                  } else {
+                    showFlash();
+                  }
                 } else {
                   Duration timeToThen =
                       _oneToThen.difference(new DateTime.now());
