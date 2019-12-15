@@ -24,13 +24,13 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
+    _tabController = new TabController(
       length: Constants.app_tabs,
       vsync: this,
     );
-    _scrollController = ScrollController();
+    _scrollController = new ScrollController();
     _pageController = new PageController();
-    loadUser();
+    this.loadUser();
   }
 
   @override
@@ -48,13 +48,13 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return new FutureBuilder(
         future: this.loadUser(),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
-              return Scaffold(
+              return new Scaffold(
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
@@ -68,17 +68,17 @@ class _MainScreenState extends State<MainScreen>
                   onTap: (index) {
                     _pageController.animateToPage(
                       index,
-                      duration: const Duration(milliseconds: 300),
+                      duration: new Duration(milliseconds: 300),
                       curve: Curves.ease,
                     );
                   },
                 ),
                 body: new NestedScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: new BouncingScrollPhysics(),
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
                     return <Widget>[
-                      buildSliverAppBar(isScrolled),
+                      this.buildSliverAppBar(isScrolled),
                     ];
                   },
                   body: this.buildPageView(),
@@ -86,7 +86,7 @@ class _MainScreenState extends State<MainScreen>
               );
             } // snapshot.hasData
           } // snapshot != null
-          return Container(child: CircularProgressIndicator());
+          return new Container(child: new CircularProgressIndicator());
         });
   }
 
@@ -94,11 +94,11 @@ class _MainScreenState extends State<MainScreen>
     return [
       new BottomNavigationBarItem(
         icon: Constants.join_project['icon'],
-        title: Text(Constants.join_project['text']),
+        title: new Text(Constants.join_project['text']),
       ),
       new BottomNavigationBarItem(
         icon: Constants.create_project['icon'],
-        title: Text(Constants.create_project['text']),
+        title: new Text(Constants.create_project['text']),
       )
     ];
   }
