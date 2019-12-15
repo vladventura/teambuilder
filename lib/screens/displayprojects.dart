@@ -11,7 +11,7 @@ import 'package:teambuilder/util/connectionstream.dart';
 part 'package:teambuilder/screens/displayproject.dart';
 
 class DisplayProjects extends StatefulWidget {
-  _DisplayProjectsState createState() => _DisplayProjectsState();
+  _DisplayProjectsState createState() => new _DisplayProjectsState();
 }
 
 class _DisplayProjectsState extends State<DisplayProjects> {
@@ -38,42 +38,42 @@ class _DisplayProjectsState extends State<DisplayProjects> {
   }
 
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    return new StreamBuilder<QuerySnapshot>(
         stream: _db.collection('projects').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView(
-              physics: BouncingScrollPhysics(),
+            return new ListView(
+              physics: new BouncingScrollPhysics(),
               children: snapshot.data.documents
                   .map((document) => buildProject(document))
                   .toList(),
             );
           } else {
-            return CircularProgressIndicator();
+            return new CircularProgressIndicator();
           }
         });
   }
 
   Card buildProject(DocumentSnapshot document) {
-    return Card(
-      child: Container(
+    return new Card(
+      child: new Container(
         decoration: Constants.buttonDecoration(),
         alignment: Alignment.centerLeft,
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.07,
-        child: FlatButton(
+        child: new FlatButton(
           color: Constants.formInactiveColor,
           textColor: Constants.flavorTextColor,
-          child: Container(
+          child: new Container(
             width: double.infinity,
-            child: Column(
+            child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                new Text(
                   document.data['name'],
                   textAlign: TextAlign.center,
                 ),
-                Text(
+                new Text(
                   document.data['originator'],
                   textAlign: TextAlign.center,
                 ),
@@ -94,15 +94,15 @@ class _DisplayProjectsState extends State<DisplayProjects> {
                     context: context,
                     duration: new Duration(seconds: 3),
                     builder: (context, controller) {
-                      return Flash(
+                      return new Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "No Internet Connection Detected",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
