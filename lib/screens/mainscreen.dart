@@ -63,16 +63,7 @@ class _MainScreenState extends State<MainScreen>
                   backgroundColor: Constants.sideBackgroundColor,
                   selectedItemColor: Constants.formActiveColor,
                   showSelectedLabels: false,
-                  items: [
-                    new BottomNavigationBarItem(
-                      icon: Constants.join_project['icon'],
-                      title: Text(Constants.join_project['text']),
-                    ),
-                    new BottomNavigationBarItem(
-                      icon: Constants.create_project['icon'],
-                      title: Text(Constants.create_project['text']),
-                    )
-                  ],
+                  items: buildBottomNavBarItems(),
                   currentIndex: _currentIndex,
                   onTap: (index) {
                     _pageController.animateToPage(
@@ -97,6 +88,19 @@ class _MainScreenState extends State<MainScreen>
           } // snapshot != null
           return Container(child: CircularProgressIndicator());
         });
+  }
+
+  List<BottomNavigationBarItem> buildBottomNavBarItems() {
+    return [
+      new BottomNavigationBarItem(
+        icon: Constants.join_project['icon'],
+        title: Text(Constants.join_project['text']),
+      ),
+      new BottomNavigationBarItem(
+        icon: Constants.create_project['icon'],
+        title: Text(Constants.create_project['text']),
+      )
+    ];
   }
 
   SliverAppBar buildSliverAppBar(bool isScrolled) {
