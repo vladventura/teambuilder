@@ -46,33 +46,33 @@ class _DisplayProjectState extends State<_DisplayProject> {
               color: Constants.flavorTextColor,
             ),
           ),
-          buildSizedBoxHeight(0.05),
-          buildHeaderText("Description"),
-          buildDivider(),
+          this.buildSizedBoxHeight(0.05),
+          this.buildHeaderText("Description"),
+          this.buildDivider(),
           new Padding(
             padding: new EdgeInsets.symmetric(horizontal: 5),
             child: new Text(document.data['description'],
                 style: new TextStyle(
                     fontSize: 18, color: Constants.flavorTextColor)),
           ),
-          buildSizedBoxHeight(0.1),
-          buildHeaderText("Members"),
-          buildDivider(),
-          buildMembersList(document.data['joinedUsers']),
-          buildSizedBoxHeight(0.1),
-          buildHeaderText("Languages Used"),
-          buildDivider(),
-          buildElements(document.data['languagesUsed']),
-          buildSizedBoxHeight(0.1),
-          buildHeaderText("SDKs and Frameworks Used"),
-          buildDivider(),
-          buildElements(document.data['technologiesUsed']),
-          buildSizedBoxHeight(0.1),
-          buildHeaderText("Contact Platforms"),
-          buildDivider(),
-          buildContactPlatformButtons(document),
-          buildSizedBoxHeight(0.1),
-          buildButtons(document, user),
+          this.buildSizedBoxHeight(0.1),
+          this.buildHeaderText("Members"),
+          this.buildDivider(),
+          this.buildMembersList(document.data['joinedUsers']),
+          this.buildSizedBoxHeight(0.1),
+          this.buildHeaderText("Languages Used"),
+          this.buildDivider(),
+          this.buildElements(document.data['languagesUsed']),
+          this.buildSizedBoxHeight(0.1),
+          this.buildHeaderText("SDKs and Frameworks Used"),
+          this.buildDivider(),
+          this.buildElements(document.data['technologiesUsed']),
+          this.buildSizedBoxHeight(0.1),
+          this.buildHeaderText("Contact Platforms"),
+          this.buildDivider(),
+          this.buildContactPlatformButtons(document),
+          this.buildSizedBoxHeight(0.1),
+          this.buildButtons(document, user),
         ],
       ),
     );
@@ -295,7 +295,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         int.parse(document.data['teamMembers']));
     if (!belongs) {
       if (slotAvailable == true) {
-        return buildJoinButton(document);
+        return this.buildJoinButton(document);
       } else {
         return new FlatButton(
           child: new Text(
@@ -317,7 +317,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         onPressed: null,
       );
     } else if (belongs) {
-      return buildLeaveButton(document);
+      return this.buildLeaveButton(document);
     }
   }
 
@@ -326,7 +326,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
       color: Constants.acceptButtonColor,
       child: new Text("Join Project", style: new TextStyle(fontSize: 15)),
       onPressed: () {
-        _showSpecializationChooser(document);
+        this._showSpecializationChooser(document);
       },
     );
   }
@@ -416,7 +416,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
-                    handleRadioChange(document, val);
+                    this.handleRadioChange(document, val);
                   },
                   value: 1,
                   title: new Text("Frontend"),
@@ -425,12 +425,12 @@ class _DisplayProjectState extends State<_DisplayProject> {
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
-                    handleRadioChange(document, val);
+                    this.handleRadioChange(document, val);
                   },
                   value: 2,
                   title: Text("Backend"),
                 ),
-                buildJoinConfirm(document),
+                this.buildJoinConfirm(document),
               ],
             ),
           );
@@ -448,7 +448,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     });
     // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
     Navigator.of(context).pop();
-    _showSpecializationChooser(document);
+    this._showSpecializationChooser(document);
   }
 
   RaisedButton buildJoinConfirm(DocumentSnapshot document) {
