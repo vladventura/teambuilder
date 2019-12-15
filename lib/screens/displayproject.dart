@@ -20,28 +20,28 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Project Details"),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Project Details"),
         backgroundColor: Constants.sideBackgroundColor,
-        iconTheme: IconThemeData(
+        iconTheme: new IconThemeData(
           color: Constants.flavorTextColor,
         ),
-        textTheme: TextTheme(
-          title: TextStyle(
+        textTheme: new TextTheme(
+          title: new TextStyle(
             color: Constants.generalTextColor,
             fontSize: 20,
           ),
         ),
       ),
       backgroundColor: Constants.mainBackgroundColor,
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      body: new ListView(
+        physics: new BouncingScrollPhysics(),
+        padding: new EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         children: <Widget>[
-          Text(
+          new Text(
             "${document.data['name']} by ${document.data['originator']}",
-            style: TextStyle(
+            style: new TextStyle(
               fontSize: 30,
               color: Constants.flavorTextColor,
             ),
@@ -49,11 +49,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
           buildSizedBoxHeight(0.05),
           buildHeaderText("Description"),
           buildDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Text(document.data['description'],
-                style:
-                    TextStyle(fontSize: 18, color: Constants.flavorTextColor)),
+          new Padding(
+            padding: new EdgeInsets.symmetric(horizontal: 5),
+            child: new Text(document.data['description'],
+                style: new TextStyle(
+                    fontSize: 18, color: Constants.flavorTextColor)),
           ),
           buildSizedBoxHeight(0.1),
           buildHeaderText("Members"),
@@ -79,9 +79,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   Text buildHeaderText(String headerText) {
-    return Text(
+    return new Text(
       headerText,
-      style: TextStyle(
+      style: new TextStyle(
         fontSize: 25,
         color: Constants.generalTextColor,
       ),
@@ -89,14 +89,14 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   Divider buildDivider() {
-    return Divider(
+    return new Divider(
       thickness: 1.5,
       color: Constants.acceptButtonColor,
     );
   }
 
   SizedBox buildSizedBoxHeight(double height) {
-    return SizedBox(
+    return new SizedBox(
       height: MediaQuery.of(context).size.height * height,
     );
   }
@@ -114,20 +114,20 @@ class _DisplayProjectState extends State<_DisplayProject> {
             emailAndDomain[1].contains('hotmail')) {
           contactPlatformButtons.add(
             new Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color(0xFF0072C6), //#0072C6
+              padding: new EdgeInsets.all(5),
+              decoration: new BoxDecoration(
+                borderRadius: new BorderRadius.circular(5),
+                color: new Color(0xFF0072C6), //#0072C6
               ),
-              child: Row(
+              child: new Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(
+                  new Icon(
                     MdiIcons.outlook,
                     color: Colors.white,
                   ),
-                  Text(emailAndDomain[0] + "@" + emailAndDomain[1],
-                      style: TextStyle(color: Colors.white)),
+                  new Text(emailAndDomain[0] + "@" + emailAndDomain[1],
+                      style: new TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -135,21 +135,21 @@ class _DisplayProjectState extends State<_DisplayProject> {
         } else if (emailAndDomain[1].contains('gmail')) {
           contactPlatformButtons.add(
             new Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color(0XFFD44638), //#D44638
+              padding: new EdgeInsets.all(5),
+              decoration: new BoxDecoration(
+                borderRadius: new BorderRadius.circular(5),
+                color: new Color(0XFFD44638), //#D44638
               ),
-              child: Row(
+              child: new Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(
+                  new Icon(
                     MdiIcons.gmail,
                     color: Colors.white,
                   ),
-                  Text(
+                  new Text(
                     emailAndDomain[0] + "@" + emailAndDomain[1],
-                    style: TextStyle(color: Colors.white),
+                    style: new TextStyle(color: Colors.white),
                   ),
                 ],
               ),
@@ -157,21 +157,21 @@ class _DisplayProjectState extends State<_DisplayProject> {
           );
         } else {
           contactPlatformButtons.add(new Container(
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            padding: new EdgeInsets.all(5),
+            decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(5),
               color: Colors.black,
             ),
-            child: Row(
+            child: new Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(
+                new Icon(
                   MdiIcons.email,
                   color: Colors.white,
                 ),
-                Text(
+                new Text(
                   emailAndDomain[0] + "@" + emailAndDomain[1],
-                  style: TextStyle(color: Colors.white),
+                  style: new TextStyle(color: Colors.white),
                 ),
               ],
             ),
@@ -183,19 +183,19 @@ class _DisplayProjectState extends State<_DisplayProject> {
         discordAndHash =
             document.data['contactPlatforms']['discordUsername'].split('#');
         contactPlatformButtons.add(new Container(
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color(0xFF738ADB), //#738ADB
+            padding: new EdgeInsets.all(5),
+            decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(5),
+              color: new Color(0xFF738ADB), //#738ADB
             ),
-            child: Row(
+            child: new Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(
+                new Icon(
                   MdiIcons.discord,
                   color: Colors.white,
                 ),
-                Text(
+                new Text(
                   discordAndHash[0] + "#" + discordAndHash[1],
                   style: TextStyle(color: Colors.white),
                 ),
@@ -205,21 +205,21 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
       if (!document.data['contactPlatforms']['githubUsername'].isEmpty) {
         contactPlatformButtons.add(new Container(
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            padding: new EdgeInsets.all(5),
+            decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(5),
               color: Colors.black,
             ),
-            child: Row(
+            child: new Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(
+                new Icon(
                   MdiIcons.githubBox,
                   color: Colors.white,
                 ),
-                Text(
+                new Text(
                   document.data['contactPlatforms']['githubUsername'],
-                  style: TextStyle(color: Colors.white),
+                  style: new TextStyle(color: Colors.white),
                 ),
               ],
             )));
@@ -228,18 +228,15 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
     if (contactPlatformButtons.isEmpty) {
       contactPlatformButtons.add(new Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(5)
-        ),
-        child: Text("The owner didn't specify no platform~!", 
-        style: TextStyle(
-          color: Colors.white
-        ),)
-      ));
+          padding: new EdgeInsets.all(5),
+          decoration: new BoxDecoration(
+              color: Colors.black, borderRadius: new BorderRadius.circular(5)),
+          child: new Text(
+            "The owner didn't specify no platform~!",
+            style: new TextStyle(color: Colors.white),
+          )));
     }
-    return Column(
+    return new Column(
       children: contactPlatformButtons,
       crossAxisAlignment: CrossAxisAlignment.center,
     );
@@ -248,42 +245,42 @@ class _DisplayProjectState extends State<_DisplayProject> {
   Widget buildMembersList(List<dynamic> users) {
     bool isEmpty = (users.length <= 0 || users == null);
     if (!isEmpty)
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 5),
+      return new Container(
+        margin: new EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: users
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
-                      style: TextStyle(
+                      style: new TextStyle(
                           fontSize: 18, color: Constants.flavorTextColor),
                     ))
                 .toList()),
       );
-    return Container(
-      child: Text("Nothing to show here~!"),
+    return new Container(
+      child: new Text("Nothing to show here~!"),
     );
   }
 
   Widget buildElements(List<dynamic> elements) {
     bool isEmpty = (elements.length <= 0 || elements == null);
     if (!isEmpty)
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 5),
+      return new Container(
+        margin: new EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: elements
                 .map((element) => new Text(
                       element,
-                      style: TextStyle(
+                      style: new TextStyle(
                           fontSize: 18, color: Constants.flavorTextColor),
                     ))
                 .toList()),
       );
-    return Container(
-      child: Text("Nothing to show here~!"),
+    return new Container(
+      child: new Text("Nothing to show here~!"),
     );
   }
 
@@ -300,10 +297,10 @@ class _DisplayProjectState extends State<_DisplayProject> {
       if (slotAvailable == true) {
         return buildJoinButton(document);
       } else {
-        return FlatButton(
-          child: Text(
+        return new FlatButton(
+          child: new Text(
             "The team is full.",
-            style: TextStyle(
+            style: new TextStyle(
               fontSize: 18,
             ),
           ),
@@ -311,10 +308,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
         );
       }
     } else if (owner) {
-      return FlatButton(
-        child: Text(
+      return new FlatButton(
+        child: new Text(
           "You cannot join your own project!",
-          style: TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
+          style:
+              new TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
         ),
         onPressed: null,
       );
@@ -324,9 +322,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   FlatButton buildJoinButton(DocumentSnapshot document) {
-    return FlatButton(
+    return new FlatButton(
       color: Constants.acceptButtonColor,
-      child: Text("Join Project", style: TextStyle(fontSize: 15)),
+      child: new Text("Join Project", style: new TextStyle(fontSize: 15)),
       onPressed: () {
         _showSpecializationChooser(document);
       },
@@ -334,28 +332,28 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   FlatButton buildLeaveButton(DocumentSnapshot document) {
-    return FlatButton(
+    return new FlatButton(
       color: Constants.cancelButtonColor,
-      child: Text(
+      child: new Text(
         'Leave Project',
-        style: TextStyle(
+        style: new TextStyle(
           fontSize: 15,
         ),
       ),
       onPressed: () async {
         showFlash(
             context: context,
-            duration: Duration(seconds: 1),
+            duration: new Duration(seconds: 1),
             builder: (context, controller) {
-              return Flash(
+              return new Flash(
                 controller: controller,
                 style: FlashStyle.grounded,
                 backgroundColor: Constants.sideBackgroundColor,
                 boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
+                child: new FlashBar(
+                  message: new Text(
                     "Leaving team...",
-                    style: TextStyle(
+                    style: new TextStyle(
                       color: Constants.generalTextColor,
                     ),
                   ),
@@ -382,17 +380,17 @@ class _DisplayProjectState extends State<_DisplayProject> {
               '/Home', (Route<dynamic> route) => false);
           showFlash(
               context: context,
-              duration: Duration(seconds: 1),
+              duration: new Duration(seconds: 1),
               builder: (context, controller) {
-                return Flash(
+                return new Flash(
                   controller: controller,
                   style: FlashStyle.grounded,
                   backgroundColor: Constants.sideBackgroundColor,
                   boxShadows: kElevationToShadow[4],
-                  child: FlashBar(
-                    message: Text(
+                  child: new FlashBar(
+                    message: new Text(
                       "Left team successfully.",
-                      style: TextStyle(
+                      style: new TextStyle(
                         color: Constants.generalTextColor,
                       ),
                     ),
@@ -408,22 +406,22 @@ class _DisplayProjectState extends State<_DisplayProject> {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Most comfortable area?"),
+          return new AlertDialog(
+            title: new Text("Most comfortable area?"),
             backgroundColor: Constants.sideBackgroundColor,
-            content: Column(
+            content: new Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                RadioListTile(
+                new RadioListTile(
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
                     handleRadioChange(document, val);
                   },
                   value: 1,
-                  title: Text("Frontend"),
+                  title: new Text("Frontend"),
                 ),
-                RadioListTile(
+                new RadioListTile(
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
@@ -454,23 +452,23 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   RaisedButton buildJoinConfirm(DocumentSnapshot document) {
-    return RaisedButton(
-      child: Text("Join Project"),
+    return new RaisedButton(
+      child: new Text("Join Project"),
       color: Constants.acceptButtonColor,
       onPressed: () async {
         showFlash(
             context: context,
-            duration: Duration(seconds: 1),
+            duration: new Duration(seconds: 1),
             builder: (context, controller) {
-              return Flash(
+              return new Flash(
                 controller: controller,
                 style: FlashStyle.grounded,
                 backgroundColor: Constants.sideBackgroundColor,
                 boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
+                child: new FlashBar(
+                  message: new Text(
                     "Joining team...",
-                    style: TextStyle(
+                    style: new TextStyle(
                       color: Constants.generalTextColor,
                     ),
                   ),
@@ -497,17 +495,17 @@ class _DisplayProjectState extends State<_DisplayProject> {
             .pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
         showFlash(
             context: context,
-            duration: Duration(seconds: 1),
+            duration: new Duration(seconds: 1),
             builder: (context, controller) {
-              return Flash(
+              return new Flash(
                 controller: controller,
                 style: FlashStyle.grounded,
                 backgroundColor: Constants.sideBackgroundColor,
                 boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
+                child: new FlashBar(
+                  message: new Text(
                     "Team joined!",
-                    style: TextStyle(
+                    style: new TextStyle(
                       color: Constants.generalTextColor,
                     ),
                   ),
