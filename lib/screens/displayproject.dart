@@ -325,8 +325,15 @@ class _DisplayProjectState extends State<_DisplayProject> {
               builder: (BuildContext context) {
                 return new AlertDialog(
                   actions: <Widget>[
-                    new FlatButton(),
-                    new FlatButton(),
+                    new FlatButton(
+                      child: new Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    new FlatButton(
+                      child: new Text("Yes"),
+                    ),
                   ],
                 );
               });
