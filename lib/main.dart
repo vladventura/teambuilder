@@ -13,8 +13,8 @@ void main() {
   final _auth = FirebaseAuth.instance;
   runApp(MaterialApp(
     routes: <String, WidgetBuilder>{
-      '/Home': (context) => MainScreen(),
       '/Login': (context) => Login(),
+      '/Home': (context) => MainScreen(),
     },
     home: FutureBuilder<FirebaseUser>(
       future: _auth.currentUser(),
