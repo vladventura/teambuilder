@@ -24,13 +24,13 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
+    _tabController = new TabController(
       length: Constants.app_tabs,
       vsync: this,
     );
-    _scrollController = ScrollController();
+    _scrollController = new ScrollController();
     _pageController = new PageController();
-    loadUser();
+    this.loadUser();
   }
 
   @override
@@ -48,103 +48,115 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: loadUser(),
+    return new FutureBuilder(
+        future: this.loadUser(),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
-              return Scaffold(
+              return new Scaffold(
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
-                drawer: buildDrawer(),
+                drawer: this.buildDrawer(),
                 bottomNavigationBar: new BottomNavigationBar(
                   backgroundColor: Constants.sideBackgroundColor,
                   selectedItemColor: Constants.formActiveColor,
                   showSelectedLabels: false,
-                  items: [
-                    new BottomNavigationBarItem(
-                      icon: Constants.join_project['icon'],
-                      title: Text(Constants.join_project['text']),
-                    ),
-                    new BottomNavigationBarItem(
-                      icon: Constants.create_project['icon'],
-                      title: Text(Constants.create_project['text']),
-                    )
-                  ],
+                  items: this.buildBottomNavBarItems(),
                   currentIndex: _currentIndex,
                   onTap: (index) {
                     _pageController.animateToPage(
                       index,
-                      duration: const Duration(milliseconds: 300),
+                      duration: new Duration(milliseconds: 300),
                       curve: Curves.ease,
                     );
                   },
                 ),
-                body: NestedScrollView(
-                  physics: BouncingScrollPhysics(),
+                body: new NestedScrollView(
+                  physics: new BouncingScrollPhysics(),
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
                     return <Widget>[
-                      SliverAppBar(
-                        backgroundColor: Constants.sideBackgroundColor,
-                        iconTheme: IconThemeData(
-                          color: Constants.flavorTextColor,
-                        ),
-                        textTheme: TextTheme(
-                          title: TextStyle(
-                            color: Constants.generalTextColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                        title: (_currentIndex == 0)
-                            ? Texts.appbar_join_title
-                            : Texts.appbar_create_title,
-                        forceElevated: isScrolled,
-                        pinned: isScrolled,
-                        floating: true,
-                      ),
+                      this.buildSliverAppBar(isScrolled),
                     ];
                   },
-                  body: new PageView(
-                    controller: _pageController,
-                    onPageChanged: ((index) {
-                      setState(() {
-                        this._currentIndex = index;
-                      });
-                    }),
-                    children: <Widget>[
-                      DisplayProjects(),
-                      DisplayForm(),
-                    ],
-                  ),
+                  body: this.buildPageView(),
                 ),
               );
             } // snapshot.hasData
           } // snapshot != null
-          return Container(child: CircularProgressIndicator());
+          return new Container(child: new CircularProgressIndicator());
         });
   }
 
+  List<BottomNavigationBarItem> buildBottomNavBarItems() {
+    return [
+      new BottomNavigationBarItem(
+        icon: Constants.join_project['icon'],
+        title: new Text(Constants.join_project['text']),
+      ),
+      new BottomNavigationBarItem(
+        icon: Constants.create_project['icon'],
+        title: new Text(Constants.create_project['text']),
+      )
+    ];
+  }
+
+  SliverAppBar buildSliverAppBar(bool isScrolled) {
+    return new SliverAppBar(
+      backgroundColor: Constants.sideBackgroundColor,
+      iconTheme: new IconThemeData(
+        color: Constants.flavorTextColor,
+      ),
+      textTheme: new TextTheme(
+        title: new TextStyle(
+          color: Constants.generalTextColor,
+          fontSize: 20,
+        ),
+      ),
+      title: (_currentIndex == 0)
+          ? Texts.appbar_join_title
+          : Texts.appbar_create_title,
+      forceElevated: isScrolled,
+      pinned: isScrolled,
+      floating: true,
+    );
+  }
+
+  PageView buildPageView() {
+    return new PageView(
+      controller: _pageController,
+      onPageChanged: ((index) {
+        setState(() {
+          this._currentIndex = index;
+        });
+      }),
+      children: <Widget>[
+        new DisplayProjects(),
+        new DisplayForm(),
+      ],
+    );
+  }
+
   TabBarView buildTabBarView() {
-    return TabBarView(
+    return new TabBarView(
       controller: _tabController,
       children: <Widget>[
-        DisplayProjects(),
-        DisplayForm(),
+        new DisplayProjects(),
+        new DisplayForm(),
       ],
     );
   }
 
   TabBar buildTabBar() {
-    return TabBar(
+    return new TabBar(
       controller: _tabController,
       tabs: <Widget>[
-        Tab(
+        new Tab(
             text: Constants.join_project['text'],
             icon: Constants.join_project['icon']),
-        Tab(
+        new Tab(
           text: Constants.create_project['text'],
           icon: Constants.create_project['icon'],
         ),
@@ -153,12 +165,12 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Drawer buildDrawer() {
-    return Drawer(
-      child: Center(
-        child: Column(
+    return new Drawer(
+      child: new Center(
+        child: new Column(
           children: <Widget>[
-            FlatButton(
-              child: Text("Sign out, ${_user.displayName}"),
+            new FlatButton(
+              child: new Text("Sign out, ${_user.displayName}"),
               onPressed: () async {
                 try {
                   Navigator.of(context).pushNamedAndRemoveUntil(

@@ -27,8 +27,10 @@ class _DisplayFormState extends State<DisplayForm> {
   List<String> _techTextboxesData = new List<String>();
   ConnectionStream _connectionStream = ConnectionStream.instance;
   Map _connectionSources = {ConnectivityResult.none: false};
+
   DateTime _time = new DateTime.now();
-  DateTime _oneToThen = DateTime.now();
+  DateTime _oneToThen = new DateTime.now();
+
   final _auth = FirebaseAuth.instance;
   final _formKey = new GlobalKey<FormState>();
   final db = Firestore.instance;
@@ -61,24 +63,24 @@ class _DisplayFormState extends State<DisplayForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return new Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
+      child: new SingleChildScrollView(
+        physics: new BouncingScrollPhysics(),
+        child: new Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            buildNameBox(),
-            buildDescriptionBox(),
-            buildComplexityDropdow(),
-            buildLanguagesDTB(),
-            buildTechDTB(),
-            buildTeamSizeInput(),
-            buildEmailBox(),
-            buildGithubBox(),
-            buildDiscordUsernameBox(),
-            buildSubmitButton(),
+            this.buildNameBox(),
+            this.buildDescriptionBox(),
+            this.buildComplexityDropdow(),
+            this.buildLanguagesDTB(),
+            this.buildTechDTB(),
+            this.buildTeamSizeInput(),
+            this.buildEmailBox(),
+            this.buildGithubBox(),
+            this.buildDiscordUsernameBox(),
+            this.buildSubmitButton(),
           ],
         ),
       ),
@@ -86,33 +88,33 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Column buildLanguagesDTB() {
-    return Column(
+    return new Column(
       children: <Widget>[
-        OutlineButton(
+        new OutlineButton(
           onPressed: generateTextBox,
-          borderSide: BorderSide(
+          borderSide: new BorderSide(
             color: Constants.formInactiveColor,
           ),
           highlightedBorderColor: Constants.formActiveColor,
-          child: Container(
+          child: new Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
+            decoration: new BoxDecoration(
               borderRadius: new BorderRadius.circular(20),
             ),
-            child: Column(
+            child: new Column(
               children: <Widget>[
-                Text(
+                new Text(
                   "Add Programming Languages",
-                  style: TextStyle(
+                  style: new TextStyle(
                     color: Constants.generalTextColor,
                   ),
                 ),
-                Icon(Icons.add)
+                new Icon(Icons.add)
               ],
             ),
           ),
         ),
-        Column(
+        new Column(
           children: _textboxes,
         ),
       ],
@@ -120,33 +122,33 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Column buildTechDTB() {
-    return Column(
+    return new Column(
       children: <Widget>[
-        OutlineButton(
+        new OutlineButton(
           onPressed: generateTechTextBox,
-          borderSide: BorderSide(
+          borderSide: new BorderSide(
             color: Constants.formInactiveColor,
           ),
           highlightedBorderColor: Constants.formActiveColor,
-          child: Container(
+          child: new Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
+            decoration: new BoxDecoration(
               borderRadius: new BorderRadius.circular(20),
             ),
-            child: Column(
+            child: new Column(
               children: <Widget>[
-                Text(
+                new Text(
                   "Add Frameworks, SDKs or Tools",
-                  style: TextStyle(
+                  style: new TextStyle(
                     color: Constants.generalTextColor,
                   ),
                 ),
-                Icon(Icons.add)
+                new Icon(Icons.add)
               ],
             ),
           ),
         ),
-        Column(
+        new Column(
           children: _techTextboxes,
         ),
       ],
@@ -156,7 +158,7 @@ class _DisplayFormState extends State<DisplayForm> {
   void generateTextBox() {
     setState(() {
       TextEditingController _textboxesController = new TextEditingController();
-      _textboxes = List.from(_textboxes)
+      _textboxes = new List.from(_textboxes)
         ..add(
           new TextFormField(
             onSaved: (String value) {
@@ -173,8 +175,8 @@ class _DisplayFormState extends State<DisplayForm> {
             controller: _textboxesController,
             decoration: Constants.dynamicFormDecoration(
                 "Language Used",
-                IconButton(
-                  icon: Icon(Icons.delete),
+                new IconButton(
+                  icon: new Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
                       _textboxesController.text = "";
@@ -191,7 +193,7 @@ class _DisplayFormState extends State<DisplayForm> {
     setState(() {
       TextEditingController _techTextboxesController =
           new TextEditingController();
-      _techTextboxes = List.from(_techTextboxes)
+      _techTextboxes = new List.from(_techTextboxes)
         ..add(
           new TextFormField(
             onSaved: (String value) {
@@ -208,8 +210,8 @@ class _DisplayFormState extends State<DisplayForm> {
             controller: _techTextboxesController,
             decoration: Constants.dynamicFormDecoration(
                 "Technology Used",
-                IconButton(
-                  icon: Icon(Icons.delete),
+                new IconButton(
+                  icon: new Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
                       _techTextboxesController.text = "";
@@ -223,9 +225,9 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildNameBox() {
-    return Container(
+    return new Container(
       margin: Constants.form_column_margins,
-      child: TextFormField(
+      child: new TextFormField(
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.next,
         autocorrect: Constants.has_autocorrect,
@@ -240,11 +242,11 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildEmailBox() {
-    return Container(
+    return new Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
-      child: TextFormField(
+      child: new TextFormField(
         textInputAction: TextInputAction.next,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Contact Email, if any"),
@@ -264,11 +266,11 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildGithubBox() {
-    return Container(
+    return new Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
-      child: TextFormField(
+      child: new TextFormField(
         textInputAction: TextInputAction.next,
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Github username, if any"),
@@ -280,11 +282,11 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildDiscordUsernameBox() {
-    return Container(
+    return new Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width *
           Constants.project_name_screen_percent,
-      child: TextFormField(
+      child: new TextFormField(
         style: Constants.formContentStyle(),
         decoration: Constants.formDecoration("Discord username"),
         onSaved: (String discordUsername) {
@@ -320,10 +322,10 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildDescriptionBox() {
-    return Container(
+    return new Container(
       margin: Constants.form_column_margins,
       width: MediaQuery.of(context).size.width,
-      child: TextFormField(
+      child: new TextFormField(
           maxLines: Constants.description_max_lines,
           maxLength: Constants.description_max_length,
           maxLengthEnforced: Constants.max_length_enforced,
@@ -336,20 +338,20 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Row buildTeamSizeInput() {
-    return Row(
+    return new Row(
       children: <Widget>[
-        Text(
+        new Text(
           "Number of Team Members ",
-          style: TextStyle(
+          style: new TextStyle(
             color: Constants.generalTextColor,
           ),
         ),
-        Container(
+        new Container(
           width: MediaQuery.of(context).size.width * 0.3,
           height: MediaQuery.of(context).size.height * 0.06,
           margin: EdgeInsets.all(3),
           padding: EdgeInsets.all(7),
-          child: TextFormField(
+          child: new TextFormField(
             keyboardType: TextInputType.number,
             style: Constants.formContentStyle(),
             inputFormatters: <TextInputFormatter>[
@@ -374,19 +376,19 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildComplexityDropdow() {
-    return Container(
+    return new Container(
         margin: Constants.form_column_margins,
         padding: Constants.complexity_padding,
         decoration: Constants.complexitiesDecoration(),
-        child: Theme(
+        child: new Theme(
           data: Theme.of(context)
               .copyWith(canvasColor: Constants.sideBackgroundColor),
-          child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                  style: TextStyle(color: Constants.flavorTextColor),
-                  hint: Text(
+          child: new DropdownButtonHideUnderline(
+              child: new DropdownButton(
+                  style: new TextStyle(color: Constants.flavorTextColor),
+                  hint: new Text(
                     "Complexity",
-                    style: TextStyle(color: Constants.generalTextColor),
+                    style: new TextStyle(color: Constants.generalTextColor),
                   ),
                   value: _complexity,
                   onChanged: (String value) => _onChanged(value),
@@ -398,15 +400,15 @@ class _DisplayFormState extends State<DisplayForm> {
   }
 
   Container buildSubmitButton() {
-    return Container(
+    return new Container(
         margin: Constants.complexity_padding,
-        child: Center(
-            child: FlatButton(
+        child: new Center(
+            child: new FlatButton(
           color: Colors.transparent,
-          child: Column(
+          child: new Column(
             children: <Widget>[
-              Text('Add Project'),
-              Icon(Icons.add),
+              new Text('Add Project'),
+              new Icon(Icons.add),
             ],
           ),
           textColor: Constants.acceptButtonColor,
@@ -418,30 +420,30 @@ class _DisplayFormState extends State<DisplayForm> {
                     _oneToThen.isAtSameMomentAs(new DateTime.now())) {
                   showFlash(
                       context: context,
-                      duration: Duration(seconds: 1),
+                      duration: new Duration(seconds: 1),
                       builder: (context, controller) {
-                        return Flash(
+                        return new Flash(
                           controller: controller,
                           style: FlashStyle.grounded,
                           backgroundColor: Constants.sideBackgroundColor,
                           boxShadows: kElevationToShadow[4],
-                          child: FlashBar(
-                            message: Text(
+                          child: new FlashBar(
+                            message: new Text(
                               "Creating project...",
-                              style: TextStyle(
+                              style: new TextStyle(
                                 color: Constants.generalTextColor,
                               ),
                             ),
                           ),
                         );
                       });
-                  submitProject();
+                  this.submitProject();
                 } else {
                   Duration timeToThen =
                       _oneToThen.difference(new DateTime.now());
                   showFlash(
                       context: context,
-                      duration: Duration(seconds: 1),
+                      duration: new Duration(seconds: 1),
                       builder: (context, controller) {
                         return new Flash(
                           controller: controller,
@@ -451,7 +453,7 @@ class _DisplayFormState extends State<DisplayForm> {
                           child: new FlashBar(
                             message: new Text(
                               "You must wait ${timeToThen.inSeconds} seconds",
-                              style: TextStyle(
+                              style: new TextStyle(
                                 color: Constants.generalTextColor,
                               ),
                             ),
@@ -463,17 +465,17 @@ class _DisplayFormState extends State<DisplayForm> {
               case ConnectivityResult.none:
                 showFlash(
                     context: context,
-                    duration: Duration(seconds: 1),
+                    duration: new Duration(seconds: 1),
                     builder: (context, controller) {
                       return Flash(
                         controller: controller,
                         style: FlashStyle.grounded,
                         backgroundColor: Constants.sideBackgroundColor,
                         boxShadows: kElevationToShadow[4],
-                        child: FlashBar(
-                          message: Text(
+                        child: new FlashBar(
+                          message: new Text(
                             "No Internet Connection Detected",
-                            style: TextStyle(
+                            style: new TextStyle(
                               color: Constants.generalTextColor,
                             ),
                           ),
@@ -511,17 +513,17 @@ class _DisplayFormState extends State<DisplayForm> {
       });
       showFlash(
           context: context,
-          duration: const Duration(seconds: 1),
+          duration: new Duration(seconds: 1),
           builder: (context, controller) {
             return new Flash(
               controller: controller,
               style: FlashStyle.grounded,
               backgroundColor: Constants.sideBackgroundColor,
               boxShadows: kElevationToShadow[4],
-              child: FlashBar(
-                message: Text(
+              child: new FlashBar(
+                message: new Text(
                   "Project created!",
-                  style: TextStyle(
+                  style: new TextStyle(
                     color: Constants.generalTextColor,
                   ),
                 ),
