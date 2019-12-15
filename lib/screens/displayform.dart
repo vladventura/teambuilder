@@ -71,16 +71,16 @@ class _DisplayFormState extends State<DisplayForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            buildNameBox(),
-            buildDescriptionBox(),
-            buildComplexityDropdow(),
-            buildLanguagesDTB(),
-            buildTechDTB(),
-            buildTeamSizeInput(),
-            buildEmailBox(),
-            buildGithubBox(),
-            buildDiscordUsernameBox(),
-            buildSubmitButton(),
+            this.buildNameBox(),
+            this.buildDescriptionBox(),
+            this.buildComplexityDropdow(),
+            this.buildLanguagesDTB(),
+            this.buildTechDTB(),
+            this.buildTeamSizeInput(),
+            this.buildEmailBox(),
+            this.buildGithubBox(),
+            this.buildDiscordUsernameBox(),
+            this.buildSubmitButton(),
           ],
         ),
       ),
@@ -437,7 +437,7 @@ class _DisplayFormState extends State<DisplayForm> {
                           ),
                         );
                       });
-                  submitProject();
+                  this.submitProject();
                 } else {
                   Duration timeToThen =
                       _oneToThen.difference(new DateTime.now());
