@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
           child: new SingleChildScrollView(
             physics: new BouncingScrollPhysics(),
             child: new Column(
-              children: buildScreen(),
+              children: this.buildScreen(),
             ),
           ),
         ),
@@ -265,7 +265,7 @@ class _LoginState extends State<Login> {
                         ),
                       );
                     });
-                await submit();
+                await this.submit();
                 break;
               case ConnectivityResult.none:
                 showFlash(
@@ -328,7 +328,7 @@ class _LoginState extends State<Login> {
                         ),
                       );
                     });
-                await submit();
+                await this.submit();
                 break;
               case ConnectivityResult.none:
                 showFlash(
@@ -386,7 +386,7 @@ class _LoginState extends State<Login> {
           _password = "";
           _passwordController.text = "";
         });
-        switchFormState('register');
+        this.switchFormState('register');
       },
     );
   }
@@ -413,7 +413,7 @@ class _LoginState extends State<Login> {
           _password = "";
           _passwordController.text = "";
         });
-        switchFormState('login');
+        this.switchFormState('login');
       },
     );
   }
@@ -421,46 +421,46 @@ class _LoginState extends State<Login> {
   List<Widget> buildScreen() {
     if (_formType == FormType.login) {
       return [
-        buildTopText(),
+        this.buildTopText(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.30,
         ),
-        buildEmailBox(),
+        this.buildEmailBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
-        buildPasswordBox(),
+        this.buildPasswordBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
         ),
-        buildLoginSubmitButton(),
-        buildCreateAccountButton(),
+        this.buildLoginSubmitButton(),
+        this.buildCreateAccountButton(),
       ];
       // Create account page
     } else {
       return [
-        buildTopText(),
+        this.buildTopText(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.30,
         ),
-        buildEmailBox(),
+        this.buildEmailBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
-        buildUsernameBox(),
+        this.buildUsernameBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
-        buildPasswordBox(),
+        this.buildPasswordBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.01,
         ),
-        buildConfirmPasswordBox(),
+        this.buildConfirmPasswordBox(),
         new SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
         ),
-        buildCreateAccountSubmitButton(),
-        buildLoginButton(),
+        this.buildCreateAccountSubmitButton(),
+        this.buildLoginButton(),
       ];
     }
   }
