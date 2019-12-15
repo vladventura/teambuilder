@@ -424,7 +424,7 @@ class _DisplayFormState extends State<DisplayForm> {
                       .collection('users')
                       .document(user.displayName);
                   DocumentSnapshot snapshot = await thisUser.get();
-                  if (snapshot.data['createdProjects'].length() <= 5) {
+                  if (snapshot.data['createdProjects'].length <= 5) {
                     this.submitProject().then(() {
                       showFlash(
                           context: context,
@@ -447,7 +447,25 @@ class _DisplayFormState extends State<DisplayForm> {
                           });
                     });
                   } else {
-                    showFlash();
+                    showFlash(
+                        context: context,
+                        duration: new Duration(seconds: 1),
+                        builder: (context, controller) {
+                          return new Flash(
+                            controller: controller,
+                            style: FlashStyle.grounded,
+                            backgroundColor: Constants.sideBackgroundColor,
+                            boxShadows: kElevationToShadow[4],
+                            child: new FlashBar(
+                              message: new Text(
+                                "You've created too many projects!",
+                                style: new TextStyle(
+                                  color: Constants.generalTextColor,
+                                ),
+                              ),
+                            ),
+                          );
+                        });
                   }
                 } else {
                   Duration timeToThen =
