@@ -127,6 +127,21 @@ class _MainScreenState extends State<MainScreen>
         });
   }
 
+  PageView buildPageView() {
+    return new PageView(
+      controller: _pageController,
+      onPageChanged: ((index) {
+        setState(() {
+          this._currentIndex = index;
+        });
+      }),
+      children: <Widget>[
+        DisplayProjects(),
+        DisplayForm(),
+      ],
+    );
+  }
+
   TabBarView buildTabBarView() {
     return TabBarView(
       controller: _tabController,
