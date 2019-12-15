@@ -9,6 +9,7 @@ TODO: Docstrings for all functions. Should maybe do before the project gets out-
 */
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   final _auth = FirebaseAuth.instance;
   runApp(MaterialApp(
     routes: <String, WidgetBuilder>{
@@ -17,8 +18,8 @@ void main() {
     },
     home: FutureBuilder<FirebaseUser>(
       future: _auth.currentUser(),
-      builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot){
-        if(snapshot.hasData){
+      builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
+        if (snapshot.hasData) {
           return MainScreen();
         } else {
           return Login();

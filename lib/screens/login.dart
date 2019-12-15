@@ -101,8 +101,13 @@ class _LoginState extends State<Login> {
             'joinedProjects': [],
             'createdProjects': [],
           });
-          FirebaseUser user = await auth.createUserWithEmailAndPassword(
-              email: _email, password: _password);
+          FirebaseUser user;
+          auth
+              .createUserWithEmailAndPassword(
+                  email: _email, password: _password)
+              .then((onValue) {
+            user = onValue;
+          });
           updater.displayName = _username;
           await auth.signInWithEmailAndPassword(
               email: _email, password: _password);
