@@ -102,11 +102,11 @@ class _MainScreenState extends State<MainScreen>
   SliverAppBar buildSliverAppBar(bool isScrolled) {
     return new SliverAppBar(
       backgroundColor: Constants.sideBackgroundColor,
-      iconTheme: IconThemeData(
+      iconTheme: new IconThemeData(
         color: Constants.flavorTextColor,
       ),
-      textTheme: TextTheme(
-        title: TextStyle(
+      textTheme: new TextTheme(
+        title: new TextStyle(
           color: Constants.generalTextColor,
           fontSize: 20,
         ),
@@ -129,30 +129,30 @@ class _MainScreenState extends State<MainScreen>
         });
       }),
       children: <Widget>[
-        DisplayProjects(),
-        DisplayForm(),
+        new DisplayProjects(),
+        new DisplayForm(),
       ],
     );
   }
 
   TabBarView buildTabBarView() {
-    return TabBarView(
+    return new TabBarView(
       controller: _tabController,
       children: <Widget>[
-        DisplayProjects(),
-        DisplayForm(),
+        new DisplayProjects(),
+        new DisplayForm(),
       ],
     );
   }
 
   TabBar buildTabBar() {
-    return TabBar(
+    return new TabBar(
       controller: _tabController,
       tabs: <Widget>[
-        Tab(
+        new Tab(
             text: Constants.join_project['text'],
             icon: Constants.join_project['icon']),
-        Tab(
+        new Tab(
           text: Constants.create_project['text'],
           icon: Constants.create_project['icon'],
         ),
@@ -161,12 +161,12 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Drawer buildDrawer() {
-    return Drawer(
-      child: Center(
-        child: Column(
+    return new Drawer(
+      child: new Center(
+        child: new Column(
           children: <Widget>[
-            FlatButton(
-              child: Text("Sign out, ${_user.displayName}"),
+            new FlatButton(
+              child: new Text("Sign out, ${_user.displayName}"),
               onPressed: () async {
                 try {
                   Navigator.of(context).pushNamedAndRemoveUntil(
