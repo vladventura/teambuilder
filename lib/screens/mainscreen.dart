@@ -107,18 +107,7 @@ class _MainScreenState extends State<MainScreen>
                       ),
                     ];
                   },
-                  body: new PageView(
-                    controller: _pageController,
-                    onPageChanged: ((index) {
-                      setState(() {
-                        this._currentIndex = index;
-                      });
-                    }),
-                    children: <Widget>[
-                      DisplayProjects(),
-                      DisplayForm(),
-                    ],
-                  ),
+                  body: this.buildPageView(),
                 ),
               );
             } // snapshot.hasData
