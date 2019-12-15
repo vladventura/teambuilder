@@ -44,7 +44,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
           if (snapshot.hasData) {
             return new ListView(
               physics: new BouncingScrollPhysics(),
-              children: snapshot.data.documents
+              children: snapshot.data.documents.reversed
                   .map((document) => buildProject(document))
                   .toList(),
             );
