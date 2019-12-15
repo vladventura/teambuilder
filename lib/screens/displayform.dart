@@ -418,26 +418,55 @@ class _DisplayFormState extends State<DisplayForm> {
               case ConnectivityResult.mobile:
                 if (_oneToThen.isBefore(new DateTime.now()) ||
                     _oneToThen.isAtSameMomentAs(new DateTime.now())) {
-                  showFlash(
-                      context: context,
-                      duration: new Duration(seconds: 1),
-                      builder: (context, controller) {
-                        return new Flash(
-                          controller: controller,
-                          style: FlashStyle.grounded,
-                          backgroundColor: Constants.sideBackgroundColor,
-                          boxShadows: kElevationToShadow[4],
-                          child: new FlashBar(
-                            message: new Text(
-                              "Creating project...",
-                              style: new TextStyle(
-                                color: Constants.generalTextColor,
+                  FirebaseUser user;
+                  await _auth.currentUser().then((onValue) => user = onValue);
+                  DocumentReference thisUser = Firestore.instance
+                      .collection('users')
+                      .document(user.displayName);
+                  DocumentSnapshot snapshot = await thisUser.get();
+                  if (snapshot.data['createdProjects'].length <= 5) {
+                    this.submitProject().then(() {
+                      showFlash(
+                          context: context,
+                          duration: new Duration(seconds: 1),
+                          builder: (context, controller) {
+                            return new Flash(
+                              controller: controller,
+                              style: FlashStyle.grounded,
+                              backgroundColor: Constants.sideBackgroundColor,
+                              boxShadows: kElevationToShadow[4],
+                              child: new FlashBar(
+                                message: new Text(
+                                  "Creating project...",
+                                  style: new TextStyle(
+                                    color: Constants.generalTextColor,
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    });
+                  } else {
+                    showFlash(
+                        context: context,
+                        duration: new Duration(seconds: 1),
+                        builder: (context, controller) {
+                          return new Flash(
+                            controller: controller,
+                            style: FlashStyle.grounded,
+                            backgroundColor: Constants.sideBackgroundColor,
+                            boxShadows: kElevationToShadow[4],
+                            child: new FlashBar(
+                              message: new Text(
+                                "You've created too many projects!",
+                                style: new TextStyle(
+                                  color: Constants.generalTextColor,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      });
-                  this.submitProject();
+                          );
+                        });
+                  }
                 } else {
                   Duration timeToThen =
                       _oneToThen.difference(new DateTime.now());
@@ -488,7 +517,7 @@ class _DisplayFormState extends State<DisplayForm> {
         )));
   }
 
-  void submitProject() async {
+  dynamic submitProject() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       this._oneToThen = _time.add(new Duration(minutes: 1));
