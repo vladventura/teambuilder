@@ -315,15 +315,73 @@ class _DisplayProjectState extends State<_DisplayProject> {
     } else if (owner) {
       return new FlatButton(
         child: new Text(
-          "You cannot join your own project!",
+          "Delete",
           style:
               new TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
         ),
-        onPressed: null,
+        onPressed: () {
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return new AlertDialog(
+                  actions: <Widget>[
+                    new FlatButton(
+                      child: new Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    new FlatButton(
+                      child: new Text("Yes"),
+                      onPressed: () async => this.deleteProject(document),
+                    ),
+                  ],
+                  title: new Text("Delete Project"),
+                  content:
+                      new Text("Are you sure you want to delete this project?"),
+                );
+              });
+        },
       );
     } else if (belongs) {
       return this.buildLeaveButton(document);
     }
+  }
+
+  void deleteProject(DocumentSnapshot document) async {
+    FirebaseUser user;
+    await FirebaseAuth.instance.currentUser().then((ref) => user = ref);
+    DocumentReference thisProject =
+        _db.collection('projects').document(document.documentID);
+    DocumentReference thisUserDocument =
+        _db.collection('users').document(user.displayName);
+
+    await thisUserDocument.updateData({
+      'joinedProjects': FieldValue.arrayRemove([document.documentID])
+    });
+
+    thisProject.delete().then((nothing) {
+      showFlash(
+          context: context,
+          duration: new Duration(seconds: 1),
+          builder: (context, controller) {
+            return new Flash(
+              controller: controller,
+              style: FlashStyle.grounded,
+              backgroundColor: Constants.sideBackgroundColor,
+              boxShadows: kElevationToShadow[4],
+              child: new FlashBar(
+                  message: new Text(
+                "Project Deleted",
+                style: new TextStyle(
+                  color: Constants.generalTextColor,
+                ),
+              )),
+            );
+          });
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
+    });
   }
 
   FlatButton buildJoinButton(DocumentSnapshot document) {
