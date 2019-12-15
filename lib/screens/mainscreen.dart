@@ -87,24 +87,7 @@ class _MainScreenState extends State<MainScreen>
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool isScrolled) {
                     return <Widget>[
-                      SliverAppBar(
-                        backgroundColor: Constants.sideBackgroundColor,
-                        iconTheme: IconThemeData(
-                          color: Constants.flavorTextColor,
-                        ),
-                        textTheme: TextTheme(
-                          title: TextStyle(
-                            color: Constants.generalTextColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                        title: (_currentIndex == 0)
-                            ? Texts.appbar_join_title
-                            : Texts.appbar_create_title,
-                        forceElevated: isScrolled,
-                        pinned: isScrolled,
-                        floating: true,
-                      ),
+                      buildSliverAppBar(isScrolled),
                     ];
                   },
                   body: this.buildPageView(),
@@ -114,6 +97,27 @@ class _MainScreenState extends State<MainScreen>
           } // snapshot != null
           return Container(child: CircularProgressIndicator());
         });
+  }
+
+  SliverAppBar buildSliverAppBar(bool isScrolled) {
+    return new SliverAppBar(
+      backgroundColor: Constants.sideBackgroundColor,
+      iconTheme: IconThemeData(
+        color: Constants.flavorTextColor,
+      ),
+      textTheme: TextTheme(
+        title: TextStyle(
+          color: Constants.generalTextColor,
+          fontSize: 20,
+        ),
+      ),
+      title: (_currentIndex == 0)
+          ? Texts.appbar_join_title
+          : Texts.appbar_create_title,
+      forceElevated: isScrolled,
+      pinned: isScrolled,
+      floating: true,
+    );
   }
 
   PageView buildPageView() {
