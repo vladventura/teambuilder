@@ -320,12 +320,16 @@ class _DisplayProjectState extends State<_DisplayProject> {
               new TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
         ),
         onPressed: () {
-          return new AlertDialog(
-            actions: <Widget>[
-              new FlatButton(),
-              new FlatButton(),
-            ],
-          );
+          return showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return new AlertDialog(
+                  actions: <Widget>[
+                    new FlatButton(),
+                    new FlatButton(),
+                  ],
+                );
+              });
         },
       );
     } else if (belongs) {
