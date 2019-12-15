@@ -315,11 +315,18 @@ class _DisplayProjectState extends State<_DisplayProject> {
     } else if (owner) {
       return new FlatButton(
         child: new Text(
-          "You cannot join your own project!",
+          "Delete",
           style:
               new TextStyle(fontSize: 18, color: Constants.cancelButtonColor),
         ),
-        onPressed: null,
+        onPressed: () {
+          return new AlertDialog(
+            actions: <Widget>[
+              new FlatButton(),
+              new FlatButton(),
+            ],
+          );
+        },
       );
     } else if (belongs) {
       return this.buildLeaveButton(document);
