@@ -19,6 +19,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
   String _specialization = "Frontend";
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
