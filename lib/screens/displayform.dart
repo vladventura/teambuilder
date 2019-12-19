@@ -538,7 +538,7 @@ class _DisplayFormState extends State<DisplayForm> {
       DocumentReference createdProject = await projects.add(project.toMap());
       DocumentReference userDocument = users.document(_user.displayName);
       userDocument.updateData({
-        'createdProjects': FieldValue.arrayUnion([createdProject.documentID]),
+        'createdProjects': FieldValue.arrayUnion([createdProject]),
       });
       showFlash(
           context: context,
