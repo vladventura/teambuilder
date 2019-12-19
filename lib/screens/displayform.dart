@@ -558,6 +558,16 @@ class _DisplayFormState extends State<DisplayForm> {
               ),
             );
           });
+      this.clearBoxes();
     }
+  }
+
+  void clearBoxes() {
+    this._contactPlatforms = new Map<String, dynamic>();
+    this.complexities = new List<String>();
+    this._textboxes = new List<Widget>();
+    this._textboxesData = new List<String>();
+    this._techTextboxes = new List<Widget>();
+    this._techTextboxesData = new List<String>();
   }
 }
