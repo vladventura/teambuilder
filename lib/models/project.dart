@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Project {
   String complexity;
   Map<String, dynamic> contactPlatforms;
   String description;
   List<String> joinedUsers;
   String name;
-  String originator;
+  DocumentReference originator;
   List<String> languagesUsed;
   List<String> technologiesUsed;
   String teamMembers;
