@@ -425,7 +425,6 @@ class _DisplayFormState extends State<DisplayForm> {
                       .document(user.displayName);
                   DocumentSnapshot snapshot = await thisUser.get();
                   if (snapshot.data['createdProjects'].length <= 5) {
-                    this.submitProject();
                     showFlash(
                         context: context,
                         duration: new Duration(seconds: 1),
@@ -445,6 +444,7 @@ class _DisplayFormState extends State<DisplayForm> {
                             ),
                           );
                         });
+                    this.submitProject();
                   } else {
                     showFlash(
                         context: context,
