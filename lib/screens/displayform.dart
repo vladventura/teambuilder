@@ -524,19 +524,19 @@ class _DisplayFormState extends State<DisplayForm> {
       this._time = new DateTime.now();
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
+      CollectionReference users = db.collection('users');
+      DocumentReference userDocument = users.document(_user.displayName);
       Project project = new Project(
           _complexity,
           _contactPlatforms,
           _description,
           _name,
           [],
-          _user.displayName,
+          userDocument,
           _textboxesData,
           _techTextboxesData,
           _teamMembers);
-      CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
-      DocumentReference userDocument = users.document(_user.displayName);
       userDocument.updateData({
         'createdProjects': FieldValue.arrayUnion([createdProject]),
       });
