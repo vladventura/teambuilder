@@ -425,27 +425,26 @@ class _DisplayFormState extends State<DisplayForm> {
                       .document(user.displayName);
                   DocumentSnapshot snapshot = await thisUser.get();
                   if (snapshot.data['createdProjects'].length <= 5) {
-                    this.submitProject().then(() {
-                      showFlash(
-                          context: context,
-                          duration: new Duration(seconds: 1),
-                          builder: (context, controller) {
-                            return new Flash(
-                              controller: controller,
-                              style: FlashStyle.grounded,
-                              backgroundColor: Constants.sideBackgroundColor,
-                              boxShadows: kElevationToShadow[4],
-                              child: new FlashBar(
-                                message: new Text(
-                                  "Creating project...",
-                                  style: new TextStyle(
-                                    color: Constants.generalTextColor,
-                                  ),
+                    this.submitProject();
+                    showFlash(
+                        context: context,
+                        duration: new Duration(seconds: 1),
+                        builder: (context, controller) {
+                          return new Flash(
+                            controller: controller,
+                            style: FlashStyle.grounded,
+                            backgroundColor: Constants.sideBackgroundColor,
+                            boxShadows: kElevationToShadow[4],
+                            child: new FlashBar(
+                              message: new Text(
+                                "Creating project...",
+                                style: new TextStyle(
+                                  color: Constants.generalTextColor,
                                 ),
                               ),
-                            );
-                          });
-                    });
+                            ),
+                          );
+                        });
                   } else {
                     showFlash(
                         context: context,
