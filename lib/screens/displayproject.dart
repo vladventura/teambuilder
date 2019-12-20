@@ -324,6 +324,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
               context: context,
               builder: (BuildContext context) {
                 return new AlertDialog(
+                  backgroundColor: Constants.sideBackgroundColor,
                   actions: <Widget>[
                     new FlatButton(
                       child: new Text("No"),
