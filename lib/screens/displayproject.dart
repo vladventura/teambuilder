@@ -357,7 +357,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         _db.collection('users').document(user.displayName);
 
     await thisUserDocument.updateData({
-      'joinedProjects': FieldValue.arrayRemove([document.documentID])
+      'joinedProjects': FieldValue.arrayRemove([document])
     });
 
     thisProject.delete().then((nothing) {
