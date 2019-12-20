@@ -324,21 +324,29 @@ class _DisplayProjectState extends State<_DisplayProject> {
               context: context,
               builder: (BuildContext context) {
                 return new AlertDialog(
+                  backgroundColor: Constants.mainBackgroundColor,
                   actions: <Widget>[
                     new FlatButton(
                       child: new Text("No"),
+                      textColor: Constants.acceptButtonColor,
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                     new FlatButton(
                       child: new Text("Yes"),
+                      textColor: Constants.cancelButtonColor,
                       onPressed: () async => this.deleteProject(document),
                     ),
                   ],
-                  title: new Text("Delete Project"),
-                  content:
-                      new Text("Are you sure you want to delete this project?"),
+                  title: new Text("Delete Project",
+                      style: TextStyle(color: Constants.generalTextColor)),
+                  content: new Text(
+                    "Are you sure you want to delete this project? All data related to it will be lost",
+                    style: TextStyle(
+                      color: Constants.generalTextColor,
+                    ),
+                  ),
                 );
               });
         },
