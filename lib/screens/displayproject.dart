@@ -357,7 +357,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         _db.collection('users').document(user.displayName);
 
     await thisUserDocument.updateData({
-      'joinedProjects': FieldValue.arrayRemove([document.documentID])
+      'joinedProjects': FieldValue.arrayRemove([thisProject])
     });
 
     thisProject.delete().then((nothing) {
@@ -436,7 +436,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         thisProject.updateData({'joinedUsers': without.toList()});
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayRemove([
-            document.documentID,
+            document,
           ])
         }).then((onValue) {
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -551,7 +551,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
-            document.documentID,
+            document,
           ])
         });
         Navigator.of(context)

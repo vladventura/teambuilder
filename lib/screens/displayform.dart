@@ -425,27 +425,26 @@ class _DisplayFormState extends State<DisplayForm> {
                       .document(user.displayName);
                   DocumentSnapshot snapshot = await thisUser.get();
                   if (snapshot.data['createdProjects'].length <= 5) {
-                    this.submitProject().then(() {
-                      showFlash(
-                          context: context,
-                          duration: new Duration(seconds: 1),
-                          builder: (context, controller) {
-                            return new Flash(
-                              controller: controller,
-                              style: FlashStyle.grounded,
-                              backgroundColor: Constants.sideBackgroundColor,
-                              boxShadows: kElevationToShadow[4],
-                              child: new FlashBar(
-                                message: new Text(
-                                  "Creating project...",
-                                  style: new TextStyle(
-                                    color: Constants.generalTextColor,
-                                  ),
+                    showFlash(
+                        context: context,
+                        duration: new Duration(seconds: 1),
+                        builder: (context, controller) {
+                          return new Flash(
+                            controller: controller,
+                            style: FlashStyle.grounded,
+                            backgroundColor: Constants.sideBackgroundColor,
+                            boxShadows: kElevationToShadow[4],
+                            child: new FlashBar(
+                              message: new Text(
+                                "Creating project...",
+                                style: new TextStyle(
+                                  color: Constants.generalTextColor,
                                 ),
                               ),
-                            );
-                          });
-                    });
+                            ),
+                          );
+                        });
+                    this.submitProject();
                   } else {
                     showFlash(
                         context: context,
@@ -524,6 +523,8 @@ class _DisplayFormState extends State<DisplayForm> {
       this._time = new DateTime.now();
       FirebaseUser _user = await _auth.currentUser();
       CollectionReference projects = db.collection('projects');
+      CollectionReference users = db.collection('users');
+      DocumentReference userDocument = users.document(_user.displayName);
       Project project = new Project(
           _complexity,
           _contactPlatforms,
@@ -534,11 +535,9 @@ class _DisplayFormState extends State<DisplayForm> {
           _textboxesData,
           _techTextboxesData,
           _teamMembers);
-      CollectionReference users = db.collection('users');
       DocumentReference createdProject = await projects.add(project.toMap());
-      DocumentReference userDocument = users.document(_user.displayName);
       userDocument.updateData({
-        'createdProjects': FieldValue.arrayUnion([createdProject.documentID]),
+        'createdProjects': FieldValue.arrayUnion([createdProject]),
       });
       showFlash(
           context: context,
@@ -559,6 +558,16 @@ class _DisplayFormState extends State<DisplayForm> {
               ),
             );
           });
+      this.clearBoxes();
     }
+  }
+
+  void clearBoxes() {
+    this._contactPlatforms = new Map<String, dynamic>();
+    this.complexities = new List<String>();
+    this._textboxes = new List<Widget>();
+    this._textboxesData = new List<String>();
+    this._techTextboxes = new List<Widget>();
+    this._techTextboxesData = new List<String>();
   }
 }
