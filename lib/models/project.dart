@@ -6,7 +6,7 @@ class Project {
   String description;
   List<String> joinedUsers;
   String name;
-  DocumentReference originator;
+  String originator;
   List<String> languagesUsed;
   List<String> technologiesUsed;
   String teamMembers;
