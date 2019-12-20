@@ -75,6 +75,9 @@ class _DisplayFormState extends State<DisplayForm> {
             this.buildDescriptionBox(),
             this.buildComplexityDropdow(),
             this.buildLanguagesDTB(),
+            new SizedBox(
+              height: 5,
+            ),
             this.buildTechDTB(),
             this.buildTeamSizeInput(),
             this.buildEmailBox(),
