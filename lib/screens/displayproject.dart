@@ -551,7 +551,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
-            document.documentID,
+            document,
           ])
         });
         Navigator.of(context)
