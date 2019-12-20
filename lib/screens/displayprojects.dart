@@ -54,7 +54,10 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         });
   }
 
-  Card buildProject(DocumentSnapshot document) {
+  Future<Widget> buildProject(DocumentSnapshot document) async {
+    print(document.data);
+    DocumentSnapshot originator =
+        await _db.document(document.data['originator']).get();
     return new Card(
       child: new Container(
         decoration: Constants.buttonDecoration(),
