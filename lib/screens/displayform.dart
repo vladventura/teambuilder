@@ -531,7 +531,7 @@ class _DisplayFormState extends State<DisplayForm> {
           _description,
           _name,
           [],
-          userDocument,
+          _user.displayName,
           _textboxesData,
           _techTextboxesData,
           _teamMembers);
