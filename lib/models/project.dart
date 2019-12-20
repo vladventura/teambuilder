@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Project {
   String complexity;
   Map<String, dynamic> contactPlatforms;
