@@ -76,9 +76,12 @@ class _DisplayFormState extends State<DisplayForm> {
             this.buildComplexityDropdow(),
             this.buildLanguagesDTB(),
             new SizedBox(
-              height: 5,
+              height: 10,
             ),
             this.buildTechDTB(),
+            new SizedBox(
+              height: 20,
+            ),
             this.buildTeamSizeInput(),
             this.buildEmailBox(),
             this.buildGithubBox(),
@@ -343,17 +346,18 @@ class _DisplayFormState extends State<DisplayForm> {
   Row buildTeamSizeInput() {
     return new Row(
       children: <Widget>[
-        new Text(
-          "Number of Team Members ",
-          style: new TextStyle(
-            color: Constants.generalTextColor,
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: new Text(
+            "Number of Team Members ",
+            style: new TextStyle(
+              color: Constants.generalTextColor,
+            ),
           ),
         ),
         new Container(
-          width: MediaQuery.of(context).size.width * 0.3,
+          width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height * 0.06,
-          margin: EdgeInsets.all(3),
-          padding: EdgeInsets.all(7),
           child: new TextFormField(
             keyboardType: TextInputType.number,
             style: Constants.formContentStyle(),
@@ -362,11 +366,11 @@ class _DisplayFormState extends State<DisplayForm> {
             ],
             decoration: Constants.formDecoration(''),
             validator: (String value) {
-              if (value.isEmpty) return "You must have at least one team mate!";
+              if (value.isEmpty) return "At least one teammate!";
               int parsed = int.parse(value);
-              if (parsed < 0) return "You cannot have less than 0 team mates!";
-              if (parsed == 0) return "You cannot have no team mates!";
-              if (parsed > 99) return "That's way to many people!";
+              if (parsed < 0) return "No less than 0 team mates!";
+              if (parsed == 0) return "At least 1 should join!";
+              if (parsed > 99) return "That's way too many people!";
               return null;
             },
             onSaved: (String value) {
