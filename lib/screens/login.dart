@@ -83,10 +83,12 @@ class _LoginState extends State<Login> {
     if (validate()) {
       if (_formType == FormType.login) {
         try {
-          await auth.signInWithEmailAndPassword(
-              email: _email, password: _password);
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/Home', (Route<dynamic> route) => false);
+          await auth
+              .signInWithEmailAndPassword(email: _email, password: _password)
+              .then((nothing) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/Home', (Route<dynamic> route) => false);
+          });
           return true;
         } catch (e) {
           print(e);
@@ -102,20 +104,15 @@ class _LoginState extends State<Login> {
             'createdProjects': [],
           });
           FirebaseUser user;
-          auth
-              .createUserWithEmailAndPassword(
-                  email: _email, password: _password)
-              .then((onValue) {
-            user = onValue;
-          });
-          updater.displayName = _username;
-          await auth.signInWithEmailAndPassword(
+          await auth.createUserWithEmailAndPassword(
               email: _email, password: _password);
+          user = await auth.currentUser();
+          updater.displayName = _username;
           user.updateProfile(updater);
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
-          print(e.message);
+          print(e);
         }
       }
     }
