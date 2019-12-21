@@ -2,7 +2,7 @@
 A place where developers can find others like them and build stuff together... sort of.
 
 ## Getting Started
-A small requirement to work on this project besides having the fully functional [Flutter SDK](https://flutter.dev/docs/get-started/install), would be a/a pair of google-services.json files. I'm currently working on setting up Travis CI so we can encrypt the file and everyone's happy. If you cannot get a google-services.json file, message me through Discord (Sleepy#1156) and we'll see how to arrange the file transfer (if I can trust you, because it'll beat the purpose of ignoring them on the .gitignore, right?).
+A small requirement to work on this project besides having the fully functional [Flutter SDK](https://flutter.dev/docs/get-started/install), would be a/a pair of google-services.json files. I'm currently working on setting up Travis CI so we can encrypt the file and everyone's happy. If you cannot get a google-services.json file, message me through [Discord](https://discordapp.com/) (Sleepy#1156) and we'll see how to arrange the file transfer (if I can trust you, because it'll beat the purpose of ignoring them on the .gitignore, right?).
 
 Confused? Just follow these easy steps (make sure you have git installed on your [Windows PC](https://gitforwindows.org/) or [Linux/Mac (just do brew install git)](https://brew.sh/) and also the Flutter SDK):
 
