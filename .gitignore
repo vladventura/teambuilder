@@ -1,3 +1,7 @@
+# Google Services JSON files
+**/android/app/src/prod/
+**/android/app/src/dev/
+
 # Miscellaneous
 *.class
 *.log
