@@ -62,6 +62,16 @@ android {
            multiDexKeepFile file('multidex-config.txt')
        }
    }
+
+   flavorDimensions "default"
+   productFlavors{
+       dev{
+           dimension "default"
+       }
+       prod{
+           dimension "default"
+       }
+   }
 }
 
 flutter {
