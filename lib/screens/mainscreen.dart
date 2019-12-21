@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen>
     );
     _scrollController = new ScrollController();
     _pageController = new PageController();
-    this.loadUser();
   }
 
   @override
@@ -42,8 +41,7 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Future<dynamic> loadUser() async {
-    _user = await FirebaseAuth.instance.currentUser();
-    return _user;
+    return await FirebaseAuth.instance.currentUser();
   }
 
   @override
@@ -53,6 +51,7 @@ class _MainScreenState extends State<MainScreen>
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             if (snapshot.hasData) {
+              _user = snapshot.data;
               //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
               return new Scaffold(
                 resizeToAvoidBottomInset: true,
@@ -170,7 +169,7 @@ class _MainScreenState extends State<MainScreen>
         child: new Column(
           children: <Widget>[
             new FlatButton(
-              child: new Text("Sign out, ${_user.displayName}"),
+              child: new Text("Sign out"),
               onPressed: () async {
                 try {
                   Navigator.of(context).pushNamedAndRemoveUntil(
