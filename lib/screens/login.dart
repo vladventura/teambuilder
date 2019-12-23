@@ -91,6 +91,31 @@ class _LoginState extends State<Login> {
           });
           return true;
         } catch (e) {
+          //A switch statement here
+          //And showFlash on each one of them
+          //We can even extract the flash into it's own
+          //separate function and pass in the context
+          //and a string
+          switch (e.code) {
+            case "ERROR_INVALID_EMAIL":
+              showFlash();
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              showFlash();
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              showFlash();
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              showFlash();
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              showFlash();
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              showFlash();
+              break;
+          }
           print(e);
         }
       } else {
@@ -112,6 +137,7 @@ class _LoginState extends State<Login> {
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
+          //Also switch statement here
           print(e);
         }
       }
