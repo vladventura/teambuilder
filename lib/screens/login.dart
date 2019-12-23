@@ -120,13 +120,14 @@ class _LoginState extends State<Login> {
   }
 
   void switchFormState(String state) {
-    _formKey.currentState.reset();
     if (state == 'register') {
       setState(() {
+        _formKey.currentState.reset();
         _formType = FormType.register;
       });
     } else {
       setState(() {
+        _formKey.currentState.reset();
         _formType = FormType.login;
       });
     }
