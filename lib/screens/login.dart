@@ -96,6 +96,12 @@ class _LoginState extends State<Login> {
       } else {
         try {
           UserUpdateInfo updater = new UserUpdateInfo();
+          FirebaseUser user;
+          await auth.createUserWithEmailAndPassword(
+              email: _email, password: _password);
+          user = await auth.currentUser();
+          updater.displayName = _username;
+          user.updateProfile(updater);
           await Firestore.instance
               .collection('users')
               .document(_username)
@@ -103,12 +109,6 @@ class _LoginState extends State<Login> {
             'joinedProjects': [],
             'createdProjects': [],
           });
-          FirebaseUser user;
-          await auth.createUserWithEmailAndPassword(
-              email: _email, password: _password);
-          user = await auth.currentUser();
-          updater.displayName = _username;
-          user.updateProfile(updater);
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
@@ -120,13 +120,14 @@ class _LoginState extends State<Login> {
   }
 
   void switchFormState(String state) {
-    _formKey.currentState.reset();
     if (state == 'register') {
       setState(() {
+        _formKey.currentState.reset();
         _formType = FormType.register;
       });
     } else {
       setState(() {
+        _formKey.currentState.reset();
         _formType = FormType.login;
       });
     }
