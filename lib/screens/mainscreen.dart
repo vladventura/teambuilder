@@ -163,24 +163,29 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  Drawer buildDrawer() {
-    return new Drawer(
-      child: new Center(
-        child: new Column(
-          children: <Widget>[
-            new FlatButton(
-              child: new Text("Sign out"),
-              onPressed: () async {
-                try {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/Login', (Route<dynamic> route) => false);
-                  await FirebaseAuth.instance.signOut();
-                } catch (e) {
-                  print(e);
-                }
-              },
-            ),
-          ],
+  SafeArea buildDrawer() {
+    return SafeArea(
+      child: new Drawer(
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new FlatButton(
+                child: new Text("Own Projects"),
+              ),
+              new FlatButton(
+                child: new Text("Sign out"),
+                onPressed: () async {
+                  try {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/Login', (Route<dynamic> route) => false);
+                    await FirebaseAuth.instance.signOut();
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
