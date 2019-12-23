@@ -75,6 +75,28 @@ class _LoginState extends State<Login> {
     }
   }
 
+  void displayFlash(String message) {
+    showFlash(
+        context: context,
+        duration: new Duration(seconds: 3),
+        builder: (context, controller) {
+          return new Flash(
+            controller: controller,
+            style: FlashStyle.grounded,
+            backgroundColor: Constants.sideBackgroundColor,
+            boxShadows: kElevationToShadow[4],
+            child: new FlashBar(
+              message: new Text(
+                message,
+                style: new TextStyle(
+                  color: Constants.generalTextColor,
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (_formType == FormType.register) {
@@ -97,26 +119,25 @@ class _LoginState extends State<Login> {
           //separate function and pass in the context
           //and a string
           switch (e.code) {
+            case "ERROR_USER_NOT_FOUND":
+              print("Switch Reached");
+              break;
+            case "ERROR_USER_DISABLED":
+              print("Switch Reached");
+              break;
+            case "ERROR_WRONG_PASSWORD":
+              print("Switch Reached");
+              break;
             case "ERROR_INVALID_EMAIL":
-              showFlash();
+              print("Switch Reached");
               break;
-            case "ERROR_WRONG_PASSWORD":
-              showFlash();
+            case "ERROR_TOO_MANY_REQUESTS":
+              print("Switch Reached");
               break;
-            case "ERROR_WRONG_PASSWORD":
-              showFlash();
-              break;
-            case "ERROR_WRONG_PASSWORD":
-              showFlash();
-              break;
-            case "ERROR_WRONG_PASSWORD":
-              showFlash();
-              break;
-            case "ERROR_WRONG_PASSWORD":
-              showFlash();
+            case "ERROR_OPERATION_NOT_ALLOWED":
+              print("Switch Reached");
               break;
           }
-          print(e);
         }
       } else {
         try {
