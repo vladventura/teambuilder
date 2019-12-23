@@ -113,11 +113,6 @@ class _LoginState extends State<Login> {
           });
           return true;
         } catch (e) {
-          //A switch statement here
-          //And showFlash on each one of them
-          //We can even extract the flash into it's own
-          //separate function and pass in the context
-          //and a string
           switch (e.code) {
             case "ERROR_USER_NOT_FOUND":
               displayFlash("No Account with specified email has been found.");
