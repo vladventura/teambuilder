@@ -159,8 +159,7 @@ class _LoginState extends State<Login> {
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
-          //Also switch statement here
-          print(e);
+          firebaseAuthErrorResolve(e.code);
         }
       }
     }
