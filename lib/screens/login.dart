@@ -75,6 +75,53 @@ class _LoginState extends State<Login> {
     }
   }
 
+  void firebaseAuthErrorResolve(dynamic eCode) {
+    switch (eCode) {
+      case "ERROR_USER_NOT_FOUND":
+        displayFlash("No Account with specified email has been found.");
+        break;
+      case "ERROR_USER_DISABLED":
+        displayFlash(
+            "This Account has been disabled. Please contact me to resolve this issue.");
+        break;
+      case "ERROR_WRONG_PASSWORD":
+        displayFlash("Incorrect Email or Password.");
+        break;
+      case "ERROR_INVALID_EMAIL":
+        displayFlash("This Email is not valid, or poorly formatted.");
+        break;
+      case "ERROR_TOO_MANY_REQUESTS":
+        displayFlash(
+            "Too many requests to the server; try again on a few minutes.");
+        break;
+      case "ERROR_OPERATION_NOT_ALLOWED":
+        displayFlash("You have no permissions to proceed with this operation.");
+        break;
+    }
+  }
+
+  void displayFlash(String message) {
+    showFlash(
+        context: context,
+        duration: new Duration(seconds: 3),
+        builder: (context, controller) {
+          return new Flash(
+            controller: controller,
+            style: FlashStyle.grounded,
+            backgroundColor: Constants.sideBackgroundColor,
+            boxShadows: kElevationToShadow[4],
+            child: new FlashBar(
+              message: new Text(
+                message,
+                style: new TextStyle(
+                  color: Constants.generalTextColor,
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (_formType == FormType.register) {
@@ -91,7 +138,7 @@ class _LoginState extends State<Login> {
           });
           return true;
         } catch (e) {
-          print(e);
+          firebaseAuthErrorResolve(e.code);
         }
       } else {
         try {
@@ -112,7 +159,7 @@ class _LoginState extends State<Login> {
           Navigator.pushNamedAndRemoveUntil(
               context, '/Home', (Route<dynamic> route) => false);
         } catch (e) {
-          print(e);
+          firebaseAuthErrorResolve(e.code);
         }
       }
     }
@@ -244,47 +291,11 @@ class _LoginState extends State<Login> {
             switch (_connectionSource.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "Logging in...",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("Logging in...");
                 await this.submit();
                 break;
               case ConnectivityResult.none:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "No Internet Connection Detected",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("No Internet Connection detected.");
                 break;
             }
           },
@@ -307,47 +318,11 @@ class _LoginState extends State<Login> {
             switch (_connectionSource.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "Creating account...",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("Creating Account...");
                 await this.submit();
                 break;
               case ConnectivityResult.none:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "No Internet Connection Detected",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("No Internet Connection detected.");
                 break;
             }
           },
