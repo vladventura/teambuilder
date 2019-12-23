@@ -60,7 +60,9 @@ class _DisplayProjectsState extends State<DisplayProjects> {
         decoration: Constants.buttonDecoration(),
         alignment: Alignment.centerLeft,
         width: MediaQuery.of(context).size.width * 0.95,
-        height: MediaQuery.of(context).size.height * 0.07,
+        height: (MediaQuery.of(context).orientation == Orientation.landscape
+            ? MediaQuery.of(context).size.height * 0.10
+            : MediaQuery.of(context).size.height * 0.07),
         child: new FlatButton(
           color: Constants.formInactiveColor,
           textColor: Constants.flavorTextColor,
