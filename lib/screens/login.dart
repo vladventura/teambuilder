@@ -120,22 +120,25 @@ class _LoginState extends State<Login> {
           //and a string
           switch (e.code) {
             case "ERROR_USER_NOT_FOUND":
-              print("Switch Reached");
+              displayFlash("No Account with specified email has been found.");
               break;
             case "ERROR_USER_DISABLED":
-              print("Switch Reached");
+              displayFlash(
+                  "This Account has been disabled. Please contact me to resolve this issue.");
               break;
             case "ERROR_WRONG_PASSWORD":
-              print("Switch Reached");
+              displayFlash("Incorrect Email or Password.");
               break;
             case "ERROR_INVALID_EMAIL":
-              print("Switch Reached");
+              displayFlash("This Email is not valid, or poorly formatted.");
               break;
             case "ERROR_TOO_MANY_REQUESTS":
-              print("Switch Reached");
+              displayFlash(
+                  "Too many requests to the server; try again on a few minutes.");
               break;
             case "ERROR_OPERATION_NOT_ALLOWED":
-              print("Switch Reached");
+              displayFlash(
+                  "You have no permissions to proceed with this operation.");
               break;
           }
         }
