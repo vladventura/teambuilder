@@ -318,47 +318,11 @@ class _LoginState extends State<Login> {
             switch (_connectionSource.keys.toList()[0]) {
               case ConnectivityResult.wifi:
               case ConnectivityResult.mobile:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "Creating account...",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("Creating Account...");
                 await this.submit();
                 break;
               case ConnectivityResult.none:
-                showFlash(
-                    context: context,
-                    duration: new Duration(seconds: 3),
-                    builder: (context, controller) {
-                      return new Flash(
-                        controller: controller,
-                        style: FlashStyle.grounded,
-                        backgroundColor: Constants.sideBackgroundColor,
-                        boxShadows: kElevationToShadow[4],
-                        child: new FlashBar(
-                          message: new Text(
-                            "No Internet Connection Detected",
-                            style: new TextStyle(
-                              color: Constants.generalTextColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                displayFlash("No Internet Connection detected.");
                 break;
             }
           },
