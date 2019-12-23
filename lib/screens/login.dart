@@ -75,8 +75,8 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void firebaseAuthErrorResolve(dynamic e) {
-    switch (e.code) {
+  void firebaseAuthErrorResolve(dynamic eCode) {
+    switch (eCode) {
       case "ERROR_USER_NOT_FOUND":
         displayFlash("No Account with specified email has been found.");
         break;
@@ -138,29 +138,7 @@ class _LoginState extends State<Login> {
           });
           return true;
         } catch (e) {
-          switch (e.code) {
-            case "ERROR_USER_NOT_FOUND":
-              displayFlash("No Account with specified email has been found.");
-              break;
-            case "ERROR_USER_DISABLED":
-              displayFlash(
-                  "This Account has been disabled. Please contact me to resolve this issue.");
-              break;
-            case "ERROR_WRONG_PASSWORD":
-              displayFlash("Incorrect Email or Password.");
-              break;
-            case "ERROR_INVALID_EMAIL":
-              displayFlash("This Email is not valid, or poorly formatted.");
-              break;
-            case "ERROR_TOO_MANY_REQUESTS":
-              displayFlash(
-                  "Too many requests to the server; try again on a few minutes.");
-              break;
-            case "ERROR_OPERATION_NOT_ALLOWED":
-              displayFlash(
-                  "You have no permissions to proceed with this operation.");
-              break;
-          }
+          firebaseAuthErrorResolve(e.code);
         }
       } else {
         try {
