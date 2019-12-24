@@ -178,6 +178,8 @@ class _MainScreenState extends State<MainScreen>
             new UserAccountsDrawerHeader(
               accountEmail: Text(_user.email),
               accountName: Text(_user.displayName),
+              decoration: ShapeDecoration(
+                  shape: Border.all(), color: Constants.sideBackgroundColor),
             ),
             new ListTile(
               title: new Text(
