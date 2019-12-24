@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -20,6 +21,7 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
+  Stream<QuerySnapshot> toQuery;
 
   @override
   void initState() {
@@ -132,7 +134,7 @@ class _MainScreenState extends State<MainScreen>
         });
       }),
       children: <Widget>[
-        new DisplayProjects(),
+        new DisplayProjects(toQuery),
         new DisplayForm(),
       ],
     );
@@ -142,7 +144,7 @@ class _MainScreenState extends State<MainScreen>
     return new TabBarView(
       controller: _tabController,
       children: <Widget>[
-        new DisplayProjects(),
+        new DisplayProjects(toQuery),
         new DisplayForm(),
       ],
     );
@@ -171,6 +173,15 @@ class _MainScreenState extends State<MainScreen>
             children: <Widget>[
               new FlatButton(
                 child: new Text("Own Projects"),
+                onPressed: () {
+                  print(toQuery);
+                  setState(() {
+                    toQuery = Firestore.instance
+                        .collection('projects')
+                        .where('originator', isEqualTo: _user.displayName)
+                        .snapshots();
+                  });
+                },
               ),
               new FlatButton(
                 child: new Text("Sign out"),
