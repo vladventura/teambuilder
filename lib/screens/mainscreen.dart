@@ -176,10 +176,11 @@ class _MainScreenState extends State<MainScreen>
           shrinkWrap: true,
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountEmail: Text(_user.email),
-              accountName: Text(_user.displayName),
-              decoration: ShapeDecoration(
-                  shape: Border.all(), color: Constants.sideBackgroundColor),
+              accountEmail: new Text(_user.email),
+              accountName: new Text(_user.displayName),
+              decoration: new ShapeDecoration(
+                  shape: new Border.all(),
+                  color: Constants.sideBackgroundColor),
             ),
             new ListTile(
               title: new Text(
