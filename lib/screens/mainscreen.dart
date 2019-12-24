@@ -166,15 +166,20 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  SafeArea buildDrawer() {
-    return SafeArea(
-      child: new Drawer(
-        child: new Center(
-          child: new Column(
+  Drawer buildDrawer() {
+    return new Drawer(
+      child: new Center(
+        child: Container(
+          color: Constants.mainBackgroundColor,
+          width: MediaQuery.of(context).size.width,
+          child: new ListView(
             children: <Widget>[
-              new FlatButton(
-                child: new Text("All Projects"),
-                onPressed: () {
+              new ListTile(
+                title: new Text(
+                  "All Projects",
+                  style: TextStyle(color: Constants.generalTextColor),
+                ),
+                onTap: () {
                   setState(() {
                     toQuery =
                         Firestore.instance.collection('projects').snapshots();
@@ -184,7 +189,10 @@ class _MainScreenState extends State<MainScreen>
                 },
               ),
               new FlatButton(
-                child: new Text("Own Projects"),
+                child: new Text(
+                  "Own Projects",
+                  style: TextStyle(color: Constants.generalTextColor),
+                ),
                 onPressed: () {
                   setState(() {
                     toQuery = Firestore.instance
@@ -197,7 +205,10 @@ class _MainScreenState extends State<MainScreen>
                 },
               ),
               new FlatButton(
-                child: new Text("Sign out"),
+                child: new Text(
+                  "Sign out",
+                  style: TextStyle(color: Constants.generalTextColor),
+                ),
                 onPressed: () async {
                   try {
                     Navigator.of(context).pushNamedAndRemoveUntil(
