@@ -166,50 +166,68 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  SafeArea buildDrawer() {
-    return SafeArea(
-      child: new Drawer(
-        child: new Center(
-          child: new Column(
-            children: <Widget>[
-              new FlatButton(
-                child: new Text("All Projects"),
-                onPressed: () {
-                  setState(() {
-                    toQuery =
-                        Firestore.instance.collection('projects').snapshots();
-                    projectsTitle = "Join Projects";
-                  });
-                  Navigator.pop(context);
-                },
+  Drawer buildDrawer() {
+    return new Drawer(
+      child: Container(
+        color: Constants.mainBackgroundColor,
+        width: MediaQuery.of(context).size.width,
+        child: new ListView(
+          physics: new BouncingScrollPhysics(),
+          shrinkWrap: true,
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountEmail: new Text(_user.email),
+              accountName: new Text(_user.displayName),
+              decoration: new ShapeDecoration(
+                  shape: new Border.all(),
+                  color: Constants.sideBackgroundColor),
+            ),
+            new ListTile(
+              title: new Text(
+                "All Projects",
+                style: TextStyle(color: Constants.generalTextColor),
               ),
-              new FlatButton(
-                child: new Text("Own Projects"),
-                onPressed: () {
-                  setState(() {
-                    toQuery = Firestore.instance
-                        .collection('projects')
-                        .where('originator', isEqualTo: _user.displayName)
-                        .snapshots();
-                    projectsTitle = "Own Projects";
-                  });
-                  Navigator.pop(context);
-                },
+              onTap: () {
+                setState(() {
+                  toQuery =
+                      Firestore.instance.collection('projects').snapshots();
+                  projectsTitle = "Join Projects";
+                });
+                Navigator.pop(context);
+              },
+            ),
+            new ListTile(
+              title: new Text(
+                "Own Projects",
+                style: TextStyle(color: Constants.generalTextColor),
               ),
-              new FlatButton(
-                child: new Text("Sign out"),
-                onPressed: () async {
-                  try {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/Login', (Route<dynamic> route) => false);
-                    await FirebaseAuth.instance.signOut();
-                  } catch (e) {
-                    print(e);
-                  }
-                },
+              onTap: () {
+                setState(() {
+                  toQuery = Firestore.instance
+                      .collection('projects')
+                      .where('originator', isEqualTo: _user.displayName)
+                      .snapshots();
+                  projectsTitle = "Own Projects";
+                });
+                Navigator.pop(context);
+              },
+            ),
+            new ListTile(
+              title: new Text(
+                "Sign out",
+                style: TextStyle(color: Constants.generalTextColor),
               ),
-            ],
-          ),
+              onTap: () async {
+                try {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/Login', (Route<dynamic> route) => false);
+                  await FirebaseAuth.instance.signOut();
+                } catch (e) {
+                  print(e);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
