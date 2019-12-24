@@ -175,6 +175,10 @@ class _MainScreenState extends State<MainScreen>
           physics: new BouncingScrollPhysics(),
           shrinkWrap: true,
           children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountEmail: Text(_user.email),
+              accountName: Text(_user.displayName),
+            ),
             new ListTile(
               title: new Text(
                 "All Projects",
