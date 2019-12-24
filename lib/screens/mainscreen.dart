@@ -172,6 +172,15 @@ class _MainScreenState extends State<MainScreen>
           child: new Column(
             children: <Widget>[
               new FlatButton(
+                child: new Text("All Projects"),
+                onPressed: () {
+                  setState(() {
+                    toQuery =
+                        Firestore.instance.collection('projects').snapshots();
+                  });
+                },
+              ),
+              new FlatButton(
                 child: new Text("Own Projects"),
                 onPressed: () {
                   print(toQuery);
