@@ -11,6 +11,8 @@ import 'package:teambuilder/util/connectionstream.dart';
 part 'package:teambuilder/screens/displayproject.dart';
 
 class DisplayProjects extends StatefulWidget {
+  final Stream<QuerySnapshot> toQuery;
+  const DisplayProjects(this.toQuery);
   _DisplayProjectsState createState() => new _DisplayProjectsState();
 }
 
@@ -39,7 +41,7 @@ class _DisplayProjectsState extends State<DisplayProjects> {
 
   Widget build(BuildContext context) {
     return new StreamBuilder<QuerySnapshot>(
-        stream: _db.collection('projects').snapshots(),
+        stream: widget.toQuery,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return new ListView(

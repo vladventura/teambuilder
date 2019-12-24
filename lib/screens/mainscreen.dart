@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -20,6 +21,8 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
+  Stream<QuerySnapshot> toQuery;
+  String projectsTitle = "Join Projects";
 
   @override
   void initState() {
@@ -115,7 +118,7 @@ class _MainScreenState extends State<MainScreen>
         ),
       ),
       title: (_currentIndex == 0)
-          ? Texts.appbar_join_title
+          ? Text(projectsTitle)
           : Texts.appbar_create_title,
       forceElevated: isScrolled,
       pinned: isScrolled,
@@ -132,7 +135,7 @@ class _MainScreenState extends State<MainScreen>
         });
       }),
       children: <Widget>[
-        new DisplayProjects(),
+        new DisplayProjects(toQuery),
         new DisplayForm(),
       ],
     );
@@ -142,7 +145,7 @@ class _MainScreenState extends State<MainScreen>
     return new TabBarView(
       controller: _tabController,
       children: <Widget>[
-        new DisplayProjects(),
+        new DisplayProjects(toQuery),
         new DisplayForm(),
       ],
     );
@@ -163,24 +166,50 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  Drawer buildDrawer() {
-    return new Drawer(
-      child: new Center(
-        child: new Column(
-          children: <Widget>[
-            new FlatButton(
-              child: new Text("Sign out"),
-              onPressed: () async {
-                try {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/Login', (Route<dynamic> route) => false);
-                  await FirebaseAuth.instance.signOut();
-                } catch (e) {
-                  print(e);
-                }
-              },
-            ),
-          ],
+  SafeArea buildDrawer() {
+    return SafeArea(
+      child: new Drawer(
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new FlatButton(
+                child: new Text("All Projects"),
+                onPressed: () {
+                  setState(() {
+                    toQuery =
+                        Firestore.instance.collection('projects').snapshots();
+                    projectsTitle = "Join Projects";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new FlatButton(
+                child: new Text("Own Projects"),
+                onPressed: () {
+                  setState(() {
+                    toQuery = Firestore.instance
+                        .collection('projects')
+                        .where('originator', isEqualTo: _user.displayName)
+                        .snapshots();
+                    projectsTitle = "Own Projects";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new FlatButton(
+                child: new Text("Sign out"),
+                onPressed: () async {
+                  try {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/Login', (Route<dynamic> route) => false);
+                    await FirebaseAuth.instance.signOut();
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
