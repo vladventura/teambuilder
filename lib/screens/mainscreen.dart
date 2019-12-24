@@ -178,6 +178,7 @@ class _MainScreenState extends State<MainScreen>
                     toQuery =
                         Firestore.instance.collection('projects').snapshots();
                   });
+                  Navigator.pop(context);
                 },
               ),
               new FlatButton(
@@ -190,6 +191,7 @@ class _MainScreenState extends State<MainScreen>
                         .where('originator', isEqualTo: _user.displayName)
                         .snapshots();
                   });
+                  Navigator.pop(context);
                 },
               ),
               new FlatButton(
