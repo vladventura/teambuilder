@@ -68,21 +68,7 @@ class _MainScreenState extends State<MainScreen>
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: this.buildDrawer(),
-                appBar: new AppBar(
-                  backgroundColor: Constants.sideBackgroundColor,
-                  iconTheme: new IconThemeData(
-                    color: Constants.flavorTextColor,
-                  ),
-                  textTheme: new TextTheme(
-                    title: new TextStyle(
-                      color: Constants.generalTextColor,
-                      fontSize: 20,
-                    ),
-                  ),
-                  title: (_currentIndex == 0)
-                      ? Text(projectsTitle)
-                      : Texts.appbar_create_title,
-                ),
+                appBar: this.buildAppBar(),
                 body: DisplayForm(),
               );
             }
@@ -104,8 +90,8 @@ class _MainScreenState extends State<MainScreen>
     ];
   }
 
-  SliverAppBar buildSliverAppBar(bool isScrolled) {
-    return new SliverAppBar(
+  AppBar buildAppBar() {
+    return new AppBar(
       backgroundColor: Constants.sideBackgroundColor,
       iconTheme: new IconThemeData(
         color: Constants.flavorTextColor,
@@ -119,9 +105,6 @@ class _MainScreenState extends State<MainScreen>
       title: (_currentIndex == 0)
           ? Text(projectsTitle)
           : Texts.appbar_create_title,
-      forceElevated: isScrolled,
-      pinned: isScrolled,
-      floating: true,
     );
   }
 
