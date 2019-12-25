@@ -215,9 +215,8 @@ class _MainScreenState extends State<MainScreen>
             new ListTile(
               title: Text("Joined Projects"),
               onTap: () {
-                setState(() {
-                  Navigator.of(context).pop();
-                });
+                setState(() {});
+                Navigator.of(context).pop();
               },
             ),
             new ListTile(
