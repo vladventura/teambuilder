@@ -432,10 +432,10 @@ class _DisplayProjectState extends State<_DisplayProject> {
               );
             });
 
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
+        DocumentReference thisProject =
+            _db.collection('projects').document(document.documentID);
+        DocumentReference userDocument =
+            _db.collection('users').document(_user.displayName);
         DocumentSnapshot currentJoinedUsers = await thisProject.get();
         dynamic without = currentJoinedUsers.data['joinedUsers']
             .where((element) => element['name'] != _user.displayName);
