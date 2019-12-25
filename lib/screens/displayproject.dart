@@ -60,7 +60,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Members"),
           this.buildDivider(),
-          this.buildMembersList(widget.document.data['joinedUsers']),
+          this.buildMembersList(),
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Languages Used"),
           this.buildDivider(),
@@ -247,15 +247,16 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  Widget buildMembersList(List<dynamic> users) {
-    bool isEmpty = (users.length <= 0 || users == null);
+  Widget buildMembersList() {
+    bool isEmpty = (widget.document.data['joinedUsers'].length <= 0 ||
+        widget.document.data['joinedUsers'] == null);
     if (!isEmpty)
       return new Container(
         margin: new EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: users
+            children: widget.document.data['joinedUsers']
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
                       style: new TextStyle(
