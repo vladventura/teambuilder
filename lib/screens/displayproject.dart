@@ -524,7 +524,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     this._showSpecializationChooser();
   }
 
-  RaisedButton buildJoinConfirm(DocumentSnapshot document) {
+  RaisedButton buildJoinConfirm() {
     return new RaisedButton(
       child: new Text("Join Project"),
       color: Constants.acceptButtonColor,
@@ -548,12 +548,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
                 ),
               );
             });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
+
+        DocumentReference thisProject =
+            _db.collection('projects').document(document.documentID);
+        DocumentReference userDocument =
+            _db.collection('users').document(_user.displayName);
         thisProject.updateData({
           'joinedUsers': FieldValue.arrayUnion([
             {'name': _user.displayName, 'specialization': _specialization}
