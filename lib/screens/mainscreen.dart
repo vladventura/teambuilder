@@ -24,9 +24,11 @@ class _MainScreenState extends State<MainScreen> {
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
+  String screenToDisplay;
 
   @override
   void initState() {
+    screenToDisplay = 'main';
     super.initState();
   }
 
@@ -53,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: this.buildDrawer(),
                 appBar: this.buildAppBar(),
-                body: this.buildScreen('main'),
+                body: this.buildScreen(screenToDisplay),
               );
             }
           }
@@ -129,6 +131,7 @@ class _MainScreenState extends State<MainScreen> {
                       .collection('projects')
                       .where('originator', isEqualTo: _user.displayName)
                       .snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Own Projects";
                 });
                 Navigator.pop(context);
@@ -146,6 +149,7 @@ class _MainScreenState extends State<MainScreen> {
                       .where('joinedUserNames',
                           arrayContains: _user.displayName)
                       .snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Joined Projects";
                 });
                 Navigator.of(context).pop();
@@ -156,6 +160,13 @@ class _MainScreenState extends State<MainScreen> {
                 "Create Project",
                 style: new TextStyle(color: Constants.generalTextColor),
               ),
+              onTap: () {
+                setState(() {
+                  screenToDisplay = 'create';
+                  projectsTitle = "Create Project";
+                });
+                Navigator.of(context).pop();
+              },
             ),
             new ListTile(
               title: new Text(
