@@ -10,6 +10,12 @@ import './displayform.dart';
 import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 
+///Landing page of the Application
+///
+///It contains most of the graphical interfacing we're doing with users.
+///[toQuery] and [projectsTitle] need an initial value so their respective Widgets
+///can render properly. All of the [Controller]s are there to manage the transitions and
+///animations between pages.
 class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
@@ -56,7 +62,6 @@ class _MainScreenState extends State<MainScreen>
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               _user = snapshot.data;
-              //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
               return new Scaffold(
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
@@ -87,8 +92,8 @@ class _MainScreenState extends State<MainScreen>
                   body: this.buildPageView(),
                 ),
               );
-            } // snapshot.hasData
-          } // snapshot != null
+            }
+          }
           return new Container(child: new CircularProgressIndicator());
         });
   }
