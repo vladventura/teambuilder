@@ -392,12 +392,12 @@ class _DisplayProjectState extends State<_DisplayProject> {
     });
   }
 
-  FlatButton buildJoinButton(DocumentSnapshot document) {
+  FlatButton buildJoinButton() {
     return new FlatButton(
       color: Constants.acceptButtonColor,
       child: new Text("Join Project", style: new TextStyle(fontSize: 15)),
       onPressed: () {
-        this._showSpecializationChooser(document);
+        this._showSpecializationChooser();
       },
     );
   }
