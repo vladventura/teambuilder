@@ -17,7 +17,6 @@ class DisplayProjects extends StatefulWidget {
 }
 
 class _DisplayProjectsState extends State<DisplayProjects> {
-  final _db = Firestore.instance;
   Map _connectionSource = {ConnectivityResult.none: false};
   ConnectionStream _connectionStream = ConnectionStream.instance;
 
