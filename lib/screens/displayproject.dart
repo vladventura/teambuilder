@@ -42,7 +42,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         padding: new EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         children: <Widget>[
           new Text(
-            "${document.data['name']} by ${document.data['originator']}",
+            "${widget.document.data['name']} by ${widget.document.data['originator']}",
             style: new TextStyle(
               fontSize: 30,
               color: Constants.flavorTextColor,
@@ -53,28 +53,28 @@ class _DisplayProjectState extends State<_DisplayProject> {
           this.buildDivider(),
           new Padding(
             padding: new EdgeInsets.symmetric(horizontal: 5),
-            child: new Text(document.data['description'],
+            child: new Text(widget.document.data['description'],
                 style: new TextStyle(
                     fontSize: 18, color: Constants.flavorTextColor)),
           ),
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Members"),
           this.buildDivider(),
-          this.buildMembersList(document.data['joinedUsers']),
+          this.buildMembersList(widget.document.data['joinedUsers']),
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Languages Used"),
           this.buildDivider(),
-          this.buildElements(document.data['languagesUsed']),
+          this.buildElements(widget.document.data['languagesUsed']),
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("SDKs and Frameworks Used"),
           this.buildDivider(),
-          this.buildElements(document.data['technologiesUsed']),
+          this.buildElements(widget.document.data['technologiesUsed']),
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Contact Platforms"),
           this.buildDivider(),
-          this.buildContactPlatformButtons(document),
+          this.buildContactPlatformButtons(widget.document),
           this.buildSizedBoxHeight(0.1),
-          this.buildButtons(document, user),
+          this.buildButtons(widget.document, widget.user),
         ],
       ),
     );
