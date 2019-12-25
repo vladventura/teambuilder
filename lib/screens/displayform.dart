@@ -17,6 +17,9 @@ class DisplayForm extends StatefulWidget {
   _DisplayFormState createState() => _DisplayFormState();
 }
 
+/// This module is built to create the form that the users see whenever they want to submit a project
+///
+/// The upload handling is also here as well, on several asynchronous methods spread all around the module.
 class _DisplayFormState extends State<DisplayForm> {
   String _complexity, _name, _description, _teamMembers;
   Map<String, dynamic> _contactPlatforms = new Map<String, dynamic>();
