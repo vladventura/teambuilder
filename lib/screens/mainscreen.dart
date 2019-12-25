@@ -132,6 +132,7 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
+  ///This is what displays the content of the tabs
   PageView buildPageView() {
     return new PageView(
       controller: _pageController,
@@ -147,16 +148,10 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
-  TabBarView buildTabBarView() {
-    return new TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        new DisplayProjects(toQuery),
-        new DisplayForm(),
-      ],
-    );
-  }
-
+  /// Instead, this displays the **tabs themselves**
+  ///
+  /// Not to be confused with displaying the contents of the tab, this only
+  /// shows the actual tabs themselves
   TabBar buildTabBar() {
     return new TabBar(
       controller: _tabController,
@@ -172,6 +167,7 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 
+  /// Constructs the side menu for the application and its functionality.
   Drawer buildDrawer() {
     return new Drawer(
       child: Container(
