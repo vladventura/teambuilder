@@ -248,15 +248,15 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   Widget buildMembersList() {
-    bool isEmpty = (widget.document.data['joinedUsers'].length <= 0 ||
-        widget.document.data['joinedUsers'] == null);
+    List<dynamic> users = widget.document.data['joinedUsers'];
+    bool isEmpty = (users.length <= 0 || users == null);
     if (!isEmpty)
       return new Container(
         margin: new EdgeInsets.symmetric(horizontal: 5),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: widget.document.data['joinedUsers']
+            children: users
                 .map((user) => new Text(
                       "${user['name']} (${user['specialization']})",
                       style: new TextStyle(
@@ -550,14 +550,14 @@ class _DisplayProjectState extends State<_DisplayProject> {
             });
 
         DocumentReference thisProject =
-            _db.collection('projects').document(document.documentID);
+            _db.collection('projects').document(widget.document.documentID);
         DocumentReference userDocument =
-            _db.collection('users').document(_user.displayName);
+            _db.collection('users').document(widget.user.displayName);
         thisProject.updateData({
           'joinedUsers': FieldValue.arrayUnion([
-            {'name': _user.displayName, 'specialization': _specialization}
+            {'name': widget.user.displayName, 'specialization': _specialization}
           ]),
-          'joinedUserNames': FieldValue.arrayUnion([_user.displayName])
+          'joinedUserNames': FieldValue.arrayUnion([widget.user.displayName])
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
