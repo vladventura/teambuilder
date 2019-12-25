@@ -510,7 +510,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         });
   }
 
-  void handleRadioChange(DocumentSnapshot document, int val) {
+  void handleRadioChange(int val) {
     setState(() {
       _groupValue = val;
       if (val == 1) {
@@ -521,7 +521,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     });
     // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
     Navigator.of(context).pop();
-    this._showSpecializationChooser(document);
+    this._showSpecializationChooser();
   }
 
   RaisedButton buildJoinConfirm(DocumentSnapshot document) {
