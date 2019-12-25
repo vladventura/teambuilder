@@ -436,8 +436,8 @@ class _DisplayProjectState extends State<_DisplayProject> {
             _db.collection('projects').document(widget.document.documentID);
         DocumentReference userDocument =
             _db.collection('users').document(widget.user.displayName);
-        DocumentSnapshot currentJoinedUsers = await thisProject.get();
-        dynamic without = currentJoinedUsers.data['joinedUsers']
+
+        dynamic without = widget.document.data['joinedUsers']
             .where((element) => element['name'] != widget.user.displayName);
 
         thisProject.updateData({
