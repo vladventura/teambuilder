@@ -22,11 +22,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ScrollController _scrollController;
-  PageController _pageController;
-  int _currentIndex = 0;
-
   FirebaseUser _user;
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
@@ -35,21 +30,11 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     super.initState();
-
-    _tabController = new TabController(
-      length: Constants.app_tabs,
-      vsync: this,
-    );
-    _scrollController = new ScrollController();
-    _pageController = new PageController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
-    _scrollController.dispose();
-    _pageController.dispose();
   }
 
   Future<dynamic> loadUser() async {
