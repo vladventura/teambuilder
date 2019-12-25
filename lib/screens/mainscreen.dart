@@ -25,15 +25,19 @@ class _MainScreenState extends State<MainScreen>
   TabController _tabController;
   ScrollController _scrollController;
   PageController _pageController;
-  FirebaseUser _user;
   int _currentIndex = 0;
+
+  FirebaseUser _user;
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
+  Widget displayScreen;
 
   @override
   void initState() {
     super.initState();
+    displayScreen = DisplayProjects(this.toQuery);
+
     _tabController = new TabController(
       length: Constants.app_tabs,
       vsync: this,
@@ -45,6 +49,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   void dispose() {
     super.dispose();
+
     _tabController.dispose();
     _scrollController.dispose();
     _pageController.dispose();
