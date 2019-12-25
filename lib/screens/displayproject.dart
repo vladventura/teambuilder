@@ -555,7 +555,8 @@ class _DisplayProjectState extends State<_DisplayProject> {
         thisProject.updateData({
           'joinedUsers': FieldValue.arrayUnion([
             {'name': _user.displayName, 'specialization': _specialization}
-          ])
+          ]),
+          'joinedUserNames': FieldValue.arrayUnion([_user.displayName])
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayUnion([
