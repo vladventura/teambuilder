@@ -359,12 +359,10 @@ class _DisplayProjectState extends State<_DisplayProject> {
   }
 
   void deleteProject() async {
-    FirebaseUser user;
-    await FirebaseAuth.instance.currentUser().then((ref) => user = ref);
     DocumentReference thisProject =
         _db.collection('projects').document(widget.document.documentID);
     DocumentReference thisUserDocument =
-        _db.collection('users').document(user.displayName);
+        _db.collection('users').document(widget.user.displayName);
 
     await thisUserDocument.updateData({
       'joinedProjects': FieldValue.arrayRemove([thisProject])
