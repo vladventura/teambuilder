@@ -20,8 +20,7 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen> {
   FirebaseUser _user;
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
