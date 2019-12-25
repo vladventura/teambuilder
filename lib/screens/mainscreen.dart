@@ -31,13 +31,10 @@ class _MainScreenState extends State<MainScreen>
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
-  Widget displayScreen;
 
   @override
   void initState() {
     super.initState();
-    displayScreen = DisplayProjects(this.toQuery);
-
     _tabController = new TabController(
       length: Constants.app_tabs,
       vsync: this,
@@ -49,7 +46,6 @@ class _MainScreenState extends State<MainScreen>
   @override
   void dispose() {
     super.dispose();
-
     _tabController.dispose();
     _scrollController.dispose();
     _pageController.dispose();
@@ -72,30 +68,22 @@ class _MainScreenState extends State<MainScreen>
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: this.buildDrawer(),
-                bottomNavigationBar: new BottomNavigationBar(
+                appBar: new AppBar(
                   backgroundColor: Constants.sideBackgroundColor,
-                  selectedItemColor: Constants.formActiveColor,
-                  showSelectedLabels: false,
-                  items: this.buildBottomNavBarItems(),
-                  currentIndex: _currentIndex,
-                  onTap: (index) {
-                    _pageController.animateToPage(
-                      index,
-                      duration: new Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
+                  iconTheme: new IconThemeData(
+                    color: Constants.flavorTextColor,
+                  ),
+                  textTheme: new TextTheme(
+                    title: new TextStyle(
+                      color: Constants.generalTextColor,
+                      fontSize: 20,
+                    ),
+                  ),
+                  title: (_currentIndex == 0)
+                      ? Text(projectsTitle)
+                      : Texts.appbar_create_title,
                 ),
-                body: new NestedScrollView(
-                  physics: new BouncingScrollPhysics(),
-                  controller: _scrollController,
-                  headerSliverBuilder: (BuildContext context, bool isScrolled) {
-                    return <Widget>[
-                      this.buildSliverAppBar(isScrolled),
-                    ];
-                  },
-                  body: this.buildPageView(),
-                ),
+                body: DisplayForm(),
               );
             }
           }
