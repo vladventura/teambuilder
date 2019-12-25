@@ -45,20 +45,22 @@ class _DisplayProjectsState extends State<DisplayProjects> {
 
   /// The stream here would be the parent class' stream ([toQuery]).
   Widget build(BuildContext context) {
-    return new StreamBuilder<QuerySnapshot>(
-        stream: widget.toQuery,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new ListView(
-              physics: new BouncingScrollPhysics(),
-              children: snapshot.data.documents.reversed
-                  .map((document) => buildProject(document))
-                  .toList(),
-            );
-          } else {
-            return new CircularProgressIndicator();
-          }
-        });
+    return new Container(
+      child: new StreamBuilder<QuerySnapshot>(
+          stream: widget.toQuery,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new ListView(
+                physics: new BouncingScrollPhysics(),
+                children: snapshot.data.documents.reversed
+                    .map((document) => buildProject(document))
+                    .toList(),
+              );
+            } else {
+              return new CircularProgressIndicator();
+            }
+          }),
+    );
   }
 
   /// Most of the online/offline checking is done when someone clicks on a project
