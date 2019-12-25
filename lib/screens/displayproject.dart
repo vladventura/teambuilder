@@ -402,7 +402,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  FlatButton buildLeaveButton(DocumentSnapshot document) {
+  FlatButton buildLeaveButton() {
     return new FlatButton(
       color: Constants.cancelButtonColor,
       child: new Text(
@@ -431,8 +431,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                 ),
               );
             });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
+
         CollectionReference projects = _db.collection('projects');
         CollectionReference users = _db.collection('users');
         DocumentReference thisProject = projects.document(document.documentID);
