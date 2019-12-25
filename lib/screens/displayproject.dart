@@ -72,9 +72,9 @@ class _DisplayProjectState extends State<_DisplayProject> {
           this.buildSizedBoxHeight(0.1),
           this.buildHeaderText("Contact Platforms"),
           this.buildDivider(),
-          this.buildContactPlatformButtons(widget.document),
+          this.buildContactPlatformButtons(),
           this.buildSizedBoxHeight(0.1),
-          this.buildButtons(widget.document, widget.user),
+          this.buildButtons(),
         ],
       ),
     );
@@ -103,14 +103,15 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  Column buildContactPlatformButtons(DocumentSnapshot document) {
+  Column buildContactPlatformButtons() {
     List<Widget> contactPlatformButtons = new List();
     List<String> emailAndDomain = new List();
     List<String> discordAndHash = new List();
 
-    if (document.data['contactPlatforms'] != null) {
-      if (!document.data['contactPlatforms']['email'].isEmpty) {
-        emailAndDomain = document.data['contactPlatforms']['email'].split('@');
+    if (widget.document.data['contactPlatforms'] != null) {
+      if (!widget.document.data['contactPlatforms']['email'].isEmpty) {
+        emailAndDomain =
+            widget.document.data['contactPlatforms']['email'].split('@');
         if (emailAndDomain[1].contains('outlook') ||
             emailAndDomain[1].contains('live') ||
             emailAndDomain[1].contains('hotmail')) {
@@ -181,9 +182,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
         }
       }
 
-      if (!document.data['contactPlatforms']['discordUsername'].isEmpty) {
-        discordAndHash =
-            document.data['contactPlatforms']['discordUsername'].split('#');
+      if (!widget
+          .document.data['contactPlatforms']['discordUsername'].isEmpty) {
+        discordAndHash = widget
+            .document.data['contactPlatforms']['discordUsername']
+            .split('#');
         contactPlatformButtons.add(new Container(
             padding: new EdgeInsets.all(5),
             decoration: new BoxDecoration(
@@ -205,7 +208,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
             )));
       }
 
-      if (!document.data['contactPlatforms']['githubUsername'].isEmpty) {
+      if (!widget.document.data['contactPlatforms']['githubUsername'].isEmpty) {
         contactPlatformButtons.add(new Container(
             padding: new EdgeInsets.all(5),
             decoration: new BoxDecoration(
@@ -220,7 +223,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                   color: Colors.white,
                 ),
                 new Text(
-                  document.data['contactPlatforms']['githubUsername'],
+                  widget.document.data['contactPlatforms']['githubUsername'],
                   style: new TextStyle(color: Colors.white),
                 ),
               ],
@@ -354,11 +357,11 @@ class _DisplayProjectState extends State<_DisplayProject> {
     }
   }
 
-  void deleteProject(DocumentSnapshot document) async {
+  void deleteProject() async {
     FirebaseUser user;
     await FirebaseAuth.instance.currentUser().then((ref) => user = ref);
     DocumentReference thisProject =
-        _db.collection('projects').document(document.documentID);
+        _db.collection('projects').document(widget.document.documentID);
     DocumentReference thisUserDocument =
         _db.collection('users').document(user.displayName);
 
