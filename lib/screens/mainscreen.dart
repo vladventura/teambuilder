@@ -215,7 +215,14 @@ class _MainScreenState extends State<MainScreen>
             new ListTile(
               title: Text("Joined Projects"),
               onTap: () {
-                setState(() {});
+                setState(() {
+                  toQuery = Firestore.instance
+                      .collection('projects')
+                      .where('joinedUserNames',
+                          arrayContains: _user.displayName)
+                      .snapshots();
+                  projectsTitle = "Joined Projects";
+                });
                 Navigator.of(context).pop();
               },
             ),
