@@ -286,18 +286,19 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  dynamic buildButtons(DocumentSnapshot document, FirebaseUser user) {
-    bool owner = (document.data['originator'] == user.displayName);
-    bool isJoined = (document.data['joinedUsers']
-            .where((element) => element['name'] == user.displayName)
+  dynamic buildButtons() {
+    bool owner =
+        (widget.document.data['originator'] == widget.user.displayName);
+    bool isJoined = (widget.document.data['joinedUsers']
+            .where((element) => element['name'] == widget.user.displayName)
             .length >
         0);
     bool belongs = (isJoined || owner);
-    bool slotAvailable = (document.data['joinedUsers'].length <
-        int.parse(document.data['teamMembers']));
+    bool slotAvailable = (widget.document.data['joinedUsers'].length <
+        int.parse(widget.document.data['teamMembers']));
     if (!belongs) {
       if (slotAvailable == true) {
-        return this.buildJoinButton(document);
+        return this.buildJoinButton();
       } else {
         return new FlatButton(
           child: new Text(
@@ -333,7 +334,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                     new FlatButton(
                       child: new Text("Yes"),
                       textColor: Constants.cancelButtonColor,
-                      onPressed: () async => this.deleteProject(document),
+                      onPressed: () async => this.deleteProject(),
                     ),
                   ],
                   title: new Text("Delete Project",
@@ -349,7 +350,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
         },
       );
     } else if (belongs) {
-      return this.buildLeaveButton(document);
+      return this.buildLeaveButton();
     }
   }
 
