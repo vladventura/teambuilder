@@ -21,7 +21,8 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
-  Stream<QuerySnapshot> toQuery;
+  Stream<QuerySnapshot> toQuery =
+      Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
 
   @override
