@@ -441,7 +441,10 @@ class _DisplayProjectState extends State<_DisplayProject> {
         dynamic without = currentJoinedUsers.data['joinedUsers']
             .where((element) => element['name'] != _user.displayName);
 
-        thisProject.updateData({'joinedUsers': without.toList()});
+        thisProject.updateData({
+          'joinedUsers': without.toList(),
+          'joinedUserNames': FieldValue.arrayRemove([_user.displayName])
+        });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayRemove([
             thisProject,
