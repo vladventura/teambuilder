@@ -8,7 +8,6 @@ import './displayprojects.dart';
 import './displayform.dart';
 
 import 'package:teambuilder/util/constants.dart';
-import 'package:teambuilder/util/texts.dart';
 
 ///Landing page of the Application
 ///
@@ -72,19 +71,6 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  List<BottomNavigationBarItem> buildBottomNavBarItems() {
-    return [
-      new BottomNavigationBarItem(
-        icon: Constants.join_project['icon'],
-        title: new Text(Constants.join_project['text']),
-      ),
-      new BottomNavigationBarItem(
-        icon: Constants.create_project['icon'],
-        title: new Text(Constants.create_project['text']),
-      )
-    ];
-  }
-
   AppBar buildAppBar() {
     return new AppBar(
       backgroundColor: Constants.sideBackgroundColor,
@@ -97,44 +83,7 @@ class _MainScreenState extends State<MainScreen> {
           fontSize: 20,
         ),
       ),
-      title: (_currentIndex == 0)
-          ? Text(projectsTitle)
-          : Texts.appbar_create_title,
-    );
-  }
-
-  ///This is what displays the content of the tabs
-  PageView buildPageView() {
-    return new PageView(
-      controller: _pageController,
-      onPageChanged: ((index) {
-        setState(() {
-          this._currentIndex = index;
-        });
-      }),
-      children: <Widget>[
-        new DisplayProjects(toQuery),
-        new DisplayForm(),
-      ],
-    );
-  }
-
-  /// Instead, this displays the **tabs themselves**
-  ///
-  /// Not to be confused with displaying the contents of the tab, this only
-  /// shows the actual tabs themselves
-  TabBar buildTabBar() {
-    return new TabBar(
-      controller: _tabController,
-      tabs: <Widget>[
-        new Tab(
-            text: Constants.join_project['text'],
-            icon: Constants.join_project['icon']),
-        new Tab(
-          text: Constants.create_project['text'],
-          icon: Constants.create_project['icon'],
-        ),
-      ],
+      title: new Text(projectsTitle),
     );
   }
 
