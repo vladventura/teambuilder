@@ -21,7 +21,8 @@ class _MainScreenState extends State<MainScreen>
   PageController _pageController;
   FirebaseUser _user;
   int _currentIndex = 0;
-  Stream<QuerySnapshot> toQuery;
+  Stream<QuerySnapshot> toQuery =
+      Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
 
   @override
@@ -210,6 +211,23 @@ class _MainScreenState extends State<MainScreen>
                   projectsTitle = "Own Projects";
                 });
                 Navigator.pop(context);
+              },
+            ),
+            new ListTile(
+              title: Text(
+                "Joined Projects",
+                style: TextStyle(color: Constants.generalTextColor),
+              ),
+              onTap: () {
+                setState(() {
+                  toQuery = Firestore.instance
+                      .collection('projects')
+                      .where('joinedUserNames',
+                          arrayContains: _user.displayName)
+                      .snapshots();
+                  projectsTitle = "Joined Projects";
+                });
+                Navigator.of(context).pop();
               },
             ),
             new ListTile(
