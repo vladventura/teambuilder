@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     super.initState();
+
     _tabController = new TabController(
       length: Constants.app_tabs,
       vsync: this,
@@ -69,12 +70,22 @@ class _MainScreenState extends State<MainScreen>
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: this.buildDrawer(),
                 appBar: this.buildAppBar(),
-                body: DisplayForm(),
+                body: this.buildScreen('main'),
               );
             }
           }
           return new Container(child: new CircularProgressIndicator());
         });
+  }
+
+  Widget buildScreen(String screen) {
+    switch (screen) {
+      case 'create':
+        return DisplayForm();
+      case 'main':
+      default:
+        return DisplayProjects(this.toQuery);
+    }
   }
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
