@@ -442,7 +442,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
 
         thisProject.updateData({
           'joinedUsers': without.toList(),
-          'joinedUserNames': FieldValue.arrayRemove([_user.displayName])
+          'joinedUserNames': FieldValue.arrayRemove([widget.user.displayName])
         });
         userDocument.updateData({
           'joinedProjects': FieldValue.arrayRemove([
@@ -475,7 +475,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
     );
   }
 
-  Future<Null> _showSpecializationChooser(DocumentSnapshot document) async {
+  Future<Null> _showSpecializationChooser() async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -489,7 +489,7 @@ class _DisplayProjectState extends State<_DisplayProject> {
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
-                    this.handleRadioChange(document, val);
+                    this.handleRadioChange(val);
                   },
                   value: 1,
                   title: new Text("Frontend"),
@@ -498,12 +498,12 @@ class _DisplayProjectState extends State<_DisplayProject> {
                   activeColor: Constants.flavorTextColor,
                   groupValue: _groupValue,
                   onChanged: (int val) {
-                    this.handleRadioChange(document, val);
+                    this.handleRadioChange(val);
                   },
                   value: 2,
                   title: Text("Backend"),
                 ),
-                this.buildJoinConfirm(document),
+                this.buildJoinConfirm(),
               ],
             ),
           );
