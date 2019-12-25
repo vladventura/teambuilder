@@ -233,6 +233,12 @@ class _MainScreenState extends State<MainScreen>
             ),
             new ListTile(
               title: new Text(
+                "Create Project",
+                style: new TextStyle(color: Constants.generalTextColor),
+              ),
+            ),
+            new ListTile(
+              title: new Text(
                 "Sign out",
                 style: TextStyle(color: Constants.generalTextColor),
               ),
