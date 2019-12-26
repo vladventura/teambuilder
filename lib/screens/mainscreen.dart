@@ -63,6 +63,7 @@ class _MainScreenState extends State<MainScreen> {
         });
   }
 
+  /// This is what actually displays stuff on the screen with
   Widget buildScreen(String screen) {
     switch (screen) {
       case 'create':
@@ -73,6 +74,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  /// Returns an App Bar widget that has a dynamic title determined by ```projectsTitle```
   AppBar buildAppBar() {
     return new AppBar(
       backgroundColor: Constants.sideBackgroundColor,
@@ -89,7 +91,10 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  /// Constructs the side menu for the application and its functionality.
+  /// Hamburger menu with minimal styling.
+  ///
+  /// Contains the buttons that manipulate ```screenToDisplay``` and ```toQuery``` so we can
+  /// change the displayed screen accordingly.
   Drawer buildDrawer() {
     return new Drawer(
       child: Container(
