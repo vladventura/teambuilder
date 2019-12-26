@@ -13,6 +13,20 @@ import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/texts.dart';
 import 'package:teambuilder/util/validators.dart';
 
+/// This module constructs the landing page of our application.
+///
+/// It handles the communications between the app and the authentication servers of the
+/// Firestore with [FirebaseAuth]. [TextEditingController]s are here to control the flow of data
+/// to and from the text boxes.
+///
+/// This is a dynamic page: it renders whatever kind of form (controlled by the [FormType]s) it needs,
+/// be it a login form, or an account creation form.
+///
+/// Most of the text found in the form comes from the [Constants] module.
+///
+/// * First, it checks what [FormType] it's on (while being defaulted to the login type)
+/// * Then, it renders as many text boxes as needed depending on whether we're logging someone in or creating an account
+/// * On submit, we make that assertion once more, and call the proper method from the FirebaseAuth
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -65,6 +79,7 @@ class _LoginState extends State<Login> {
     );
   }
 
+  /// Convenience method to save some lines when validating the form
   bool validate() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -75,6 +90,7 @@ class _LoginState extends State<Login> {
     }
   }
 
+  /// Error code solution used to create [FlashBar]s.
   void firebaseAuthErrorResolve(dynamic eCode) {
     switch (eCode) {
       case "ERROR_USER_NOT_FOUND":
@@ -122,6 +138,7 @@ class _LoginState extends State<Login> {
         });
   }
 
+  /// It takes care of the creation or login of new/returning users
   Future<dynamic> submit() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (_formType == FormType.register) {
@@ -166,6 +183,7 @@ class _LoginState extends State<Login> {
     return null;
   }
 
+  /// Convenience method to interchange from the create to the login form
   void switchFormState(String state) {
     if (state == 'register') {
       setState(() {
@@ -216,6 +234,7 @@ class _LoginState extends State<Login> {
     );
   }
 
+  /// Method created to check if a username is already used
   isTaken() async {
     DocumentSnapshot snap = await Firestore.instance
         .collection('users')

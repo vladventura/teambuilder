@@ -8,40 +8,33 @@ import './displayprojects.dart';
 import './displayform.dart';
 
 import 'package:teambuilder/util/constants.dart';
-import 'package:teambuilder/util/texts.dart';
 
+///Landing page of the Application
+///
+///It contains most of the graphical interfacing we're doing with users.
+///[toQuery] and [projectsTitle] need an initial value so their respective Widgets
+///can render properly. All of the [Controller]s are there to manage the transitions and
+///animations between pages.
 class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ScrollController _scrollController;
-  PageController _pageController;
+class _MainScreenState extends State<MainScreen> {
   FirebaseUser _user;
-  int _currentIndex = 0;
   Stream<QuerySnapshot> toQuery =
       Firestore.instance.collection('projects').snapshots();
   String projectsTitle = "Join Projects";
+  String screenToDisplay;
 
   @override
   void initState() {
+    screenToDisplay = 'main';
     super.initState();
-    _tabController = new TabController(
-      length: Constants.app_tabs,
-      vsync: this,
-    );
-    _scrollController = new ScrollController();
-    _pageController = new PageController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
-    _scrollController.dispose();
-    _pageController.dispose();
   }
 
   Future<dynamic> loadUser() async {
@@ -56,58 +49,34 @@ class _MainScreenState extends State<MainScreen>
           if (snapshot.data != null) {
             if (snapshot.hasData) {
               _user = snapshot.data;
-              //Check for the connection here, and if it is not connected then Flash a message, and return "You're offline buddy"
               return new Scaffold(
                 resizeToAvoidBottomInset: true,
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Constants.mainBackgroundColor,
                 drawer: this.buildDrawer(),
-                bottomNavigationBar: new BottomNavigationBar(
-                  backgroundColor: Constants.sideBackgroundColor,
-                  selectedItemColor: Constants.formActiveColor,
-                  showSelectedLabels: false,
-                  items: this.buildBottomNavBarItems(),
-                  currentIndex: _currentIndex,
-                  onTap: (index) {
-                    _pageController.animateToPage(
-                      index,
-                      duration: new Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
-                ),
-                body: new NestedScrollView(
-                  physics: new BouncingScrollPhysics(),
-                  controller: _scrollController,
-                  headerSliverBuilder: (BuildContext context, bool isScrolled) {
-                    return <Widget>[
-                      this.buildSliverAppBar(isScrolled),
-                    ];
-                  },
-                  body: this.buildPageView(),
-                ),
+                appBar: this.buildAppBar(),
+                body: this.buildScreen(screenToDisplay),
               );
-            } // snapshot.hasData
-          } // snapshot != null
+            }
+          }
           return new Container(child: new CircularProgressIndicator());
         });
   }
 
-  List<BottomNavigationBarItem> buildBottomNavBarItems() {
-    return [
-      new BottomNavigationBarItem(
-        icon: Constants.join_project['icon'],
-        title: new Text(Constants.join_project['text']),
-      ),
-      new BottomNavigationBarItem(
-        icon: Constants.create_project['icon'],
-        title: new Text(Constants.create_project['text']),
-      )
-    ];
+  /// This is what actually displays stuff on the screen with
+  Widget buildScreen(String screen) {
+    switch (screen) {
+      case 'create':
+        return DisplayForm();
+      case 'main':
+      default:
+        return DisplayProjects(this.toQuery);
+    }
   }
 
-  SliverAppBar buildSliverAppBar(bool isScrolled) {
-    return new SliverAppBar(
+  /// Returns an App Bar widget that has a dynamic title determined by ```projectsTitle```
+  AppBar buildAppBar() {
+    return new AppBar(
       backgroundColor: Constants.sideBackgroundColor,
       iconTheme: new IconThemeData(
         color: Constants.flavorTextColor,
@@ -118,55 +87,14 @@ class _MainScreenState extends State<MainScreen>
           fontSize: 20,
         ),
       ),
-      title: (_currentIndex == 0)
-          ? Text(projectsTitle)
-          : Texts.appbar_create_title,
-      forceElevated: isScrolled,
-      pinned: isScrolled,
-      floating: true,
+      title: new Text(projectsTitle),
     );
   }
 
-  PageView buildPageView() {
-    return new PageView(
-      controller: _pageController,
-      onPageChanged: ((index) {
-        setState(() {
-          this._currentIndex = index;
-        });
-      }),
-      children: <Widget>[
-        new DisplayProjects(toQuery),
-        new DisplayForm(),
-      ],
-    );
-  }
-
-  TabBarView buildTabBarView() {
-    return new TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        new DisplayProjects(toQuery),
-        new DisplayForm(),
-      ],
-    );
-  }
-
-  TabBar buildTabBar() {
-    return new TabBar(
-      controller: _tabController,
-      tabs: <Widget>[
-        new Tab(
-            text: Constants.join_project['text'],
-            icon: Constants.join_project['icon']),
-        new Tab(
-          text: Constants.create_project['text'],
-          icon: Constants.create_project['icon'],
-        ),
-      ],
-    );
-  }
-
+  /// Hamburger menu with minimal styling.
+  ///
+  /// Contains the buttons that manipulate ```screenToDisplay``` and ```toQuery``` so we can
+  /// change the displayed screen accordingly.
   Drawer buildDrawer() {
     return new Drawer(
       child: Container(
@@ -192,6 +120,7 @@ class _MainScreenState extends State<MainScreen>
                 setState(() {
                   toQuery =
                       Firestore.instance.collection('projects').snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Join Projects";
                 });
                 Navigator.pop(context);
@@ -208,6 +137,7 @@ class _MainScreenState extends State<MainScreen>
                       .collection('projects')
                       .where('originator', isEqualTo: _user.displayName)
                       .snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Own Projects";
                 });
                 Navigator.pop(context);
@@ -225,7 +155,21 @@ class _MainScreenState extends State<MainScreen>
                       .where('joinedUserNames',
                           arrayContains: _user.displayName)
                       .snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Joined Projects";
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            new ListTile(
+              title: new Text(
+                "Create Project",
+                style: new TextStyle(color: Constants.generalTextColor),
+              ),
+              onTap: () {
+                setState(() {
+                  screenToDisplay = 'create';
+                  projectsTitle = "Create Project";
                 });
                 Navigator.of(context).pop();
               },

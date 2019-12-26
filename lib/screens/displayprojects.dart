@@ -10,6 +10,11 @@ import 'package:teambuilder/util/constants.dart';
 import 'package:teambuilder/util/connectionstream.dart';
 part 'package:teambuilder/screens/displayproject.dart';
 
+/// Module that builds a scrollable list of clickable objects.
+///
+/// It is built in a way that it can be used by not only the very main screen, but also the
+/// subsequent screens with [toQuery]: we can pass a [Stream<QuerySnapshot>] and we'll be able to
+/// construct several items if they have certain properties.
 class DisplayProjects extends StatefulWidget {
   final Stream<QuerySnapshot> toQuery;
   const DisplayProjects(this.toQuery);
@@ -17,7 +22,6 @@ class DisplayProjects extends StatefulWidget {
 }
 
 class _DisplayProjectsState extends State<DisplayProjects> {
-  final _db = Firestore.instance;
   Map _connectionSource = {ConnectivityResult.none: false};
   ConnectionStream _connectionStream = ConnectionStream.instance;
 
@@ -39,23 +43,27 @@ class _DisplayProjectsState extends State<DisplayProjects> {
     super.dispose();
   }
 
+  /// The stream here would be the parent class' stream ([toQuery]).
   Widget build(BuildContext context) {
-    return new StreamBuilder<QuerySnapshot>(
-        stream: widget.toQuery,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new ListView(
-              physics: new BouncingScrollPhysics(),
-              children: snapshot.data.documents.reversed
-                  .map((document) => buildProject(document))
-                  .toList(),
-            );
-          } else {
-            return new CircularProgressIndicator();
-          }
-        });
+    return new Container(
+      child: new StreamBuilder<QuerySnapshot>(
+          stream: widget.toQuery,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new ListView(
+                physics: new BouncingScrollPhysics(),
+                children: snapshot.data.documents.reversed
+                    .map((document) => buildProject(document))
+                    .toList(),
+              );
+            } else {
+              return new CircularProgressIndicator();
+            }
+          }),
+    );
   }
 
+  /// Most of the online/offline checking is done when someone clicks on a project
   Card buildProject(DocumentSnapshot document) {
     return new Card(
       child: new Container(
