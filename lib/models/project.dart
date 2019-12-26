@@ -1,30 +1,29 @@
-class Project{
+class Project {
   String complexity;
-  String contactPlatforms;
+  Map<String, dynamic> contactPlatforms;
   String description;
-  List <String> joinedUsers;
+  List<String> joinedUsers;
   String name;
   String originator;
   List<String> languagesUsed;
-  List<String> technologiesUsed; 
+  List<String> technologiesUsed;
   String teamMembers;
 
   Project(
-    this.complexity, 
-    this.contactPlatforms, 
-    this.description, 
-    this.name,
-    this.joinedUsers, 
-    this.originator,
-    this.languagesUsed,
-    this.technologiesUsed,
-    this.teamMembers
-  );
+      this.complexity,
+      this.contactPlatforms,
+      this.description,
+      this.name,
+      this.joinedUsers,
+      this.originator,
+      this.languagesUsed,
+      this.technologiesUsed,
+      this.teamMembers);
 
-  Map <String, dynamic> toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'complexity': this.complexity,
-      'contactPlatforms': 'Feature coming soon',
+      'contactPlatforms': this.contactPlatforms,
       'description': this.description,
       'name': this.name,
       'joinedUsers': this.joinedUsers,

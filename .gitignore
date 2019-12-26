@@ -1,3 +1,7 @@
+# Google Services JSON files
+**/android/app/src/prod/
+**/android/app/src/dev/
+
 # Miscellaneous
 *.class
 *.log
@@ -8,6 +12,7 @@
 .buildlog/
 .history
 .svn/
+pubspec.lock
 
 # IntelliJ related
 *.iml
@@ -27,6 +32,7 @@
 .pub/
 /build/
 
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
@@ -34,6 +40,7 @@
 **/android/gradlew
 **/android/gradlew.bat
 **/android/local.properties
+**/android/key.properties
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related

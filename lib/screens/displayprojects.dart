@@ -1,407 +1,131 @@
+library project;
+
+import 'package:connectivity/connectivity.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flash/flash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:teambuilder/util/constants.dart';
+import 'package:teambuilder/util/connectionstream.dart';
+part 'package:teambuilder/screens/displayproject.dart';
 
-import 'package:flash/flash.dart';
-
+/// Module that builds a scrollable list of clickable objects.
+///
+/// It is built in a way that it can be used by not only the very main screen, but also the
+/// subsequent screens with [toQuery]: we can pass a [Stream<QuerySnapshot>] and we'll be able to
+/// construct several items if they have certain properties.
 class DisplayProjects extends StatefulWidget {
-  _DisplayProjectsState createState() => _DisplayProjectsState();
+  final Stream<QuerySnapshot> toQuery;
+  const DisplayProjects(this.toQuery);
+  _DisplayProjectsState createState() => new _DisplayProjectsState();
 }
 
 class _DisplayProjectsState extends State<DisplayProjects> {
-  final _db = Firestore.instance;
-  int _groupValue = 1;
-  String _specialization;
+  Map _connectionSource = {ConnectivityResult.none: false};
+  ConnectionStream _connectionStream = ConnectionStream.instance;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: _db.collection('projects').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
-              physics: BouncingScrollPhysics(),
-              children: snapshot.data.documents
-                  .map((document) => buildProject(document))
-                  .toList(),
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
+    this._connectionStream.initialize();
+    this._connectionStream.stream.listen((source) {
+      if (this.mounted) {
+        setState(() {
+          _connectionSource = source;
         });
+      }
+    });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  /// The stream here would be the parent class' stream ([toQuery]).
+  Widget build(BuildContext context) {
+    return new Container(
+      child: new StreamBuilder<QuerySnapshot>(
+          stream: widget.toQuery,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new ListView(
+                physics: new BouncingScrollPhysics(),
+                children: snapshot.data.documents.reversed
+                    .map((document) => buildProject(document))
+                    .toList(),
+              );
+            } else {
+              return new CircularProgressIndicator();
+            }
+          }),
+    );
+  }
+
+  /// Most of the online/offline checking is done when someone clicks on a project
   Card buildProject(DocumentSnapshot document) {
-    return Card(
-      child: Container(
+    return new Card(
+      child: new Container(
         decoration: Constants.buttonDecoration(),
         alignment: Alignment.centerLeft,
         width: MediaQuery.of(context).size.width * 0.95,
-        height: MediaQuery.of(context).size.height * 0.07,
-        child: FlatButton(
+        height: (MediaQuery.of(context).orientation == Orientation.landscape
+            ? MediaQuery.of(context).size.height * 0.10
+            : MediaQuery.of(context).size.height * 0.07),
+        child: new FlatButton(
           color: Constants.formInactiveColor,
           textColor: Constants.flavorTextColor,
-          child: Container(
+          child: new Container(
             width: double.infinity,
-            child: Column(
+            child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                new Text(
                   document.data['name'],
                   textAlign: TextAlign.center,
                 ),
-                Text(
+                new Text(
                   document.data['originator'],
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
-          onPressed: () {
-            return showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Constants.sideBackgroundColor,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                              "The creator of the project advised that this individual project is aimed at ${document.data['complexity']} level developers."),
+          onPressed: () async {
+            switch (_connectionSource.keys.toList()[0]) {
+              case ConnectivityResult.mobile:
+              case ConnectivityResult.wifi:
+                FirebaseUser user = await FirebaseAuth.instance.currentUser();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        _DisplayProject(document: document, user: user)));
+                break;
+              case ConnectivityResult.none:
+                showFlash(
+                    context: context,
+                    duration: new Duration(seconds: 3),
+                    builder: (context, controller) {
+                      return new Flash(
+                        controller: controller,
+                        style: FlashStyle.grounded,
+                        backgroundColor: Constants.sideBackgroundColor,
+                        boxShadows: kElevationToShadow[4],
+                        child: new FlashBar(
+                          message: new Text(
+                            "No Internet Connection Detected",
+                            style: new TextStyle(
+                              color: Constants.generalTextColor,
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(document.data['description']),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Members!"),
-                        ),
-                        getTextWidgets(document.data['joinedUsers']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Languages Used!"),
-                        ),
-                        getGeneralTexts(document.data['languagesUsed']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text("Technologies Used!"),
-                        ),
-                        getGeneralTexts(document.data['technologiesUsed']),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Container(
-                          child: Text(
-                              "${document.data['joinedUsers'].length}/${document.data['teamMembers']} members joined."),
-                        ),
-                        buttons(document),
-                      ],
-                    ),
-                    title: Text(document.data['name'] +
-                        ' by ' +
-                        document.data['originator']),
-                  );
-                });
+                      );
+                    });
+                break;
+            }
           },
         ),
       ),
-    );
-  }
-
-  Widget getTextWidgets(List<dynamic> users) {
-    bool isEmpty = (users.length <= 0 || users == null);
-    if (!isEmpty)
-      return Container(
-        alignment: Alignment.centerLeft,
-        child:
-            new Column(children: users.map((user) => new Text("${user['name']} (${user['specialization']})")).toList()),
-      );
-    return Container(
-      child: Text("Nothing to show here~!"),
-    );
-  }
-
-  Widget getGeneralTexts(List<dynamic> elements){
-    bool isEmpty = (elements.length <= 0 || elements == null);
-    if (!isEmpty)
-      return Container(
-        alignment: Alignment.centerLeft,
-        child:
-            new Column(children: elements.map((element) => new Text(element)).toList()),
-      );
-    return Container(
-      child: Text("Nothing to show here~!"),
-    );
-  }
-
-  Widget buttons(DocumentSnapshot document) {
-    return FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (context, snapshot) {
-          if (snapshot != null) {
-            if (snapshot.hasData) {
-              bool owner =
-                  (document.data['originator'] == snapshot.data.displayName);
-              bool belongs = (document.data['joinedUsers']
-                      .contains(snapshot.data.displayName) ||
-                  owner);
-              bool slotAvailable = (document.data['joinedUsers'].length <
-                  int.parse(document.data['teamMembers']));
-              if (!belongs) {
-                if (slotAvailable == true) {
-                  return Row(
-                    children: <Widget>[
-                      buildJoinButton(document),
-                      buildButtonSeparator(),
-                      buildCancelButton(),
-                    ],
-                  );
-                } else {
-                  return FlatButton(
-                    child: Text("The team is full."),
-                    onPressed: null,
-                  );
-                }
-              } else if (owner) {
-                return FlatButton(
-                  child: Text("You cannot join your own project!"),
-                  onPressed: null,
-                );
-              } else if (belongs) {
-                return Row(
-                  children: <Widget>[
-                    buildLeaveButton(document),
-                    buildButtonSeparator(),
-                    buildCancelButton()
-                  ],
-                );
-              }
-            }
-          }
-          return CircularProgressIndicator();
-        });
-  }
-
-  RaisedButton buildLeaveButton(DocumentSnapshot document) {
-    return RaisedButton(
-      color: Colors.grey,
-      child: Text('Leave Project'),
-      onPressed: () async {
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Leaving team...",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
-        thisProject.updateData({
-          'joinedUsers': FieldValue.arrayRemove([_user.displayName])
-        });
-        userDocument.updateData({
-          'joinedProjects': FieldValue.arrayRemove([
-            document.documentID,
-          ])
-        });
-        Navigator.pop(context);
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Left team successfully.",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  SizedBox buildButtonSeparator() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.15,
-    );
-  }
-
-  void handleRadioChange(DocumentSnapshot document, int val) {
-    setState(() {
-      _groupValue = val;
-      if (val == 1) {
-        _specialization = "Frontend";
-      } else if (val == 2) {
-        _specialization = "Backend";
-      }
-    });
-    // KLUDGE: Popping the alert box and calling it again because it is rendered outside the build tree
-    Navigator.of(context).pop();
-    _showSpecializationChooser(document);
-  }
-
-  Future<Null> _showSpecializationChooser(DocumentSnapshot document) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Most comfortable area?"),
-            backgroundColor: Constants.sideBackgroundColor,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  RadioListTile(
-                    activeColor: Constants.flavorTextColor,
-                    groupValue: _groupValue,
-                    onChanged: (int val) {
-                      handleRadioChange(document, val);
-                    },
-                    value: 1,
-                    title: Text("Frontend"),
-                  ),
-                  RadioListTile(
-                    activeColor: Constants.flavorTextColor,
-                    groupValue: _groupValue,
-                    onChanged: (int val) {
-                      handleRadioChange(document, val);
-                    },
-                    value: 2,
-                    title: Text("Backend"),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      buildJoinConfirm(document),
-                      buildButtonSeparator(),
-                      buildCancelButton()
-                    ],
-                  ),
-                ],
-            ),
-          );
-        });
-  }
-
-  RaisedButton buildJoinButton(DocumentSnapshot document) {
-    return RaisedButton(
-      color: Constants.acceptButtonColor,
-      child: Text("Join Project"),
-      onPressed: () {
-        _showSpecializationChooser(document);
-      },
-    );
-  }
-
-  RaisedButton buildJoinConfirm(DocumentSnapshot document) {
-    return RaisedButton(
-      child: Text("Join Project"),
-      color: Constants.acceptButtonColor,
-      onPressed: () async {
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Joining team...",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-        FirebaseUser _user;
-        await FirebaseAuth.instance.currentUser().then((ref) => _user = ref);
-        CollectionReference projects = _db.collection('projects');
-        CollectionReference users = _db.collection('users');
-        DocumentReference thisProject = projects.document(document.documentID);
-        DocumentReference userDocument = users.document(_user.displayName);
-        thisProject.updateData({
-          'joinedUsers': FieldValue.arrayUnion([{
-            'name': _user.displayName,
-            'specialization': _specialization
-          }])
-        });
-        userDocument.updateData({
-          'joinedProjects': FieldValue.arrayUnion([
-            document.documentID,
-          ])
-        });
-        Navigator.pop(context);
-        showFlash(
-            context: context,
-            duration: Duration(seconds: 1),
-            builder: (context, controller) {
-              return Flash(
-                controller: controller,
-                style: FlashStyle.grounded,
-                backgroundColor: Constants.sideBackgroundColor,
-                boxShadows: kElevationToShadow[4],
-                child: FlashBar(
-                  message: Text(
-                    "Team joined!",
-                    style: TextStyle(
-                      color: Constants.generalTextColor,
-                    ),
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  RaisedButton buildCancelButton() {
-    return RaisedButton(
-      child: Text("Cancel"),
-      color: Constants.cancelButtonColor,
-      onPressed: () => Navigator.of(context).pop(),
     );
   }
 }
