@@ -13,7 +13,6 @@
 .history
 .svn/
 pubspec.lock
-teambuilder.rar
 
 # IntelliJ related
 *.iml

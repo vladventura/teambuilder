@@ -90,7 +90,10 @@ flutter {
 }
 
 dependencies {
+<<<<<<< HEAD
     implementation 'androidx.multidex:multidex:2.0.1'
+=======
+>>>>>>> 1449986dfce6ecd8c914c208adff3e75cfc48af4
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.firebase:firebase-core:17.2.1'
     androidTestImplementation 'androidx.test:runner:1.2.0'
