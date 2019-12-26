@@ -32,6 +32,7 @@ pubspec.lock
 .pub/
 /build/
 
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
@@ -39,6 +40,7 @@ pubspec.lock
 **/android/gradlew
 **/android/gradlew.bat
 **/android/local.properties
+**/android/key.properties
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
