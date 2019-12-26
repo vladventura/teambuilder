@@ -120,6 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                 setState(() {
                   toQuery =
                       Firestore.instance.collection('projects').snapshots();
+                  screenToDisplay = 'main';
                   projectsTitle = "Join Projects";
                 });
                 Navigator.pop(context);
